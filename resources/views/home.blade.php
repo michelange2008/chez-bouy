@@ -1,0 +1,24 @@
+@extends('layout')
+@section('content')
+<section class="intro">
+    <p>BIENVENUE CHEZ BOUY</p>
+    <h1>Prenez le temps.<br>Vous êtes chez vous.</h1>
+    <p>Découvrez les lieux en images et préparez votre prochain séjour.</p>
+    <a class="button" href="#photos">Découvrir les photos</a>
+</section>
+<section id="photos" aria-labelledby="photos-title">
+    <h2 id="photos-title">Un aperçu des lieux</h2>
+    <div class="gallery">
+        @foreach(['maison' => 'La maison', 'salon' => 'Le salon', 'chambre' => 'La chambre'] as $file => $label)
+            <figure>
+                @if(file_exists(public_path("photos/{$file}.jpg")))
+                    <img src="{{ asset("photos/{$file}.jpg") }}" alt="{{ $label }} — Chez Bouy" loading="lazy" width="800" height="600">
+                @else
+                    <div class="placeholder">Photo à ajouter</div>
+                @endif
+                <figcaption>{{ $label }}</figcaption>
+            </figure>
+        @endforeach
+    </div>
+</section>
+@endsection

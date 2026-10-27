@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@yield('title', 'Bienvenue') — Chez Bouy</title>
+    <style>
+        *{box-sizing:border-box}body{margin:0;background:#f5f2eb;color:#263c35;font:18px/1.6 system-ui,sans-serif}header,main,footer{max-width:1100px;margin:auto;padding:24px}header{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;border-bottom:1px solid #d6dbd2}nav{display:flex;gap:20px;align-items:center;flex-wrap:wrap}a{color:inherit}h1{font:clamp(2.5rem,7vw,5rem)/1.1 Georgia,serif;max-width:850px}h2{font-family:Georgia,serif}.intro{padding:40px 0}.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}.gallery img,.placeholder{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:12px;background:#e3e6dc}.placeholder{display:grid;place-items:center;color:#536456}figure{margin:0}figcaption{padding:10px 0}.panel{max-width:540px;margin:40px auto;padding:28px;background:white;border-radius:16px}label{display:block;margin-top:16px}input{width:100%;padding:12px;border:1px solid #83948b;border-radius:6px;font:inherit}button,.button{display:inline-block;background:#294e40;color:white;padding:12px 20px;border:0;border-radius:6px;font:inherit;cursor:pointer;text-decoration:none}form button{margin-top:20px}nav form button{margin:0;padding:8px 12px}footer{margin-top:50px;color:#536456}.error{color:#9f2525}:focus-visible{outline:3px solid #bd781e;outline-offset:4px}
+    </style>
+</head>
+<body>
+<header>
+    <a href="{{ route('home') }}"><strong>Chez Bouy</strong></a>
+    <nav aria-label="Navigation principale">
+        @auth
+            <a href="{{ route('dashboard') }}">Mon séjour</a>
+            @if(auth()->user()->role === 'admin')<a href="{{ route('admin') }}">Administration</a>@endif
+            <form action="{{ route('logout') }}" method="post">@csrf<button>Déconnexion</button></form>
+        @else
+            <a href="{{ route('login') }}">Espace privé</a>
+        @endauth
+    </nav>
+</header>
+<main>
+    @if(session('status'))<p role="status">{{ session('status') }}</p>@endif
+    @if($errors->any())<div class="error" role="alert">@foreach($errors->all() as $error)<p>{{ $error }}</p>@endforeach</div>@endif
+    @yield('content')
+</main>
+<footer>Chez Bouy · Un lieu pour se retrouver.</footer>
+</body>
+</html>
