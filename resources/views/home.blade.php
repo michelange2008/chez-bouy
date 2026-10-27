@@ -9,16 +9,25 @@
 <section id="photos" aria-labelledby="photos-title">
     <h2 id="photos-title">Un aperçu des lieux</h2>
     <div class="gallery">
-        @foreach(['maison' => 'La maison', 'salon' => 'Le salon', 'chambre' => 'La chambre'] as $file => $label)
-            <figure>
-                @if(file_exists(public_path("photos/{$file}.jpg")))
-                    <img src="{{ asset("photos/{$file}.jpg") }}" alt="{{ $label }} — Chez Bouy" loading="lazy" width="800" height="600">
-                @else
-                    <div class="placeholder">Photo à ajouter</div>
-                @endif
-                <figcaption>{{ $label }}</figcaption>
-            </figure>
-        @endforeach
+        @foreach([
+    'montagne.jpg' => 'La vue sur les montagnes',
+    'residence.png' => 'La résidence — Chez Bouy',
+] as $file => $label)
+    <figure>
+        @if(\Illuminate\Support\Facades\Storage::disk('public')->exists("photos/{$file}"))
+            <img
+                src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url("photos/{$file}") }}"
+                alt="{{ $label }}"
+                loading="lazy"
+                width="800"
+                height="600"
+            >
+        @else
+            <div class="placeholder">Photo à ajouter</div>
+        @endif
+        <figcaption>{{ $label }}</figcaption>
+    </figure>
+@endforeach
     </div>
 </section>
 @endsection
