@@ -3,8 +3,10 @@
 use App\Http\Controllers\CodeLoginController;
 use App\Http\Middleware\RequireRole;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LocaleController;
 
 Route::view('/', 'home')->name('home');
+Route::post('/langue', [LocaleController::class, 'update'])->name('locale.update');
 
 Route::middleware('guest')->group(function () {
     Route::view('/connexion', 'login')->name('login');

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,6 +24,6 @@
     @if($errors->any())<div class="error" role="alert">@foreach($errors->all() as $error)<p>{{ $error }}</p>@endforeach</div>@endif
     @yield('content')
 </main>
-<footer>Chez Bouy · Un lieu pour se retrouver.</footer>
+<footer>Chez Bouy · {{ __('site.footer') }}</footer>
 </body>
 </html>

@@ -1,13 +1,14 @@
 @extends('layout')
 @section('content')
+@include('partials.language-switcher')
 <section class="intro">
-    <p>BIENVENUE CHEZ BOUY</p>
-    <h1>Prenez le temps.<br>Vous êtes chez vous.</h1>
-    <p>Découvrez les lieux en images et préparez votre prochain séjour.</p>
-    <a class="button" href="#photos">Découvrir les photos</a>
+    <p>{{ __('site.home_eyebrow') }}</p>
+    <h1>{{ __('site.home_title') }}<br>{{ __('site.home_subtitle') }}</h1>
+    <p>{{ __('site.home_intro') }}</p>
+    <a class="button" href="#photos">{{ __('site.photos_link') }}</a>
 </section>
 <section id="photos" aria-labelledby="photos-title">
-    <h2 id="photos-title">Un aperçu des lieux</h2>
+    <h2 id="photos-title">{{ __('site.photos_title') }}</h2>
     <div class="gallery">
         @foreach([
     'montagne.jpg' => 'La vue sur les montagnes',
@@ -23,7 +24,7 @@
                 height="600"
             >
         @else
-            <div class="placeholder">Photo à ajouter</div>
+            <div class="placeholder">{{ __(site.photo_missing) }}</div>
         @endif
         <figcaption>{{ $label }}</figcaption>
     </figure>

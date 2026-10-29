@@ -31,12 +31,12 @@ class CodeLoginController extends Controller
             Cache::lock($key.':lock', 15)->block(5, function () use ($key, $code) {
                 Cache::put($key, Hash::make($code), now()->addMinutes(10));
             });
-            Mail::raw("Votre code Chez Bouy : {$code}\nValable 10 minutes, utilisable une seule fois.\nSi vous n'avez rien demandé, ignorez cet e-mail.",
-                fn ($message) => $message->to($email)->subject('Votre code de connexion — Chez Bouy'));
+            Mail::raw(__('site.mail_body', ['code' => $code]),
+                fn ($message) => $message->to($email)->subject(__('site.mail_subject')));
         }, 60);
 
         return redirect()->route('code.form')->with('status',
-            'Si cette adresse est autorisée, un code vous a été envoyé. Patientez une minute avant un nouvel envoi.');
+            __('site.code_sent'));
     }
 
     public function verify(Request $request)
@@ -69,11 +69,13 @@ class CodeLoginController extends Controller
 
         if (! $user) {
             throw ValidationException::withMessages([
-                'code' => 'Code incorrect, expiré ou limite atteinte. Après 5 essais, patientez 10 minutes.',
+                'code' => __('site.invalid_code'),
             ]);
         }
 
         Auth::login($user);
+        // Incrément SQL atomique : deux connexions ne perdent pas une unité.
+        $user->increment('login_count', 1, ['last_login_at' => now()]);
         $request->session()->regenerate();
         $request->session()->forget('login_email');
         return redirect()->route($user->role === 'admin' ? 'admin' : 'dashboard');
@@ -81,9 +83,11 @@ class CodeLoginController extends Controller
 
     public function logout(Request $request)
     {
+        $locale = $request->session()->get('locale', config('app.locale', 'fr'));
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+        $request->session()->put('locale', $locale);
         return redirect()->route('home');
     }
 }

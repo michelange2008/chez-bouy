@@ -2,13 +2,13 @@
 @section('title', 'Connexion')
 @section('content')
 <section class="panel">
-    <h2>Votre espace privé</h2>
-    <p>Saisissez l’adresse e-mail communiquée pour votre séjour. Vous recevrez un code de connexion.</p>
+    <h2>{{__('site.login_title')}}
+    <p>{{ __('site.login_intro') }}</p>
     <form action="{{ route('code.send') }}" method="post">
         @csrf
-        <label for="email">Adresse e-mail</label>
+        <label for="email">{{ __('site.email') }}</label>
         <input id="email" type="email" name="email" value="{{ old('email') }}" autocomplete="email" required maxlength="254">
-        <button>Recevoir mon code</button>
+        <button>{{ __('site.send_code') }}</button>
     </form>
 </section>
 @endsection
