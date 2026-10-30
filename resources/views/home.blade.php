@@ -24,7 +24,7 @@
                 height="600"
             >
         @else
-            <div class="placeholder">{{ __(site.photo_missing) }}</div>
+            <div class="placeholder">{{ __('site.photo_missing') }}</div>
         @endif
         <figcaption>{{ $label }}</figcaption>
     </figure>

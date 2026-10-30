@@ -41,4 +41,5 @@ return [
     'mail_body' => 'Votre code Chez Bouy : :code
 Valable 10 minutes, utilisable une seule fois.
 Si vous n’avez rien demandé, ignorez cet e-mail.',
+    'email_not_registered' => 'Cette adresse e-mail n’est pas enregistrée. Contactez le propriétaire pour obtenir un accès locataire.',
 ];

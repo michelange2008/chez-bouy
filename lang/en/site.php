@@ -41,4 +41,5 @@ return [
     'mail_body' => 'Your Chez Bouy code: :code
 Valid for 10 minutes, for one use only.
 If you did not request this code, ignore this email.',
+    'email_not_registered' => 'This email address is not registered. Contact the owner to request guest access.',
 ];

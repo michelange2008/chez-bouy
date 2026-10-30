@@ -17,26 +17,37 @@ class CodeLoginController extends Controller
     {
         $data = $request->validate(['email' => ['required', 'email', 'max:254']]);
         $email = mb_strtolower(trim($data['email']));
-        $key = 'login-code:'.hash('sha256', $email);
+        if (! User::where('email', $email)->exists()) {
+            $request->session()->forget('login_email');
+
+            throw ValidationException::withMessages([
+                'email' => __('site.email_not_registered'),
+            ]);
+        }
+        $key = 'login-code:' . hash('sha256', $email);
         $request->session()->put('login_email', $email);
 
         // Limite par adresse, en complément de la limite par IP des routes.
-        RateLimiter::attempt($key.':send', 1, function () use ($key, $email) {
+        RateLimiter::attempt($key . ':send', 1, function () use ($key, $email) {
             $user = User::where('email', $email)->first();
             if (! $user || ! in_array($user->role, ['locataire', 'admin'], true)) {
                 return;
             }
 
             $code = (string) random_int(100000, 999999);
-            Cache::lock($key.':lock', 15)->block(5, function () use ($key, $code) {
+            Cache::lock($key . ':lock', 15)->block(5, function () use ($key, $code) {
                 Cache::put($key, Hash::make($code), now()->addMinutes(10));
             });
-            Mail::raw(__('site.mail_body', ['code' => $code]),
-                fn ($message) => $message->to($email)->subject(__('site.mail_subject')));
+            Mail::raw(
+                __('site.mail_body', ['code' => $code]),
+                fn($message) => $message->to($email)->subject(__('site.mail_subject'))
+            );
         }, 60);
 
-        return redirect()->route('code.form')->with('status',
-            __('site.code_sent'));
+        return redirect()->route('code.form')->with(
+            'status',
+            __('site.code_sent')
+        );
     }
 
     public function verify(Request $request)
@@ -46,14 +57,14 @@ class CodeLoginController extends Controller
         if (! is_string($email)) {
             return redirect()->route('login');
         }
-        $key = 'login-code:'.hash('sha256', $email);
+        $key = 'login-code:' . hash('sha256', $email);
 
         // Le verrou empêche deux validations simultanées du même code.
-        $user = Cache::lock($key.':lock', 15)->block(5, function () use ($key, $email, $data) {
-            if (RateLimiter::tooManyAttempts($key.':verify', 5)) {
+        $user = Cache::lock($key . ':lock', 15)->block(5, function () use ($key, $email, $data) {
+            if (RateLimiter::tooManyAttempts($key . ':verify', 5)) {
                 return null;
             }
-            RateLimiter::hit($key.':verify', 600);
+            RateLimiter::hit($key . ':verify', 600);
             $hash = Cache::get($key);
             if (! $hash || ! Hash::check($data['code'], $hash)) {
                 return null;
@@ -63,7 +74,7 @@ class CodeLoginController extends Controller
             if (! $user || ! $user->is_active || ! in_array($user->role, ['locataire', 'admin'], true)) {
                 return null;
             }
-            RateLimiter::clear($key.':verify');
+            RateLimiter::clear($key . ':verify');
             return $user;
         });
 

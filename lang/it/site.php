@@ -41,4 +41,5 @@ return [
     'mail_body' => 'Il vostro codice Chez Bouy: :code
 Valido per 10 minuti, utilizzabile una sola volta.
 Se non avete richiesto questo codice, ignorate questa e-mail.',
+    'email_not_registered' => 'Questo indirizzo e-mail non è registrato. Contattate il proprietario per richiedere l’accesso all’area ospiti.',
 ];
