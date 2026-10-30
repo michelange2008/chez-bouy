@@ -60,7 +60,7 @@ class CodeLoginController extends Controller
             }
             Cache::forget($key);
             $user = User::where('email', $email)->first();
-            if (! $user || ! in_array($user->role, ['locataire', 'admin'], true)) {
+            if (! $user || ! $user->is_active || ! in_array($user->role, ['locataire', 'admin'], true)) {
                 return null;
             }
             RateLimiter::clear($key.':verify');

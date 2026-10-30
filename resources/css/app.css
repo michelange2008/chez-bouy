@@ -1,7 +1,9 @@
 @import 'tailwindcss';
 
 @import './chez-bouy.css';
-@import '.language-switcher.css';
+@import './language-switcher.css';
+@import './admin.css';
+@import './admin-users.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
