@@ -4,6 +4,7 @@
 @import './language-switcher.css';
 @import './admin.css';
 @import './admin-users.css';
+@import './admin-photos.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';

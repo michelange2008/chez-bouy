@@ -45,6 +45,20 @@ class LocalizationTest extends TestCase
         }
     }
 
+    public function test_le_changement_de_langue_revient_sur_la_page_espace(): void
+    {
+        $user = User::factory()->create(['role' => 'locataire']);
+
+        $this->actingAs($user)->from('/espace')
+            ->post('/langue', ['locale' => 'en'])
+            ->assertRedirect('/espace')
+            ->assertSessionHas('locale', 'en');
+
+        $this->get('/espace')->assertOk()
+            ->assertSee('lang="en"', false)
+            ->assertSee('Your guest area is ready for the welcome guide and practical information for your stay.');
+    }
+
     public function test_une_langue_non_supportee_est_refusee(): void
     {
         $this->withSession(['locale' => 'it'])

@@ -13,6 +13,6 @@ class LocaleController extends Controller
         abort_unless(in_array($locale, array_keys(config('languages.supported')), true), 422);
         $request->session()->put('locale', $locale);
 
-        return redirect()->route('home');
+        return redirect()->back(fallback: route('home'));
     }
 }
