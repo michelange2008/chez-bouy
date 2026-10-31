@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Mail;
+use Symfony\Component\Mime\Email;
 use Tests\TestCase;
 
 class LocalizationTest extends TestCase
@@ -52,6 +53,31 @@ class LocalizationTest extends TestCase
             ->assertSessionHas('locale', 'it');
     }
 
+    public function test_une_langue_ajoutee_a_la_configuration_est_disponible(): void
+    {
+        config(['languages.supported.de' => 'Deutsch']);
+
+        $this->post('/langue', ['locale' => 'de'])
+            ->assertRedirect(route('home'))
+            ->assertSessionHas('locale', 'de');
+
+        $this->get('/')->assertOk()
+            ->assertSee('lang="de"', false)
+            ->assertSee('aria-label="Deutsch"', false)
+            ->assertSee('Prenez le temps.');
+    }
+
+    public function test_une_langue_retiree_de_la_configuration_est_refusee(): void
+    {
+        config(['languages.supported' => ['fr' => 'Français', 'en' => 'English']]);
+
+        $this->withSession(['locale' => 'it'])->get('/')->assertOk()
+            ->assertSee('lang="fr"', false)
+            ->assertDontSee('value="it"', false);
+
+        $this->post('/langue', ['locale' => 'it'])->assertUnprocessable();
+    }
+
     public function test_la_validation_utilise_la_langue_selectionnee(): void
     {
         $this->withSession(['locale' => 'it'])
@@ -66,10 +92,11 @@ class LocalizationTest extends TestCase
         $user = User::factory()->create(['role' => 'locataire']);
         Mail::shouldReceive('raw')->once()->withArgs(function ($body, $callback) use ($user) {
             $this->assertStringContainsString('Your Chez Bouy code:', $body);
-            $message = new Message(new \Symfony\Component\Mime\Email());
+            $message = new Message(new Email);
             $callback($message);
             $this->assertSame('Your login code — Chez Bouy', $message->getSymfonyMessage()->getSubject());
             $this->assertSame($user->email, $message->getSymfonyMessage()->getTo()[0]->getAddress());
+
             return true;
         });
 
