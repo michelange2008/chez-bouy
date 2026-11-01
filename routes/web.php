@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\PhotoLocationController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\CodeLoginController;
 use App\Http\Controllers\LocaleController;
+use App\Http\Controllers\StayController;
 use App\Http\Middleware\RequireRole;
 use Illuminate\Support\Facades\Route;
 
@@ -22,7 +23,13 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware(['auth', RequireRole::class.':locataire,admin'])->group(function () {
-    Route::view('/espace', 'space')->name('dashboard');
+    Route::get('/espace', [StayController::class, 'index'])->name('dashboard');
+    Route::get('/espace/guide', [StayController::class, 'downloadGuide'])->name('stay.guide');
+    Route::view('/espace/arrivee', 'space.arrivee')->name('stay.arrivee');
+    Route::view('/espace/installation', 'space.installation')->name('stay.installation');
+    Route::view('/espace/appartement', 'space.appartement')->name('stay.appartement');
+    Route::view('/espace/depart', 'space.depart')->name('stay.depart');
+    Route::view('/espace/chamonix', 'space.chamonix')->name('stay.chamonix');
 });
 
 Route::post('/deconnexion', [CodeLoginController::class, 'logout'])->name('logout');

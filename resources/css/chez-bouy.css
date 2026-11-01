@@ -169,3 +169,39 @@ footer {
     height: auto;
     flex-shrink: 0;
 }
+
+.stay-menu {
+    display: grid;
+    gap: 12px;
+}
+
+.stay-menu a {
+    display: block;
+    padding: 16px 20px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background: var(--color-surface);
+    color: var(--color-text);
+    text-decoration: none;
+    transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.stay-menu a:hover {
+    background: var(--color-button-hover);
+    border-color: var(--color-control-border);
+}
+
+.stay-guide { margin-top: 28px; }
+
+.stay-guide .button {
+    transition: background-color 150ms ease, color 150ms ease;
+}
+
+.stay-guide .button:hover {
+    background: var(--color-guide-hover);
+    color: var(--color-guide-hover-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .stay-guide .button { transition: none; }
+}
