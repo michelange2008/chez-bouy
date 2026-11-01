@@ -6,4 +6,6 @@ return [
     'locations' => 'Locations',
     'photos' => 'Photos',
     'files' => 'Files',
+    'notes' => 'Notes',
+    'annuaire' => 'Directory',
 ];

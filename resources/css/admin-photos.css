@@ -43,7 +43,21 @@
 .media-button:disabled { opacity:.55; cursor:not-allowed; }
 .media-badge { display:inline-block; background:#e3e6dc; border-radius:20px; padding:4px 10px; font-size:.85rem; margin-bottom:12px; }
 .media-delete { margin-top:16px; }
+.note-actions { display:flex; justify-content:flex-end; align-items:flex-start; gap:8px; margin-top:16px; }
+.note-actions > a { flex-shrink:0; }
+.note-actions .media-delete { margin-top:0; min-width:0; }
 .media-delete summary { list-style:none; }
 .media-delete summary::-webkit-details-marker { display:none; }
 .media-delete button { white-space:normal; }
 @media(max-width:760px) { .media-columns { grid-template-columns:1fr; } .media-panel { padding:16px; } }
+
+.annuaire-actions .media-button { min-height:30px; padding:4px 8px; font-size:14px; }
+.annuaire-heading { display:flex; flex-wrap:wrap; align-items:center; gap:10px; padding:12px 20px; background:#294e40; color:white; overflow-wrap:anywhere; }
+.annuaire-heading h3 { flex:1 1 100px; min-width:0; margin:0; }
+.annuaire-heading .annuaire-actions { margin:0 0 0 auto; }
+.annuaire-heading .media-delete[open] { max-width:180px; }
+.annuaire-table { width:100%; table-layout:fixed; border-collapse:collapse; }
+.annuaire-table th, .annuaire-table td { padding:6px 0; vertical-align:top; text-align:left; overflow-wrap:anywhere; }
+.annuaire-table th { width:36%; padding-right:12px; font-style:italic; font-weight:normal; }
+.annuaire-table td { white-space:pre-line; }
+.annuaire-table a[href^="mailto:"]:hover { color:#14532d; font-weight: bold; }

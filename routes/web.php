@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\AnnuaireController;
+use App\Http\Controllers\Admin\FileController;
+use App\Http\Controllers\Admin\NoteController;
 use App\Http\Controllers\Admin\PhotoController;
 use App\Http\Controllers\Admin\PhotoLocationController;
 use App\Http\Controllers\Admin\UserController;
@@ -57,6 +60,23 @@ Route::middleware(['auth', RequireRole::class.':admin'])
         Route::patch('/emplacements/{location}', [PhotoLocationController::class, 'update'])->name('admin.locations.update');
         Route::delete('/emplacements/{location}', [PhotoLocationController::class, 'destroy'])->name('admin.locations.destroy');
 
-        Route::view('/fichiers', 'admin.files')
-            ->name('admin.files');
+        Route::get('/fichiers', [FileController::class, 'index'])->name('admin.files');
+        Route::get('/fichiers/ajouter', [FileController::class, 'create'])->name('admin.files.create');
+        Route::post('/fichiers', [FileController::class, 'store'])->name('admin.files.store');
+        Route::get('/fichiers/{file}/modifier', [FileController::class, 'edit'])->name('admin.files.edit');
+        Route::patch('/fichiers/{file}', [FileController::class, 'update'])->name('admin.files.update');
+        Route::delete('/fichiers/{file}', [FileController::class, 'destroy'])->name('admin.files.destroy');
+        Route::get('/fichiers/{file}/telecharger', [FileController::class, 'download'])->name('admin.files.download');
+        Route::get('/notes', [NoteController::class, 'index'])->name('admin.notes');
+        Route::get('/notes/ajouter', [NoteController::class, 'create'])->name('admin.notes.create');
+        Route::post('/notes', [NoteController::class, 'store'])->name('admin.notes.store');
+        Route::get('/notes/{note}/modifier', [NoteController::class, 'edit'])->name('admin.notes.edit');
+        Route::patch('/notes/{note}', [NoteController::class, 'update'])->name('admin.notes.update');
+        Route::delete('/notes/{note}', [NoteController::class, 'destroy'])->name('admin.notes.destroy');
+        Route::get('/annuaire', [AnnuaireController::class, 'index'])->name('admin.annuaire');
+        Route::get('/annuaire/ajouter', [AnnuaireController::class, 'create'])->name('admin.annuaire.create');
+        Route::post('/annuaire', [AnnuaireController::class, 'store'])->name('admin.annuaire.store');
+        Route::get('/annuaire/{annuaire}/modifier', [AnnuaireController::class, 'edit'])->name('admin.annuaire.edit');
+        Route::patch('/annuaire/{annuaire}', [AnnuaireController::class, 'update'])->name('admin.annuaire.update');
+        Route::delete('/annuaire/{annuaire}', [AnnuaireController::class, 'destroy'])->name('admin.annuaire.destroy');
     });
