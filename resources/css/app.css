@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 
+@import './colors.css';
 @import './chez-bouy.css';
 @import './language-switcher.css';
 @import './admin.css';

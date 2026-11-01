@@ -4,8 +4,8 @@
 
 body {
     margin: 0;
-    background: #f5f2eb;
-    color: #263c35;
+    background: var(--color-background);
+    color: var(--color-text);
     font: 18px/1.6 system-ui,sans-serif;
 }
 
@@ -21,7 +21,7 @@ header {
     align-items: center;
     gap: 20px;
     flex-wrap: wrap;
-    border-bottom: 1px solid #d6dbd2;
+    border-bottom: 1px solid var(--color-border);
 }
 
 nav {
@@ -63,13 +63,13 @@ h3 {
     aspect-ratio: 4/3;
     object-fit: cover;
     border-radius: 12px;
-    background: #e3e6dc;
+    background: var(--color-surface-muted);
 }
 
 .placeholder {
     display: grid;
     place-items: center;
-    color: #536456;
+    color: var(--color-text-muted);
 }
 
 figure {
@@ -84,7 +84,7 @@ figcaption {
     max-width: 540px;
     margin: 40px auto;
     padding: 28px;
-    background: white;
+    background: var(--color-surface);
     border-radius: 16px;
 }
 
@@ -96,15 +96,15 @@ label {
 input {
     width: 100%;
     padding: 12px;
-    border: 1px solid #83948b;
+    border: 1px solid var(--color-input-border);
     border-radius: 6px;
     font: inherit;
 }
 
 button, .button {
     display: inline-block;
-    background: #294e40;
-    color: white;
+    background: var(--color-primary);
+    color: var(--color-on-primary);
     padding: 12px 20px;
     border: 0;
     border-radius: 6px;
@@ -122,17 +122,38 @@ nav form button {
     padding: 8px 12px;
 }
 
+body[data-theme="public"] header nav > a,
+body[data-theme="public"] header nav button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 8px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    background: var(--color-surface);
+    color: var(--color-text);
+    text-decoration: none;
+    transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+body[data-theme="public"] header nav > a:hover,
+body[data-theme="public"] header nav button:hover {
+    background: var(--color-button-hover);
+    border-color: var(--color-control-border);
+}
+
 footer {
     margin-top: 50px;
-    color: #536456;
+    color: var(--color-text-muted);
 }
 
 .error {
-    color: #9f2525;
+    color: var(--color-error);
 }
 
 :focus-visible {
-    outline: 3px solid #bd781e;
+    outline: 3px solid var(--color-focus);
     outline-offset: 4px;
 }
 

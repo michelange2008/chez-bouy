@@ -8,14 +8,11 @@
     <div class="media-grid">
         @forelse($notes as $note)
             <article class="media-card">
-                <div class="media-card-body">
+                <div class="note-heading">
                     <h3>{{ $note->title }} (<time
                             datetime="{{ $note->updated_at->format('Y-m-d') }}">{{ $note->updated_at->format('d/m/Y') }}</time> - 
                         {{ $note->author ? trim($note->author->first_name . ' ' . $note->author->name) : __('notes.unknown_author') }})
                     </h3>
-                    @if ($note->description)
-                        <p>{{ $note->description }}</p>
-                    @endif
                     <div class="note-actions">
                         <a class="media-button" href="{{ route('admin.notes.edit', $note) }}">{{ __('notes.modify') }}</a>
                         <details class="media-delete">
@@ -28,6 +25,11 @@
                         </details>
                     </div>
                 </div>
+                @if ($note->description)
+                    <div class="media-card-body">
+                        <p>{{ $note->description }}</p>
+                    </div>
+                @endif
             </article>
         @empty
             <p>{{ __('notes.empty') }}</p>

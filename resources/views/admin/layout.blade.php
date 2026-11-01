@@ -1,5 +1,7 @@
 @extends('layout')
 
+@section('theme', 'admin')
+
 @section('content')
     <h1>{{ __('site.admin') }}</h1>
     @include('admin.partials.menu')

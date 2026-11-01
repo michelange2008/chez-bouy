@@ -7,7 +7,7 @@
     <link rel="icon" type="image/svg+xml" href="{{ \Illuminate\Support\Facades\Storage::disk('public')->url("icon.svg") }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body>
+<body data-theme="@yield('theme', 'public')">
 <header>
     <a class="brand" href="{{ route('home') }}">
         <img class="img-brand" src="{{ asset('storage/icon.svg') }}" alt="">

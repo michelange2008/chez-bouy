@@ -1,0 +1,55 @@
+:root {
+    --color-background: #fafffa;
+    --color-surface: #ffffff;
+    --color-surface-muted: #e7f6ea;
+    --color-text: #001e00;
+    --color-text-muted: #425342;
+    --color-text-help: #425342;
+    --color-border: #c8c8c8;
+    --color-control-border: #6b7c6b;
+    --color-input-border: #6b7c6b;
+    --color-primary: #08752a;
+    --color-on-primary: #ffffff;
+    --color-heading-background: #14a02e;
+    --color-heading-text: #001e00;
+    --color-button-background: #e7f6ea;
+    --color-button-text: #001e00;
+    --color-button-border: #6b7c6b;
+    --color-button-hover: #c4e7cb;
+    --color-danger: #b4202a;
+    --color-on-danger: #ffffff;
+    --color-danger-hover: #901a22;
+    --color-error: #b4202a;
+    --color-link-hover: #001e00;
+    --color-focus: #001e00;
+    --color-focus-heading: #001e00;
+    --color-backdrop: rgb(0 30 0 / 65%);
+}
+
+[data-theme="admin"] {
+    --color-background: #f5f2eb;
+    --color-surface: #ffffff;
+    --color-surface-muted: #e3e6dc;
+    --color-text: #263c35;
+    --color-text-muted: #536456;
+    --color-text-help: #52635b;
+    --color-border: #d6dbd2;
+    --color-control-border: #8b9c91;
+    --color-input-border: #83948b;
+    --color-primary: #294e40;
+    --color-on-primary: #ffffff;
+    --color-heading-background: #294e40;
+    --color-heading-text: #ffffff;
+    --color-button-background: #ededed;
+    --color-button-text: #202020;
+    --color-button-border: #000000;
+    --color-button-hover: #d4d4d4;
+    --color-danger: #c62828;
+    --color-on-danger: #ffffff;
+    --color-danger-hover: #a51f1f;
+    --color-error: #9f2525;
+    --color-link-hover: #14532d;
+    --color-focus: #294e40;
+    --color-focus-heading: #ffffff;
+    --color-backdrop: rgb(20 35 29 / 65%);
+}
