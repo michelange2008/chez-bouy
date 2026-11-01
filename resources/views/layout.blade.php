@@ -9,7 +9,9 @@
 </head>
 <body>
 <header>
-    <a href="{{ route('home') }}"><strong>Chez Bouy</strong></a>
+    <a class="brand" href="{{ route('home') }}">
+        <img class="img-brand" src="{{ asset('storage/icon.svg') }}" alt="">
+        <strong>Chez Bouy</strong></a>
     <nav aria-label="Navigation principale">
         @auth
             <a href="{{ route('dashboard') }}">Mon séjour</a>

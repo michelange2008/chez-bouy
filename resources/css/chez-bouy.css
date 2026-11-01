@@ -135,3 +135,16 @@ footer {
     outline: 3px solid #bd781e;
     outline-offset: 4px;
 }
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    white-space: nowrap;
+}
+
+.img-brand {
+    width: 40px;
+    height: auto;
+    flex-shrink: 0;
+}
