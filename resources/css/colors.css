@@ -1,7 +1,7 @@
 :root {
-    --color-background: #fafffa;
+    --color-background: #fafbfa;
     --color-surface: #ffffff;
-    --color-surface-muted: #e7f6ea;
+    --color-surface-muted: #f0f3f0;
     --color-text: #001e00;
     --color-text-muted: #425342;
     --color-text-help: #425342;
@@ -12,10 +12,10 @@
     --color-on-primary: #ffffff;
     --color-heading-background: #14a02e;
     --color-heading-text: #001e00;
-    --color-button-background: #e7f6ea;
+    --color-button-background: #f0f3f0;
     --color-button-text: #001e00;
     --color-button-border: #6b7c6b;
-    --color-button-hover: #c4e7cb;
+    --color-button-hover: #e2e8e3;
     --color-danger: #b4202a;
     --color-on-danger: #ffffff;
     --color-danger-hover: #901a22;
@@ -27,29 +27,29 @@
 }
 
 [data-theme="admin"] {
-    --color-background: #f5f2eb;
+    --color-background: #f4f7f9;
     --color-surface: #ffffff;
-    --color-surface-muted: #e3e6dc;
-    --color-text: #263c35;
-    --color-text-muted: #536456;
-    --color-text-help: #52635b;
-    --color-border: #d6dbd2;
-    --color-control-border: #8b9c91;
-    --color-input-border: #83948b;
-    --color-primary: #294e40;
+    --color-surface-muted: #dee7ed;
+    --color-text: #2c476d;
+    --color-text-muted: #2c476d;
+    --color-text-help: #2c476d;
+    --color-border: #808fb3;
+    --color-control-border: #4060ba;
+    --color-input-border: #4060ba;
+    --color-primary: #4060ba;
     --color-on-primary: #ffffff;
-    --color-heading-background: #294e40;
-    --color-heading-text: #ffffff;
-    --color-button-background: #ededed;
-    --color-button-text: #202020;
-    --color-button-border: #000000;
-    --color-button-hover: #d4d4d4;
+    --color-heading-background: #2c476d;
+    --color-heading-text: #dee7ed;
+    --color-button-background: #dee7ed;
+    --color-button-text: #2c476d;
+    --color-button-border: #4060ba;
+    --color-button-hover: #9cbae3;
     --color-danger: #c62828;
     --color-on-danger: #ffffff;
     --color-danger-hover: #a51f1f;
     --color-error: #9f2525;
-    --color-link-hover: #14532d;
-    --color-focus: #294e40;
-    --color-focus-heading: #ffffff;
-    --color-backdrop: rgb(20 35 29 / 65%);
+    --color-link-hover: #4060ba;
+    --color-focus: #2c476d;
+    --color-focus-heading: #dee7ed;
+    --color-backdrop: rgb(44 71 109 / 65%);
 }
