@@ -11,6 +11,8 @@ class RequireRole
     {
         abort_unless(in_array($request->user()?->role, $roles, true), 403);
         abort_unless($request->user()?->is_active, 403);
+        abort_if($request->user()->hasExpired(), 403);
+
         return $next($request);
     }
 }

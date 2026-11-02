@@ -22,6 +22,13 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    public function hasExpired(): bool
+    {
+        return $this->role === 'locataire'
+            && $this->created_at !== null
+            && $this->created_at->copy()->addYearsNoOverflow(2)->lessThanOrEqualTo(now());
+    }
+
     /**
      * Get the attributes that should be cast.
      *

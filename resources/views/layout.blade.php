@@ -27,6 +27,6 @@
     @if($errors->any())<div class="error" role="alert">@foreach($errors->all() as $error)<p>{{ $error }}</p>@endforeach</div>@endif
     @yield('content')
 </main>
-<footer>Chez Bouy · {{ __('site.footer') }}</footer>
+@include('partials.footer')
 </body>
 </html>

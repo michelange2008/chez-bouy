@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/photos/{photo}/image', [HomeController::class, 'image'])->name('home.photos.image');
+Route::view('/informations-legales', 'legal')->name('legal');
 Route::post('/langue', [LocaleController::class, 'update'])->name('locale.update');
 
 Route::middleware('guest')->group(function () {

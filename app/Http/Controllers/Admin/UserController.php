@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\DeleteUser;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -66,15 +67,13 @@ class UserController extends Controller
         return redirect()->route('admin.users')->with('status', __('users.updated'));
     }
 
-    public function destroy(Request $request, User $user)
+    public function destroy(Request $request, User $user, DeleteUser $deleteUser)
     {
         if ($user->is($request->user())) {
             throw ValidationException::withMessages(['user' => __('users.cannot_delete_self')]);
         }
 
-        $key = 'login-code:'.hash('sha256', $user->email);
-        $user->delete();
-        Cache::forget($key);
+        $deleteUser->handle($user);
 
         return redirect()->route('admin.users')->with('status', __('users.deleted'));
     }
