@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'welcome_guide' => 'Downloadable welcome guide',
+    'welcome_guide_help' => 'This file will be offered in the guest area for the selected language. It will replace the previous guide for that language without deleting the old file.',
     'add' => 'Add a file',
     'edit' => 'Edit file',
     'delete' => 'Delete',

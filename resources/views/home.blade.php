@@ -10,18 +10,15 @@
     <section id="photos" aria-labelledby="photos-title">
         <h2 id="photos-title">{{ __('site.photos_title') }}</h2>
         <div class="gallery">
-            @foreach ([
-            'montagne.jpg' => 'La vue sur les montagnes',
-            'residence.png' => 'La résidence — Chez Bouy',
-        ] as $file => $label)
+            @foreach ($photos as $photo)
                 <figure>
-                    @if (\Illuminate\Support\Facades\Storage::disk('public')->exists("photos/{$file}"))
-                        <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url("photos/{$file}") }}"
-                            alt="{{ $label }}" loading="lazy" width="800" height="600">
+                    @if (in_array($photo->id, $availablePhotoIds, true))
+                        <img src="{{ route('home.photos.image', $photo) }}"
+                            alt="{{ $photo->translatedTitle() }}" loading="lazy" width="800" height="600">
                     @else
                         <div class="placeholder">{{ __('site.photo_missing') }}</div>
                     @endif
-                    <figcaption>{{ $label }}</figcaption>
+                    <figcaption>{{ $photo->translatedTitle() }}</figcaption>
                 </figure>
             @endforeach
         </div>

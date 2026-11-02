@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'welcome_guide' => 'Guida di benvenuto da scaricare',
+    'welcome_guide_help' => 'Questo file sarà disponibile nell’area ospiti per la lingua scelta. Sostituirà la guida precedente in quella lingua senza eliminare il vecchio file.',
     'add' => 'Aggiungi un file',
     'edit' => 'Modifica file',
     'delete' => 'Elimina',

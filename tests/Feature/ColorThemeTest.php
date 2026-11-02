@@ -27,7 +27,7 @@ class ColorThemeTest extends TestCase
     public function test_la_palette_admin_depend_de_la_page_et_non_du_role_connecte(): void
     {
         $this->actingAs(User::factory()->create(['role' => 'admin']));
-        foreach (['/admin', '/admin/utilisateurs', '/admin/emplacements', '/admin/photos', '/admin/fichiers', '/admin/notes', '/admin/annuaire', '/admin/notes/ajouter', '/admin/annuaire/ajouter'] as $url) {
+        foreach (['/admin', '/admin/utilisateurs', '/admin/photos', '/admin/fichiers', '/admin/notes', '/admin/annuaire', '/admin/notes/ajouter', '/admin/annuaire/ajouter'] as $url) {
             $this->get($url)->assertOk()->assertSee('data-theme="admin"', false);
         }
         $this->get('/')->assertOk()->assertSee('data-theme="public"', false);

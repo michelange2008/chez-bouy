@@ -13,6 +13,8 @@ class FileMetadataMigrationTest extends TestCase
 
     public function test_la_migration_conserve_le_pdf_et_les_metadonnees_francaises(): void
     {
+        $purposeMigration = require database_path('migrations/2026_11_02_180252_add_purpose_to_files_table.php');
+        $purposeMigration->down();
         $migration = require database_path('migrations/2026_11_01_114109_simplify_file_metadata.php');
         $migration->down();
         $fileId = DB::table('files')->insertGetId(['filename' => 'file/livret.pdf']);

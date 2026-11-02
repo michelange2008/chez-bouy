@@ -7,9 +7,8 @@
     <select id="location-filter" name="location"><option value="">{{ __('photos.all_locations') }}</option>
         @foreach($locations as $location)<option value="{{ $location->id }}" @selected((string) $locationId === (string) $location->id)>{{ $location->name }}</option>@endforeach
     </select>
-    <button class="media-button">{{ __('photos.apply') }}</button><a class="media-button" href="{{ route('admin.locations') }}">{{ __('photos.manage_locations') }}</a>
+    <button class="media-button">{{ __('photos.apply') }}</button>
 </form>
-@if($locationId)<p class="media-help">{{ __('photos.order_help') }}</p>@endif
 <div class="media-grid">
     @forelse($photos as $photo)
         <article class="media-card">

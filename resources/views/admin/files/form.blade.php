@@ -20,6 +20,12 @@
                     <option value="{{ $locale }}" @selected(old('locale', $file->locale ?? 'fr') === $locale)>{{ $label }}</option>
                 @endforeach
             </select>
+            <input type="hidden" name="welcome_guide" value="0">
+            <label class="media-checkbox" for="file-welcome-guide">
+                <input id="file-welcome-guide" type="checkbox" name="welcome_guide" value="1" @checked(old('welcome_guide', $file->purpose === \App\Models\File::WELCOME_GUIDE)) aria-describedby="welcome-guide-help">
+                {{ __('files.welcome_guide') }}
+            </label>
+            <p id="welcome-guide-help" class="media-help">{{ __('files.welcome_guide_help') }}</p>
             <label for="file-title">{{ __('files.title') }} *</label>
             <input id="file-title" name="title" maxlength="255" value="{{ old('title', $file->title) }}" required>
             <label for="file-description">{{ __('files.description') }}</label>

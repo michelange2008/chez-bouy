@@ -98,10 +98,8 @@ class PhotoController extends Controller
                     $photo->translations()->save($translation);
                 }
                 $associations = [];
-                foreach ($data['locations'] ?? [] as $location) {
-                    if (! empty($location['id'])) {
-                        $associations[$location['id']] = ['position' => $location['position']];
-                    }
+                if (! empty($data['location_id'])) {
+                    $associations[$data['location_id']] = isset($data['position']) ? ['position' => $data['position']] : [];
                 }
                 $photo->locations()->sync($associations);
             });

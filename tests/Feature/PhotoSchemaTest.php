@@ -33,19 +33,18 @@ class PhotoSchemaTest extends TestCase
         DB::table('photo_translations')->insert($translation);
     }
 
-    public function test_le_code_d_emplacement_est_unique(): void
+    public function test_le_nom_de_route_d_emplacement_est_unique(): void
     {
-        DB::table('photo_locations')->insert(['code' => 'public', 'name' => 'Accueil']);
 
         $this->expectException(UniqueConstraintViolationException::class);
 
-        DB::table('photo_locations')->insert(['code' => 'public', 'name' => 'Autre accueil']);
+        DB::table('photo_locations')->insert(['route_name' => 'home', 'name' => 'Autre accueil']);
     }
 
     public function test_une_photo_ne_peut_pas_etre_associee_deux_fois_au_meme_emplacement(): void
     {
         $photoId = DB::table('photos')->insertGetId(['filename' => 'photos/chalet.jpg']);
-        $locationId = DB::table('photo_locations')->insertGetId(['code' => 'public', 'name' => 'Accueil']);
+        $locationId = DB::table('photo_locations')->where('route_name', 'home')->value('id');
         $association = ['photo_id' => $photoId, 'photo_location_id' => $locationId, 'position' => 1];
         DB::table('photo_location')->insert($association);
 
@@ -57,24 +56,25 @@ class PhotoSchemaTest extends TestCase
     public function test_supprimer_un_emplacement_conserve_les_photos_et_les_autres_associations(): void
     {
         $photoId = DB::table('photos')->insertGetId(['filename' => 'photos/chalet.jpg']);
-        $publicId = DB::table('photo_locations')->insertGetId(['code' => 'public', 'name' => 'Accueil']);
-        $arrivalId = DB::table('photo_locations')->insertGetId(['code' => 'arrivee', 'name' => 'Arrivée']);
+        $otherPhotoId = DB::table('photos')->insertGetId(['filename' => 'photos/other.jpg']);
+        $publicId = DB::table('photo_locations')->where('route_name', 'home')->value('id');
+        $arrivalId = DB::table('photo_locations')->where('route_name', 'stay.arrivee')->value('id');
         DB::table('photo_location')->insert([
             ['photo_id' => $photoId, 'photo_location_id' => $publicId, 'position' => 1],
-            ['photo_id' => $photoId, 'photo_location_id' => $arrivalId, 'position' => 4],
+            ['photo_id' => $otherPhotoId, 'photo_location_id' => $arrivalId, 'position' => 4],
         ]);
 
         DB::table('photo_locations')->where('id', $publicId)->delete();
 
         $this->assertDatabaseHas('photos', ['id' => $photoId]);
         $this->assertDatabaseMissing('photo_location', ['photo_location_id' => $publicId]);
-        $this->assertDatabaseHas('photo_location', ['photo_id' => $photoId, 'photo_location_id' => $arrivalId, 'position' => 4]);
+        $this->assertDatabaseHas('photo_location', ['photo_id' => $otherPhotoId, 'photo_location_id' => $arrivalId, 'position' => 4]);
     }
 
     public function test_supprimer_une_photo_supprime_ses_traductions_et_associations(): void
     {
         $photoId = DB::table('photos')->insertGetId(['filename' => 'photos/chalet.jpg']);
-        $locationId = DB::table('photo_locations')->insertGetId(['code' => 'public', 'name' => 'Accueil']);
+        $locationId = DB::table('photo_locations')->where('route_name', 'home')->value('id');
         DB::table('photo_translations')->insert(['photo_id' => $photoId, 'locale' => 'fr', 'title' => 'Le chalet']);
         DB::table('photo_location')->insert(['photo_id' => $photoId, 'photo_location_id' => $locationId]);
 

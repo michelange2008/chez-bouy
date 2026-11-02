@@ -8,6 +8,9 @@
             <div class="media-card-body">
                 <h3>{{ $file->title }}</h3>
                 <span class="media-badge">{{ config('languages.supported')[$file->locale] ?? $file->locale }}</span>
+                @if($file->purpose === \App\Models\File::WELCOME_GUIDE)
+                    <span class="media-badge">{{ __('files.welcome_guide') }}</span>
+                @endif
                 <p>{{ $file->filename }}</p>
                 @if($file->description)<p>{{ $file->description }}</p>@endif
                 <a class="media-button" href="{{ route('admin.files.download', $file) }}">{{ __('files.download') }}</a>

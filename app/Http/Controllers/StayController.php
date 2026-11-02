@@ -31,11 +31,10 @@ class StayController extends Controller
     private function welcomeGuide(): ?File
     {
         $locale = app()->getLocale();
-        $id = config('stay.welcome_guides.'.$locale);
-        if (! $id) {
-            return null;
-        }
-        $guide = File::query()->whereKey($id)->where('locale', $locale)->first();
+        $guide = File::query()
+            ->where('locale', $locale)
+            ->where('purpose', File::WELCOME_GUIDE)
+            ->first();
 
         return $guide && Storage::disk('local')->exists($guide->filename) ? $guide : null;
     }

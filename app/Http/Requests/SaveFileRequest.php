@@ -16,6 +16,7 @@ class SaveFileRequest extends FormRequest
     {
         return [
             'upload' => [$this->route('file') ? 'nullable' : 'required', 'file', 'max:10240'],
+            'welcome_guide' => ['sometimes', 'boolean'],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:50000'],
             'locale' => ['required', Rule::in(array_keys(config('languages.supported')))],

@@ -8,6 +8,6 @@ class PhotoLocationFactory extends Factory
 {
     public function definition(): array
     {
-        return ['code' => fake()->unique()->slug(2), 'name' => fake()->words(3, true)];
+        return ['route_name' => fake()->unique()->slug(2), 'name' => fake()->words(3, true)];
     }
 }

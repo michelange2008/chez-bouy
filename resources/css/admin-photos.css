@@ -9,7 +9,7 @@
 .media-card ul { padding-left:20px; margin-bottom:16px; }
 .media-preview { width:100%; max-height:300px; object-fit:contain; margin-bottom:16px; }
 .media-form label { display:block; margin-top:14px; }
-.media-form input:not([type=checkbox]):not([type=hidden]), .media-form textarea, .media-filter select { width:100%; padding:10px; border:1px solid var(--color-input-border); border-radius:6px; background: var(--color-surface); color:inherit; font:inherit; }
+.media-form input:not([type=checkbox]):not([type=hidden]), .media-form textarea, .media-form select, .media-filter select { width:100%; padding:10px; border:1px solid var(--color-input-border); border-radius:6px; background: var(--color-surface); color:inherit; font:inherit; }
 .media-form textarea { resize:vertical; }
 .media-form .media-checkbox { display:flex; align-items:center; gap:10px; }
 .media-checkbox input { width:20px; height:20px; flex-shrink:0; }

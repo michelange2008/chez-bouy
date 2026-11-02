@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'welcome_guide' => 'Guide d’accueil à télécharger',
+    'welcome_guide_help' => 'Ce fichier sera proposé dans l’espace locataire pour la langue choisie. Il remplacera le guide précédent de cette langue, sans supprimer l’ancien fichier.',
     'add' => 'Ajouter un fichier',
     'edit' => 'Modifier le fichier',
     'delete' => 'Supprimer',

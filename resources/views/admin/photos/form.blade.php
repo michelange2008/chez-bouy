@@ -18,22 +18,16 @@
             <noscript><p class="error">{{ __('photos.no_javascript') }}</p></noscript>
             <input type="hidden" name="published" value="0">
             <label class="media-checkbox"><input type="checkbox" name="published" value="1" @checked(old('published', $photo->published))>{{ __('photos.published') }}</label>
-            <h3>{{ __('admin.locations') }}</h3>
-            <p class="media-help">{{ __('photos.assignment_help') }}</p>
-            @forelse($locations as $index => $location)
-                @php
-                    $association = $photo->locations->firstWhere('id', $location->id);
-                    $oldLocations = old('locations');
-                    $selected = $oldLocations !== null ? collect($oldLocations)->firstWhere('id', $location->id) : ($association ? ['id' => $location->id, 'position' => $association->pivot->position] : null);
-                @endphp
-                <div class="media-location-row">
-                    <label class="media-checkbox"><input type="checkbox" name="locations[{{ $index }}][id]" value="{{ $location->id }}" @checked($selected)>{{ $location->name }}</label>
-                    <label for="position-{{ $location->id }}">{{ __('photos.position') }}</label>
-                    <input id="position-{{ $location->id }}" type="number" min="0" max="2147483647" name="locations[{{ $index }}][position]" value="{{ $selected['position'] ?? 0 }}" required>
-                </div>
-            @empty
-                <p>{{ __('photos.no_locations') }} <a class="media-button" href="{{ route('admin.locations') }}">{{ __('photos.manage_locations') }}</a></p>
-            @endforelse
+            <label for="photo-location">{{ __('photos.filter') }}</label>
+            <select id="photo-location" name="location_id">
+                <option value="">{{ __('photos.unassigned') }}</option>
+                @foreach($locations as $location)
+                    <option value="{{ $location->id }}" @selected((string) old('location_id', $photo->locations->first()?->id) === (string) $location->id)>{{ $location->name }}</option>
+                @endforeach
+            </select>
+            <label for="photo-position">{{ __('photos.position') }}</label>
+            <input id="photo-position" name="position" type="number" min="0" max="2147483647" value="{{ old('position', $photo->locations->first()?->pivot->position ?? 0) }}" aria-describedby="position-help">
+            <p id="position-help" class="media-help">{{ __('photos.position_help') }}</p>
         </section>
         <section class="media-panel">
             <h3>{{ __('photos.translations') }}</h3>

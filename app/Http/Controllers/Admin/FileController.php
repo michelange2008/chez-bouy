@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveFileRequest;
 use App\Models\File;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -63,6 +64,14 @@ class FileController extends Controller
                 $file->title = $data['title'];
                 $file->description = $data['description'] ?? null;
                 $file->locale = $data['locale'];
+                $file->purpose = ! empty($data['welcome_guide']) ? File::WELCOME_GUIDE : null;
+                if ($file->purpose === File::WELCOME_GUIDE) {
+                    File::query()
+                        ->where('locale', $file->locale)
+                        ->where('purpose', File::WELCOME_GUIDE)
+                        ->when($file->exists, fn (Builder $query): Builder => $query->whereKeyNot($file->id))
+                        ->update(['purpose' => null]);
+                }
                 $file->save();
             });
         } catch (Throwable $exception) {

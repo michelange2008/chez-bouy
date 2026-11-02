@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class File extends Model
 {
     use HasFactory;
+
+    public const string WELCOME_GUIDE = 'welcome_guide';
 }
