@@ -26,6 +26,11 @@ class Photo extends Model
         return $this->belongsToMany(PhotoLocation::class, 'photo_location')->withPivot('position');
     }
 
+    public function sections(): BelongsToMany
+    {
+        return $this->belongsToMany(StaySection::class)->withPivot('position');
+    }
+
     public function translatedTitle(): string
     {
         return $this->translations->firstWhere('locale', app()->getLocale())?->title

@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'back' => 'Retour aux pages',
+    'view' => 'Voir la page',
+    'add' => 'Ajouter une section',
+    'published' => 'Publié',
+    'draft' => 'Brouillon',
+    'untitled' => 'Section sans titre',
+    'edit' => 'Modifier',
+    'up' => 'Monter',
+    'down' => 'Descendre',
+    'delete' => 'Supprimer',
+    'confirm' => 'Supprimer cette section ? Les photos seront conservées dans la photothèque.',
+    'empty' => 'Cette page ne contient aucune section.',
+    'title' => 'Titre (facultatif)',
+    'body' => 'Texte',
+    'translation_help' => 'Le texte français est obligatoire. Sans traduction, il sera affiché dans les autres langues. Les retours à la ligne sont conservés.',
+    'photos' => 'Photos associées',
+    'photo_help' => 'Cochez les photos à afficher, puis classez-les avec Monter et Descendre. Décocher retire uniquement l’association. Les photos en brouillon restent masquées aux locataires.',
+    'upload' => 'Enregistrer et ajouter une nouvelle photo',
+    'no_photos' => 'Aucune photo disponible.',
+    'publish' => 'Publier cette section',
+    'cancel' => 'Annuler',
+    'save' => 'Enregistrer',
+    'saved' => 'Section enregistrée.',
+    'deleted' => 'Section supprimée.',
+];

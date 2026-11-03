@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'back' => 'Torna alle pagine',
+    'view' => 'Visualizza la pagina',
+    'add' => 'Aggiungi una sezione',
+    'published' => 'Pubblicato',
+    'draft' => 'Bozza',
+    'untitled' => 'Sezione senza titolo',
+    'edit' => 'Modifica',
+    'up' => 'Sposta su',
+    'down' => 'Sposta giù',
+    'delete' => 'Elimina',
+    'confirm' => 'Eliminare questa sezione? Le foto rimarranno nella raccolta.',
+    'empty' => 'Questa pagina non contiene sezioni.',
+    'title' => 'Titolo (facoltativo)',
+    'body' => 'Testo',
+    'translation_help' => 'Il testo francese è obbligatorio e viene usato quando manca una traduzione. Gli a capo vengono conservati.',
+    'photos' => 'Foto associate',
+    'photo_help' => 'Seleziona le foto e ordinale con Sposta su e Sposta giù. Deselezionare rimuove solo l’associazione. Le foto in bozza restano nascoste agli ospiti.',
+    'upload' => 'Salva e aggiungi una nuova foto',
+    'no_photos' => 'Nessuna foto disponibile.',
+    'publish' => 'Pubblica questa sezione',
+    'cancel' => 'Annulla',
+    'save' => 'Salva',
+    'saved' => 'Sezione salvata.',
+    'deleted' => 'Sezione eliminata.',
+];

@@ -4,12 +4,14 @@ use App\Http\Controllers\Admin\AnnuaireController;
 use App\Http\Controllers\Admin\FileController;
 use App\Http\Controllers\Admin\NoteController;
 use App\Http\Controllers\Admin\PhotoController;
+use App\Http\Controllers\Admin\StaySectionController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\CodeLoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\StayController;
 use App\Http\Middleware\RequireRole;
+use App\Models\StaySection;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -26,12 +28,13 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware(['auth', RequireRole::class.':locataire,admin'])->group(function () {
     Route::get('/espace', [StayController::class, 'index'])->name('dashboard');
+    Route::get('/espace/photos/{photo}/image', [StayController::class, 'image'])->name('stay.photos.image');
     Route::get('/espace/guide', [StayController::class, 'downloadGuide'])->name('stay.guide');
-    Route::view('/espace/arrivee', 'space.arrivee')->name('stay.arrivee');
-    Route::view('/espace/installation', 'space.installation')->name('stay.installation');
-    Route::view('/espace/appartement', 'space.appartement')->name('stay.appartement');
-    Route::view('/espace/depart', 'space.depart')->name('stay.depart');
-    Route::view('/espace/chamonix', 'space.chamonix')->name('stay.chamonix');
+    Route::get('/espace/arrivee', [StayController::class, 'show'])->name('stay.arrivee');
+    Route::get('/espace/installation', [StayController::class, 'show'])->name('stay.installation');
+    Route::get('/espace/appartement', [StayController::class, 'show'])->name('stay.appartement');
+    Route::get('/espace/depart', [StayController::class, 'show'])->name('stay.depart');
+    Route::get('/espace/chamonix', [StayController::class, 'show'])->name('stay.chamonix');
 });
 
 Route::post('/deconnexion', [CodeLoginController::class, 'logout'])->name('logout');
@@ -39,6 +42,14 @@ Route::post('/deconnexion', [CodeLoginController::class, 'logout'])->name('logou
 Route::middleware(['auth', RequireRole::class.':admin'])
     ->prefix('admin')->group(function () {
         Route::view('/', 'admin')->name('admin');
+        Route::get('/pages-locataire', [StaySectionController::class, 'index'])->name('admin.stay');
+        Route::get('/pages-locataire/{page}', [StaySectionController::class, 'show'])->whereIn('page', StaySection::PAGES)->name('admin.stay.show');
+        Route::get('/pages-locataire/{page}/ajouter', [StaySectionController::class, 'create'])->whereIn('page', StaySection::PAGES)->name('admin.stay.create');
+        Route::post('/pages-locataire/{page}', [StaySectionController::class, 'store'])->whereIn('page', StaySection::PAGES)->name('admin.stay.store');
+        Route::get('/sections/{section}/modifier', [StaySectionController::class, 'edit'])->name('admin.stay.edit');
+        Route::patch('/sections/{section}', [StaySectionController::class, 'update'])->name('admin.stay.update');
+        Route::patch('/sections/{section}/ordre', [StaySectionController::class, 'move'])->name('admin.stay.move');
+        Route::delete('/sections/{section}', [StaySectionController::class, 'destroy'])->name('admin.stay.destroy');
 
         Route::get('/utilisateurs', [UserController::class, 'index'])
             ->name('admin.users');

@@ -7,6 +7,7 @@ use App\Http\Requests\SavePhotoRequest;
 use App\Models\Photo;
 use App\Models\PhotoLocation;
 use App\Models\PhotoTranslation;
+use App\Models\StaySection;
 use App\PhotoImage;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -38,9 +39,11 @@ class PhotoController extends Controller
         ]);
     }
 
-    public function create(): View
+    public function create(Request $request): View
     {
-        return $this->form(new Photo);
+        $data = $request->validate(['section' => ['nullable', 'integer', 'exists:stay_sections,id']]);
+
+        return $this->form(new Photo, isset($data['section']) ? (int) $data['section'] : null);
     }
 
     public function edit(Photo $photo): View
@@ -48,12 +51,13 @@ class PhotoController extends Controller
         return $this->form($photo);
     }
 
-    private function form(Photo $photo): View
+    private function form(Photo $photo, ?int $sectionId = null): View
     {
         $photo->load(['translations', 'locations']);
 
         return view('admin.photos.form', [
             'photo' => $photo,
+            'sectionId' => $sectionId,
             'translations' => $photo->translations->keyBy('locale'),
             'locations' => PhotoLocation::query()->orderBy('name')->get(),
         ]);
@@ -102,6 +106,11 @@ class PhotoController extends Controller
                     $associations[$data['location_id']] = isset($data['position']) ? ['position' => $data['position']] : [];
                 }
                 $photo->locations()->sync($associations);
+                if (! empty($data['section_id'])) {
+                    $section = StaySection::query()->lockForUpdate()->findOrFail($data['section_id']);
+                    $position = ($section->photos()->max('photo_stay_section.position') ?? -1) + 1;
+                    $section->photos()->syncWithoutDetaching([$photo->id => ['position' => $position]]);
+                }
             });
         } catch (Throwable $exception) {
             if ($newFilename) {
@@ -111,6 +120,10 @@ class PhotoController extends Controller
         }
         if ($newFilename && $oldFilename) {
             $images->delete($oldFilename);
+        }
+
+        if (! empty($data['section_id'])) {
+            return redirect()->route('admin.stay.edit', $data['section_id'])->with('status', __('photos.saved'));
         }
 
         return redirect()->route('admin.photos')->with('status', __('photos.saved'));

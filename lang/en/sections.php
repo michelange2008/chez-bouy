@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'back' => 'Back to pages',
+    'view' => 'View page',
+    'add' => 'Add a section',
+    'published' => 'Published',
+    'draft' => 'Draft',
+    'untitled' => 'Untitled section',
+    'edit' => 'Edit',
+    'up' => 'Move up',
+    'down' => 'Move down',
+    'delete' => 'Delete',
+    'confirm' => 'Delete this section? Photos will remain in the library.',
+    'empty' => 'This page has no sections.',
+    'title' => 'Title (optional)',
+    'body' => 'Text',
+    'translation_help' => 'French text is required and is used when a translation is missing. Line breaks are preserved.',
+    'photos' => 'Associated photos',
+    'photo_help' => 'Select photos and order them with Move up and Move down. Unchecking only removes the association. Draft photos remain hidden from guests.',
+    'upload' => 'Save and add a new photo',
+    'no_photos' => 'No photos available.',
+    'publish' => 'Publish this section',
+    'cancel' => 'Cancel',
+    'save' => 'Save',
+    'saved' => 'Section saved.',
+    'deleted' => 'Section deleted.',
+];

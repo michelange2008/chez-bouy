@@ -17,6 +17,7 @@ class SavePhotoRequest extends FormRequest
         $locales = array_keys(config('languages.supported'));
         $rules = [
             'image' => [$this->route('photo') ? 'nullable' : 'required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:'.config('photos.max_upload_kb'), 'dimensions:max_width='.config('photos.max_dimension').',max_height='.config('photos.max_dimension')],
+            'section_id' => ['nullable', 'integer', 'exists:stay_sections,id'],
             'published' => ['required', 'boolean'],
             'translations' => ['required', 'array:'.implode(',', $locales)],
             'location_id' => ['nullable', 'integer', Rule::exists('photo_locations', 'id')],
