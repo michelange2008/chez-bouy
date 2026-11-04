@@ -9,7 +9,7 @@
         @foreach($sections as $section)
             @php($content = $section->translatedContent())
             <section class="min-w-0">
-                @if($content['title'])<h2 class="mb-4 text-2xl">{{ $content['title'] }}</h2>@endif
+                @if($content['title'])<h2 class="mb-4 text-2xl bg-gray-200 p-2">{{ $content['title'] }}</h2>@endif
                 <div class="stay-markdown">{!! $markdown->render($content['body']) !!}</div>
                 <div class="gallery mt-5">
                     @foreach($section->photos as $photo)
