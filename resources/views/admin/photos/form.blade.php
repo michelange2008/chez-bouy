@@ -1,11 +1,12 @@
 @extends('admin.layout')
 @section('title', $photo->exists ? __('photos.edit') : __('photos.add'))
 @section('admin-content')
-<div class="users-toolbar"><h2>{{ $photo->exists ? __('photos.edit') : __('photos.add') }}</h2><a class="media-button" href="{{ (old('section_id', $sectionId) ? route('admin.stay.edit', old('section_id', $sectionId)) : route('admin.photos')) }}">{{ __('photos.back') }}</a></div>
+<div class="users-toolbar"><h2>{{ $photo->exists ? __('photos.edit') : __('photos.add') }}</h2><a class="media-button" href="{{ (old('section_id', $sectionId) ? route('admin.stay.edit', ['section' => old('section_id', $sectionId), 'section_locale' => old('section_locale', $sectionLocale)]) : route('admin.photos')) }}">{{ __('photos.back') }}</a></div>
 <form action="{{ $photo->exists ? route('admin.photos.update', $photo) : route('admin.photos.store') }}" method="post" enctype="multipart/form-data" class="media-form"
       data-photo-upload="{{ json_encode(['maxDimension' => config('photos.max_dimension'), 'maxBytes' => config('photos.max_upload_kb') * 1024, 'quality' => config('photos.quality') / 100, 'processing' => __('photos.processing'), 'ready' => __('photos.prepared'), 'failed' => __('photos.preparation_failed')]) }}">
     @csrf
     @if(old('section_id', $sectionId))
+        <input type="hidden" name="section_locale" value="{{ old('section_locale', $sectionLocale) }}">
         <input type="hidden" name="section_id" value="{{ old('section_id', $sectionId) }}">
     @endif
     @if($photo->exists) @method('PATCH') @endif
@@ -25,11 +26,11 @@
             <select id="photo-location" name="location_id">
                 <option value="">{{ __('photos.unassigned') }}</option>
                 @foreach($locations as $location)
-                    <option value="{{ $location->id }}" @selected((string) old('location_id', $photo->locations->first()?->id) === (string) $location->id)>{{ $location->name }}</option>
+                    <option value="{{ $location->id }}" @selected((string) old('location_id', $photo->locations->firstWhere('route_name', 'home')?->id) === (string) $location->id)>{{ $location->name }}</option>
                 @endforeach
             </select>
             <label for="photo-position">{{ __('photos.position') }}</label>
-            <input id="photo-position" name="position" type="number" min="0" max="2147483647" value="{{ old('position', $photo->locations->first()?->pivot->position ?? 0) }}" aria-describedby="position-help">
+            <input id="photo-position" name="position" type="number" min="0" max="2147483647" value="{{ old('position', $photo->locations->firstWhere('route_name', 'home')?->pivot->position ?? 0) }}" aria-describedby="position-help">
             <p id="position-help" class="media-help">{{ __('photos.position_help') }}</p>
         </section>
         <section class="media-panel">
@@ -46,6 +47,6 @@
             @endforeach
         </section>
     </div>
-    <div class="users-form-actions"><a class="media-button" href="{{ (old('section_id', $sectionId) ? route('admin.stay.edit', old('section_id', $sectionId)) : route('admin.photos')) }}">{{ __('photos.cancel') }}</a><button class="media-button" data-photo-submit>{{ __('photos.save') }}</button></div>
+    <div class="users-form-actions"><a class="media-button" href="{{ (old('section_id', $sectionId) ? route('admin.stay.edit', ['section' => old('section_id', $sectionId), 'section_locale' => old('section_locale', $sectionLocale)]) : route('admin.photos')) }}">{{ __('photos.cancel') }}</a><button class="media-button" data-photo-submit>{{ __('photos.save') }}</button></div>
 </form>
 @endsection

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'position_help' => 'Lower numbers appear first in this location. Without a location, this number is ignored.',
+    'position_help' => 'This ordering applies only to home page photos. For guest pages, choose photos and their order in each section’s language tab.',
     'locations' => 'Locations',
     'saved' => 'Photo saved.',
     'deleted' => 'Photo deleted.',

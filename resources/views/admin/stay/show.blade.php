@@ -16,8 +16,12 @@
             <h3>{{ $loop->iteration }}. {{ $section->translatedContent()['title'] ?: __('sections.untitled') }}</h3>
             <p class="my-3 whitespace-pre-line break-words">{{ \Illuminate\Support\Str::limit($section->translatedContent()['body'], 180) }}</p>
             <div class="flex flex-wrap gap-3">
-                @foreach($section->photos as $photo)
+                @foreach(config('languages.supported') as $locale => $label)
+                <div><p>{{ $label }}</p><div class="flex flex-wrap gap-3">
+                @foreach($section->photos->where('pivot.locale', $locale) as $photo)
                     <img class="h-20 w-28 rounded object-cover" src="{{ route('admin.photos.image', ['photo' => $photo, 'thumbnail' => 1]) }}" alt="{{ $photo->translatedTitle() }}" loading="lazy" width="112" height="80">
+                @endforeach
+                </div></div>
                 @endforeach
             </div>
             <div class="mt-4 flex flex-wrap items-start gap-3">

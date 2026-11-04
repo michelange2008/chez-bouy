@@ -1,5 +1,7 @@
 @extends('layout')
 
+@inject('markdown', 'App\StayMarkdown')
+
 @section('content')
     @include('partials.language-switcher')
     <h1>@yield('title')</h1>
@@ -8,7 +10,7 @@
             @php($content = $section->translatedContent())
             <section class="min-w-0">
                 @if($content['title'])<h2 class="mb-4 text-2xl">{{ $content['title'] }}</h2>@endif
-                <div class="whitespace-pre-line break-words">{{ $content['body'] }}</div>
+                <div class="stay-markdown">{!! $markdown->render($content['body']) !!}</div>
                 <div class="gallery mt-5">
                     @foreach($section->photos as $photo)
                         <figure>

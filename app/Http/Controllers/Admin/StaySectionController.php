@@ -7,6 +7,8 @@ use App\Http\Requests\SaveStaySectionRequest;
 use App\Models\Photo;
 use App\Models\PhotoLocation;
 use App\Models\StaySection;
+use App\StayMarkdown;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +16,13 @@ use Illuminate\View\View;
 
 class StaySectionController extends Controller
 {
+    public function preview(Request $request, StayMarkdown $markdown): JsonResponse
+    {
+        $data = $request->validate(['body' => ['present', 'nullable', 'string', 'max:50000']]);
+
+        return response()->json(['html' => $markdown->render($data['body'])])->header('Cache-Control', 'private, no-store');
+    }
+
     public function index(): View
     {
         return view('admin.stay.index', ['pages' => StaySection::PAGES]);
@@ -74,15 +83,17 @@ class StaySectionController extends Controller
             $section->published = $data['published'];
             $section->translations = $data['translations'];
             $section->save();
-            $photos = [];
-            foreach (array_values($data['photos'] ?? []) as $position => $photoId) {
-                $photos[$photoId] = ['position' => $position];
+            foreach (['fr', 'en', 'it'] as $locale) {
+                $photos = [];
+                foreach (array_values($data['photos'][$locale] ?? []) as $position => $photoId) {
+                    $photos[$photoId] = ['position' => $position];
+                }
+                $section->photosForLocale($locale)->sync($photos);
             }
-            $section->photos()->sync($photos);
         });
 
-        if (($data['action'] ?? null) === 'add_photo') {
-            return redirect()->route('admin.photos.create', ['section' => $section->id]);
+        if (! empty($data['action'])) {
+            return redirect()->route('admin.photos.create', ['section' => $section->id, 'section_locale' => $data['action']]);
         }
 
         return redirect()->route('admin.stay.show', $section->page)->with('status', __('sections.saved'));

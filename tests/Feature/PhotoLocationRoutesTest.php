@@ -41,11 +41,11 @@ class PhotoLocationRoutesTest extends TestCase
         $this->delete("/admin/emplacements/$location->id")->assertNotFound();
         $this->get('/admin/photos')->assertOk()->assertDontSee('/admin/emplacements', false);
         $this->get('/admin/photos/ajouter')->assertOk()->assertSee('name="location_id"', false)
-            ->assertSee('Sans emplacement')->assertSee('Arrivée')->assertSee('Séjour')->assertDontSee('name="locations[', false);
+            ->assertSee('Sans emplacement')->assertSee('Accueil')->assertDontSee('Arrivée')->assertDontSee('Séjour')->assertDontSee('name="locations[', false);
         $this->assertDatabaseCount('photo_locations', 6);
     }
 
-    public function test_la_selection_remplace_l_emplacement_et_l_option_vide_le_retire(): void
+    public function test_un_emplacement_locataire_est_refuse_et_l_option_vide_retire_l_accueil(): void
     {
         $photo = Photo::factory()->create();
         $home = PhotoLocation::query()->where('route_name', 'home')->sole();
@@ -53,10 +53,10 @@ class PhotoLocationRoutesTest extends TestCase
         $photo->locations()->attach($home);
         $this->actingAs(User::factory()->create(['role' => 'admin']));
         $data = ['published' => '0', 'translations' => ['fr' => ['title' => 'Photo']]];
-        $this->patch("/admin/photos/$photo->id", [...$data, 'location_id' => $arrival->id])->assertRedirect('/admin/photos');
-        $this->assertDatabaseHas('photo_location', ['photo_id' => $photo->id, 'photo_location_id' => $arrival->id]);
-        $this->assertDatabaseMissing('photo_location', ['photo_id' => $photo->id, 'photo_location_id' => $home->id]);
-        $this->get("/admin/photos/$photo->id/modifier")->assertOk()->assertSee('value="'.$arrival->id.'" selected', false);
+        $this->patch("/admin/photos/$photo->id", [...$data, 'location_id' => $arrival->id])->assertSessionHasErrors('location_id');
+        $this->assertDatabaseMissing('photo_location', ['photo_id' => $photo->id, 'photo_location_id' => $arrival->id]);
+        $this->assertDatabaseHas('photo_location', ['photo_id' => $photo->id, 'photo_location_id' => $home->id]);
+        $this->get("/admin/photos/$photo->id/modifier")->assertOk();
         $this->patch("/admin/photos/$photo->id", [...$data, 'location_id' => ''])->assertRedirect('/admin/photos');
         $this->assertDatabaseMissing('photo_location', ['photo_id' => $photo->id]);
         $this->assertModelExists($photo);

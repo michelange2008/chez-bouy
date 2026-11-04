@@ -42,6 +42,7 @@ Route::post('/deconnexion', [CodeLoginController::class, 'logout'])->name('logou
 Route::middleware(['auth', RequireRole::class.':admin'])
     ->prefix('admin')->group(function () {
         Route::view('/', 'admin')->name('admin');
+        Route::post('/pages-locataire/apercu', [StaySectionController::class, 'preview'])->name('admin.stay.preview');
         Route::get('/pages-locataire', [StaySectionController::class, 'index'])->name('admin.stay');
         Route::get('/pages-locataire/{page}', [StaySectionController::class, 'show'])->whereIn('page', StaySection::PAGES)->name('admin.stay.show');
         Route::get('/pages-locataire/{page}/ajouter', [StaySectionController::class, 'create'])->whereIn('page', StaySection::PAGES)->name('admin.stay.create');

@@ -14,13 +14,14 @@ class SaveStaySectionRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'action' => ['nullable', 'in:add_photo'],
+            'action' => ['nullable', 'in:fr,en,it'],
             'published' => ['required', 'boolean'],
             'translations' => ['required', 'array:fr,en,it'],
-            'photos' => ['nullable', 'array', 'max:100'],
-            'photos.*' => ['required', 'integer', 'distinct', 'exists:photos,id'],
+            'photos' => ['nullable', 'array:fr,en,it'],
         ];
         foreach (['fr', 'en', 'it'] as $locale) {
+            $rules["photos.$locale"] = ['nullable', 'array', 'max:100'];
+            $rules["photos.$locale.*"] = ['required', 'integer', 'distinct', 'exists:photos,id'];
             $rules["translations.$locale"] = ['sometimes', 'array:title,body'];
             $rules["translations.$locale.title"] = ['nullable', 'string', 'max:255'];
             $rules["translations.$locale.body"] = [$locale === 'fr' ? 'required' : "required_with:translations.$locale.title", 'nullable', 'string', 'max:50000'];

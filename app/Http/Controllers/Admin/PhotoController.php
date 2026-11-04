@@ -13,6 +13,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Throwable;
@@ -21,9 +22,9 @@ class PhotoController extends Controller
 {
     public function index(Request $request): View
     {
-        $data = $request->validate(['location' => ['nullable', 'integer', 'exists:photo_locations,id']]);
+        $data = $request->validate(['location' => ['nullable', 'integer', Rule::exists('photo_locations', 'id')->where('route_name', 'home')]]);
         $locationId = $data['location'] ?? null;
-        $query = Photo::query()->with(['translations', 'locations']);
+        $query = Photo::query()->with(['translations', 'locations', 'sections']);
         if ($locationId) {
             $query->join('photo_location', 'photos.id', '=', 'photo_location.photo_id')
                 ->where('photo_location.photo_location_id', $locationId)
@@ -34,16 +35,16 @@ class PhotoController extends Controller
 
         return view('admin.photos', [
             'photos' => $query->paginate(12)->withQueryString(),
-            'locations' => PhotoLocation::query()->orderBy('name')->get(),
+            'locations' => PhotoLocation::query()->where('route_name', 'home')->orderBy('name')->get(),
             'locationId' => $locationId,
         ]);
     }
 
     public function create(Request $request): View
     {
-        $data = $request->validate(['section' => ['nullable', 'integer', 'exists:stay_sections,id']]);
+        $data = $request->validate(['section' => ['nullable', 'integer', 'exists:stay_sections,id'], 'section_locale' => ['required_with:section', 'nullable', 'in:fr,en,it']]);
 
-        return $this->form(new Photo, isset($data['section']) ? (int) $data['section'] : null);
+        return $this->form(new Photo, isset($data['section']) ? (int) $data['section'] : null, $data['section_locale'] ?? null);
     }
 
     public function edit(Photo $photo): View
@@ -51,15 +52,16 @@ class PhotoController extends Controller
         return $this->form($photo);
     }
 
-    private function form(Photo $photo, ?int $sectionId = null): View
+    private function form(Photo $photo, ?int $sectionId = null, ?string $sectionLocale = null): View
     {
         $photo->load(['translations', 'locations']);
 
         return view('admin.photos.form', [
             'photo' => $photo,
             'sectionId' => $sectionId,
+            'sectionLocale' => $sectionLocale,
             'translations' => $photo->translations->keyBy('locale'),
-            'locations' => PhotoLocation::query()->orderBy('name')->get(),
+            'locations' => PhotoLocation::query()->where('route_name', 'home')->orderBy('name')->get(),
         ]);
     }
 
@@ -108,8 +110,8 @@ class PhotoController extends Controller
                 $photo->locations()->sync($associations);
                 if (! empty($data['section_id'])) {
                     $section = StaySection::query()->lockForUpdate()->findOrFail($data['section_id']);
-                    $position = ($section->photos()->max('photo_stay_section.position') ?? -1) + 1;
-                    $section->photos()->syncWithoutDetaching([$photo->id => ['position' => $position]]);
+                    $position = ($section->photosForLocale($data['section_locale'])->max('photo_stay_section.position') ?? -1) + 1;
+                    $section->photosForLocale($data['section_locale'])->syncWithoutDetaching([$photo->id => ['position' => $position]]);
                 }
             });
         } catch (Throwable $exception) {
@@ -123,7 +125,7 @@ class PhotoController extends Controller
         }
 
         if (! empty($data['section_id'])) {
-            return redirect()->route('admin.stay.edit', $data['section_id'])->with('status', __('photos.saved'));
+            return redirect()->route('admin.stay.edit', ['section' => $data['section_id'], 'section_locale' => $data['section_locale']])->with('status', __('photos.saved'));
         }
 
         return redirect()->route('admin.photos')->with('status', __('photos.saved'));

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'position_help' => 'Les plus petits numéros apparaissent en premier dans cet emplacement. Sans emplacement, ce numéro est ignoré.',
+    'position_help' => 'Ce classement concerne uniquement les photos de l’accueil. Pour les pages locataire, choisissez les photos et leur ordre dans chaque onglet de langue de la section.',
     'locations' => 'Emplacements',
     'saved' => 'Photo enregistrée.',
     'deleted' => 'Photo supprimée.',

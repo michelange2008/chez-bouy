@@ -18,7 +18,7 @@ class StayController extends Controller
         $page = substr($request->route()->getName(), strlen('stay.'));
         abort_unless(in_array($page, StaySection::PAGES, true), 404);
         $sections = StaySection::query()->where('page', $page)->where('published', true)
-            ->with(['photos' => fn (BelongsToMany $query): BelongsToMany => $query->where('published', true), 'photos.translations'])
+            ->with(['photos' => fn (BelongsToMany $query): BelongsToMany => $query->where('published', true)->wherePivot('locale', app()->getLocale()), 'photos.translations'])
             ->orderBy('position')->orderBy('id')->get();
         $availablePhotoIds = $sections->flatMap->photos->unique('id')
             ->filter(fn (Photo $photo): bool => Storage::disk('local')->exists($photo->filename))->pluck('id')->all();
@@ -28,7 +28,7 @@ class StayController extends Controller
 
     public function image(Photo $photo): StreamedResponse
     {
-        abort_unless($photo->published && $photo->sections()->where('published', true)->whereIn('page', StaySection::PAGES)->exists(), 404);
+        abort_unless($photo->published && $photo->sections()->wherePivot('locale', app()->getLocale())->where('published', true)->whereIn('page', StaySection::PAGES)->exists(), 404);
         abort_unless(Storage::disk('local')->exists($photo->filename), 404);
 
         return Storage::disk('local')->response($photo->filename, null, [

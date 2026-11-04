@@ -16,7 +16,17 @@
             <div class="media-card-body">
                 <span class="media-badge">{{ $photo->published ? __('photos.published') : __('photos.draft') }}</span>
                 <h3>{{ $photo->translatedTitle() }}</h3>
-                <ul>@forelse($photo->locations as $location)<li>{{ $location->name }} · {{ __('photos.position') }} {{ $location->pivot->position }}</li>@empty<li>{{ __('photos.unassigned') }}</li>@endforelse</ul>
+                <ul>
+                    @foreach($photo->locations->where('route_name', 'home') as $location)
+                        <li>{{ $location->name }} · {{ __('photos.position') }} {{ $location->pivot->position }}</li>
+                    @endforeach
+                    @foreach($photo->sections as $section)
+                        <li><a href="{{ route('admin.stay.edit', ['section' => $section->id, 'section_locale' => $section->pivot->locale]) }}">{{ __('stay.'.$section->page) }} · {{ strtoupper($section->pivot->locale) }}</a></li>
+                    @endforeach
+                    @if($photo->locations->where('route_name', 'home')->isEmpty() && $photo->sections->isEmpty())
+                        <li>{{ __('photos.unassigned') }}</li>
+                    @endif
+                </ul>
                 <a class="media-button" href="{{ route('admin.photos.edit', $photo) }}">{{ __('photos.edit') }}</a>
                 <details class="media-delete"><summary class="media-button media-button-danger">{{ __('photos.delete') }}</summary>
                     <p>{{ __('photos.delete_photo_help') }}</p>

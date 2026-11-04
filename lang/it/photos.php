@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'position_help' => 'I numeri più piccoli appaiono per primi in questa posizione. Senza posizione, il numero viene ignorato.',
+    'position_help' => 'Questo ordine riguarda solo le foto della pagina iniziale. Per le pagine ospiti, scegli le foto e il loro ordine nella scheda della lingua di ogni sezione.',
     'locations' => 'Posizioni',
     'saved' => 'Foto salvata.',
     'deleted' => 'Foto eliminata.',

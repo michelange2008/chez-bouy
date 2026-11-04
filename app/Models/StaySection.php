@@ -19,7 +19,12 @@ class StaySection extends Model
 
     public function photos(): BelongsToMany
     {
-        return $this->belongsToMany(Photo::class)->withPivot('position')->orderByPivot('position')->orderBy('photos.id');
+        return $this->belongsToMany(Photo::class)->withPivot('position', 'locale')->orderByPivot('position')->orderBy('photos.id');
+    }
+
+    public function photosForLocale(string $locale): BelongsToMany
+    {
+        return $this->photos()->withPivotValue('locale', $locale);
     }
 
     /** @return array{title: ?string, body: ?string} */

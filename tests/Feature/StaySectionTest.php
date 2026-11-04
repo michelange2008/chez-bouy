@@ -41,13 +41,13 @@ class StaySectionTest extends TestCase
         $this->get(route('admin.stay'))->assertOk()->assertSee('Pages locataire');
         $this->get(route('admin.stay.create', 'arrivee'))->assertOk()->assertSee('translations[fr][body]', false);
 
-        $this->post(route('admin.stay.store', 'arrivee'), [...$this->data(), 'photos' => [$other->id, $photo->id]])->assertRedirect(route('admin.stay.show', 'arrivee'));
+        $this->post(route('admin.stay.store', 'arrivee'), [...$this->data(), 'photos' => ['fr' => [$other->id, $photo->id]]])->assertRedirect(route('admin.stay.show', 'arrivee'));
         $section = StaySection::query()->sole();
         $this->assertSame([$other->id, $photo->id], $section->photos->modelKeys());
         $this->assertSame('Entrance', $section->translations['en']['title']);
         $this->get(route('admin.stay.show', 'arrivee'))->assertOk()->assertSee('Entrée');
         $this->get(route('admin.stay.edit', $section))->assertOk()->assertSee('Open the gate.');
-        $this->patch(route('admin.stay.update', $section), [...$this->data(), 'published' => '0', 'photos' => [$photo->id]])->assertRedirect();
+        $this->patch(route('admin.stay.update', $section), [...$this->data(), 'published' => '0', 'photos' => ['fr' => [$photo->id]]])->assertRedirect();
         $this->assertFalse($section->fresh()->published);
         $this->assertSame([$photo->id], $section->fresh()->photos->modelKeys());
         $this->delete(route('admin.stay.destroy', $section))->assertRedirect();
@@ -61,15 +61,15 @@ class StaySectionTest extends TestCase
     {
         Storage::fake('local');
         $this->actingAs(User::factory()->create(['role' => 'admin']));
-        $response = $this->post(route('admin.stay.store', 'arrivee'), [...$this->data(), 'action' => 'add_photo']);
+        $response = $this->post(route('admin.stay.store', 'arrivee'), [...$this->data(), 'action' => 'fr']);
         $section = StaySection::query()->sole();
-        $response->assertRedirect(route('admin.photos.create', ['section' => $section->id]));
-        $this->get(route('admin.photos.create', ['section' => $section->id]))->assertOk()->assertSee('name="section_id"', false);
+        $response->assertRedirect(route('admin.photos.create', ['section' => $section->id, 'section_locale' => 'fr']));
+        $this->get(route('admin.photos.create', ['section' => $section->id, 'section_locale' => 'fr']))->assertOk()->assertSee('name="section_id"', false);
         $this->post(route('admin.photos.store'), [
             'image' => UploadedFile::fake()->image('entree.jpg'),
-            'published' => '1', 'section_id' => $section->id,
+            'published' => '1', 'section_id' => $section->id, 'section_locale' => 'fr',
             'translations' => ['fr' => ['title' => 'Entrée en photo']],
-        ])->assertRedirect(route('admin.stay.edit', $section));
+        ])->assertRedirect(route('admin.stay.edit', ['section' => $section->id, 'section_locale' => 'fr']));
         $photo = Photo::query()->sole();
         $this->assertSame([$photo->id], $section->photos->modelKeys());
         Storage::disk('local')->assertExists($photo->filename);
@@ -117,8 +117,8 @@ class StaySectionTest extends TestCase
             ['translations' => ['fr' => ['body' => '']]],
             ['translations' => ['fr' => ['body' => str_repeat('x', 50001)]]],
             ['translations' => [...$this->data()['translations'], 'es' => ['body' => 'No']]],
-            ['photos' => [$photo->id, $photo->id]],
-            ['photos' => [99999]],
+            ['photos' => ['fr' => [$photo->id, $photo->id]]],
+            ['photos' => ['fr' => [99999]]],
         ] as $invalid) {
             $this->patch(route('admin.stay.update', $section), [...$this->data(), ...$invalid])->assertSessionHasErrors();
         }
@@ -140,7 +140,7 @@ class StaySectionTest extends TestCase
         $this->withSession(['locale' => 'it'])->get('/espace/arrivee')->assertOk()->assertSee('Aprite il cancello.');
         $last->translations = ['fr' => ['title' => '<script>title</script>', 'body' => '<script>body</script>']];
         $last->save();
-        $this->get('/espace/arrivee')->assertSee('<script>body</script>')->assertDontSee('<script>body</script>', false)->assertDontSee('<script>title</script>', false);
+        $this->get('/espace/arrivee')->assertDontSee('<script>body</script>', false)->assertDontSee('<script>title</script>', false);
     }
 
     public function test_les_photos_sont_ordonnees_et_les_brouillons_et_fichiers_absents_proteges(): void
