@@ -23,12 +23,13 @@ function browser({ width = 4000, height = 3000, fallback = false, oversized = fa
     return { calls, closed: () => closed };
 }
 
-const input = () => new File([new Uint8Array(4 * 1024 * 1024)], 'original.jpg', { type: 'image/jpeg' });
+const input = () => new File([new Uint8Array(4 * 1024 * 1024)], 'instructions_en.jpg', { type: 'image/jpeg' });
 
 test('un original de 4 Mo devient un fichier WebP proportionnel sous 1 Mo', async () => {
     const state = browser();
     const result = await preparePhoto(input(), options);
     assert.equal(result.file.type, 'image/webp');
+    assert.equal(result.originalName, 'instructions_en.jpg');
     assert.deepEqual([result.width, result.height], [1600, 1200]);
     assert.ok(result.file.size <= options.maxBytes);
     assert.equal(state.closed(), true);

@@ -5,6 +5,7 @@
 <form action="{{ $photo->exists ? route('admin.photos.update', $photo) : route('admin.photos.store') }}" method="post" enctype="multipart/form-data" class="media-form"
       data-photo-upload="{{ json_encode(['maxDimension' => config('photos.max_dimension'), 'maxBytes' => config('photos.max_upload_kb') * 1024, 'quality' => config('photos.quality') / 100, 'processing' => __('photos.processing'), 'ready' => __('photos.prepared'), 'failed' => __('photos.preparation_failed')]) }}">
     @csrf
+    <input type="hidden" name="original_filename" value="" data-original-filename>
     @if(old('section_id', $sectionId))
         <input type="hidden" name="section_locale" value="{{ old('section_locale', $sectionLocale) }}">
         <input type="hidden" name="section_id" value="{{ old('section_id', $sectionId) }}">
@@ -13,6 +14,7 @@
     <div class="media-columns">
         <section class="media-panel">
             <h3>{{ __('photos.file') }}</h3>
+                @if($photo->original_filename)<small class="block break-words text-(--color-text-muted)">({{ $photo->original_filename }})</small>@endif
             @if($photo->exists)<img class="media-preview" src="{{ route('admin.photos.image', $photo) }}" alt="{{ $photo->translatedTitle() }}">@endif
             <label for="photo-image">{{ $photo->exists ? __('photos.replace_file') : __('photos.file') }}</label>
             <input id="photo-image" name="image" type="file" accept="image/jpeg,image/png,image/webp" @required(!$photo->exists) aria-describedby="file-help">

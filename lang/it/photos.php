@@ -41,4 +41,8 @@ return [
     'upload_failed' => 'PHP ha rifiutato l’invio. Ricarica il modulo e seleziona nuovamente la foto per prepararla.',
     'conversion_failed' => 'Conversione della foto non riuscita. Prova un’altra immagine.',
     'conversion_unavailable' => 'Conversione WebP non disponibile sul server. Attiva PHP GD con supporto WebP.',
+    'enlarge' => 'Ingrandisci la foto',
+    'close' => 'Chiudi',
+    'full_size' => 'Apri a dimensione intera',
+    'preview_failed' => 'Impossibile caricare questa foto.',
 ];

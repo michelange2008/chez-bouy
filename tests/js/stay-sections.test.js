@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-globalThis.document = { querySelectorAll: () => [] };
+globalThis.document = { querySelectorAll: () => [], querySelector: () => null };
 const { formatMarkdown } = await import('../../resources/js/stay-sections.js');
 
 test('formats only the selected text and preserves surrounding content', () => {

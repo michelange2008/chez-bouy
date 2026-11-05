@@ -41,4 +41,8 @@ return [
     'upload_failed' => 'PHP rejected the upload. Reload the form and select the photo again to prepare it before uploading.',
     'conversion_failed' => 'Photo conversion failed. Try another image.',
     'conversion_unavailable' => 'WebP conversion is unavailable on the server. Enable PHP GD with WebP support.',
+    'enlarge' => 'Enlarge photo',
+    'close' => 'Close',
+    'full_size' => 'Open at full size',
+    'preview_failed' => 'Unable to load this photo.',
 ];

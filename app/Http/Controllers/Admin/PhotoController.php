@@ -80,13 +80,16 @@ class PhotoController extends Controller
         $data = $request->validated();
         $oldFilename = $photo->filename;
         $newFilename = null;
+        $originalFilename = null;
         if ($request->hasFile('image')) {
             $newFilename = $images->store($request->file('image'));
+            $originalFilename = mb_substr($data['original_filename'] ?? $request->file('image')->getClientOriginalName(), 0, 255);
         }
         try {
-            DB::transaction(function () use ($data, $photo, $newFilename): void {
+            DB::transaction(function () use ($data, $photo, $newFilename, $originalFilename): void {
                 if ($newFilename) {
                     $photo->filename = $newFilename;
+                    $photo->original_filename = $originalFilename;
                 }
                 $photo->published = (bool) $data['published'];
                 $photo->save();

@@ -121,3 +121,33 @@ document.querySelectorAll('[data-section-form]').forEach((form) => {
         });
     });
 });
+
+const photoDialog = document.querySelector('[data-photo-dialog]');
+if (photoDialog && typeof photoDialog.showModal === 'function') {
+    const image = photoDialog.querySelector('[data-photo-dialog-image]');
+    const error = photoDialog.querySelector('[data-photo-dialog-error]');
+    let opener;
+    document.querySelectorAll('[data-photo-enlarge]').forEach((link) => {
+        link.addEventListener('click', (event) => {
+            event.preventDefault();
+            opener = link;
+            photoDialog.querySelector('[data-photo-dialog-title]').textContent = link.dataset.photoTitle;
+            photoDialog.querySelector('[data-photo-dialog-filename]').textContent = link.dataset.photoFilename ? `(${link.dataset.photoFilename})` : '';
+            photoDialog.querySelector('[data-photo-dialog-original]').href = link.href;
+            error.hidden = true;
+            image.alt = link.dataset.photoTitle;
+            image.src = link.href;
+            photoDialog.showModal();
+        });
+    });
+    image.addEventListener('error', () => { error.hidden = false; });
+    photoDialog.querySelector('[data-photo-dialog-close]').addEventListener('click', () => photoDialog.close());
+    photoDialog.addEventListener('click', (event) => {
+        const bounds = photoDialog.getBoundingClientRect();
+        if (event.target === photoDialog && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) photoDialog.close();
+    });
+    photoDialog.addEventListener('close', () => {
+        image.removeAttribute('src');
+        opener?.focus();
+    });
+}

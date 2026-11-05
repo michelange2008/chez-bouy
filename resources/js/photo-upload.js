@@ -49,6 +49,7 @@ export async function preparePhoto(file, { maxDimension, maxBytes, quality }) {
                 const extension = blob.type === 'image/webp' ? 'webp' : 'jpg';
                 return {
                     file: new File([blob], `photo.${extension}`, { type: blob.type }),
+                    originalName: file.name,
                     width: canvas.width,
                     height: canvas.height,
                 };
@@ -64,6 +65,7 @@ export async function preparePhoto(file, { maxDimension, maxBytes, quality }) {
 
 for (const form of document.querySelectorAll('[data-photo-upload]')) {
     const input = form.querySelector('[name="image"]');
+    const originalName = form.querySelector('[data-original-filename]');
     const status = form.querySelector('[data-photo-status]');
     const preview = form.querySelector('[data-photo-preview]');
     const submit = form.querySelector('[data-photo-submit]');
@@ -76,6 +78,7 @@ for (const form of document.querySelectorAll('[data-photo-upload]')) {
     input.addEventListener('change', async () => {
         const current = ++generation;
         const original = input.files[0];
+        originalName.value = '';
         failed = false;
         preview.hidden = true;
         if (previewUrl) URL.revokeObjectURL(previewUrl);
@@ -92,6 +95,7 @@ for (const form of document.querySelectorAll('[data-photo-upload]')) {
         try {
             const prepared = await preparePhoto(original, options);
             if (current !== generation) return;
+            originalName.value = prepared.originalName;
             const transfer = new DataTransfer();
             transfer.items.add(prepared.file);
             input.files = transfer.files;

@@ -16,6 +16,7 @@
             <div class="media-card-body">
                 <span class="media-badge">{{ $photo->published ? __('photos.published') : __('photos.draft') }}</span>
                 <h3>{{ $photo->translatedTitle() }}</h3>
+                @if($photo->original_filename)<small class="block break-words text-(--color-text-muted)">({{ $photo->original_filename }})</small>@endif
                 <ul>
                     @foreach($photo->locations->where('route_name', 'home') as $location)
                         <li>{{ $location->name }} · {{ __('photos.position') }} {{ $location->pivot->position }}</li>

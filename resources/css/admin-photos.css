@@ -61,3 +61,7 @@
 .annuaire-table th { width:36%; padding-right:12px; font-style:italic; font-weight:normal; }
 .annuaire-table td { white-space:pre-line; }
 .annuaire-table a[href^="mailto:"]:hover { color:var(--color-link-hover); font-weight: bold; }
+
+.photo-lightbox { margin: auto; width: min(1600px, 96vw); max-width: 96vw; max-height: 96dvh; overflow: auto; padding: 20px; border: 1px solid var(--color-border); border-radius: 12px; background: var(--color-surface); color: var(--color-text); }
+.photo-lightbox::backdrop { background: var(--color-backdrop); }
+.photo-lightbox-image { display: block; width: 100%; max-height: 75dvh; object-fit: contain; margin: 16px auto; }

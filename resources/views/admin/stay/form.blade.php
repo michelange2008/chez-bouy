@@ -63,12 +63,17 @@
                     <div class="mt-4 grid gap-4" data-section-photos>
                         @forelse($orderedPhotos as $photo)
                             <div class="flex flex-wrap items-center gap-4 rounded border border-(--color-border) p-3" data-section-photo>
+                                <a href="{{ route('admin.photos.image', $photo) }}" target="_blank" rel="noopener" data-photo-enlarge data-photo-title="{{ $photo->translatedTitle() }}" data-photo-filename="{{ $photo->original_filename }}" aria-label="{{ __('photos.enlarge') }} : {{ $photo->translatedTitle() }}" class="shrink-0 rounded" title="{{ __('photos.enlarge') }}">
+                                    <img class="h-20 w-28 rounded object-cover" src="{{ route('admin.photos.image', ['photo' => $photo, 'thumbnail' => 1]) }}" alt="{{ $photo->translatedTitle() }}" width="112" height="80" loading="lazy">
+                                </a>
                                 <label class="media-checkbox !mt-0 min-w-0 flex-1">
                                     <input type="checkbox" name="photos[{{ $locale }}][]" value="{{ $photo->id }}" @checked(in_array($photo->id, $selectedIds, true))>
-                                    <img class="h-20 w-28 rounded object-cover" src="{{ route('admin.photos.image', ['photo' => $photo, 'thumbnail' => 1]) }}" alt="" width="112" height="80" loading="lazy">
+
                                     <span class="min-w-0 break-words">
                                         {{ $photo->translatedTitle() }} @unless($photo->published) ({{ __('sections.draft') }}) @endunless
-                                        <small class="text-xs text-(--color-text-muted)">({{ basename($photo->filename) }})</small>
+                                        @if($photo->original_filename)
+                                            <small class="block text-xs text-(--color-text-muted)">({{ $photo->original_filename }})</small>
+                                        @endif
                                     </span>
                                 </label>
                                 <div class="flex gap-2" data-photo-controls hidden>
@@ -94,4 +99,16 @@
         <button class="media-button">{{ __('sections.save') }}</button>
     </div>
 </form>
+<dialog class="photo-lightbox" data-photo-dialog aria-labelledby="photo-dialog-title">
+    <div class="flex flex-wrap items-center justify-between gap-4">
+        <div class="min-w-0 break-words">
+            <h2 id="photo-dialog-title" class="text-xl" data-photo-dialog-title></h2>
+            <p class="text-sm text-(--color-text-muted)" data-photo-dialog-filename></p>
+        </div>
+        <button type="button" class="media-button" data-photo-dialog-close autofocus>{{ __('photos.close') }}</button>
+    </div>
+    <p data-photo-dialog-error class="error" role="status" hidden>{{ __('photos.preview_failed') }}</p>
+    <img class="photo-lightbox-image" data-photo-dialog-image alt="">
+    <a class="media-button" data-photo-dialog-original target="_blank" rel="noopener">{{ __('photos.full_size') }}</a>
+</dialog>
 @endsection
