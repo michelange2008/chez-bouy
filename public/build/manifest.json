@@ -1,7 +1,7 @@
 {
-  "_fonts-DqppEDJS.css": {
-    "file": "assets/fonts-DqppEDJS.css",
-    "src": "_fonts-DqppEDJS.css"
+  "_fonts-CBuN7-vl.css": {
+    "file": "assets/fonts-CBuN7-vl.css",
+    "src": "_fonts-CBuN7-vl.css"
   },
   "_instrument-sans-400-normal-D1W7dsQl.woff": {
     "file": "assets/instrument-sans-400-normal-D1W7dsQl.woff",
@@ -27,8 +27,16 @@
     "file": "assets/instrument-sans-600-normal-B9e8oLYv.woff",
     "src": "_instrument-sans-600-normal-B9e8oLYv.woff"
   },
+  "_roboto-300-normal-CCzlftfr.woff2": {
+    "file": "assets/roboto-300-normal-CCzlftfr.woff2",
+    "src": "_roboto-300-normal-CCzlftfr.woff2"
+  },
+  "_roboto-300-normal-Dqn3NW0Y.woff": {
+    "file": "assets/roboto-300-normal-Dqn3NW0Y.woff",
+    "src": "_roboto-300-normal-Dqn3NW0Y.woff"
+  },
   "resources/css/app.css": {
-    "file": "assets/app-RX_10UVY.css",
+    "file": "assets/app-p4vZejlR.css",
     "name": "app",
     "names": [
       "app.css"
@@ -37,7 +45,7 @@
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-DuG3Ahmm.js",
+    "file": "assets/app-DnHR3ugb.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true

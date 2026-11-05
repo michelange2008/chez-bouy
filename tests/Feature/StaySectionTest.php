@@ -38,7 +38,7 @@ class StaySectionTest extends TestCase
         $other = Photo::factory()->create();
         Storage::disk('local')->put($photo->filename, 'photo');
         $this->actingAs(User::factory()->create(['role' => 'admin']));
-        $this->get(route('admin.stay'))->assertOk()->assertSee('Pages locataire');
+        $this->get(route('admin.stay'))->assertOk()->assertSee('Pages du site');
         $this->get(route('admin.stay.create', 'arrivee'))->assertOk()->assertSee('translations[fr][body]', false);
 
         $this->post(route('admin.stay.store', 'arrivee'), [...$this->data(), 'photos' => ['fr' => [$other->id, $photo->id]]])->assertRedirect(route('admin.stay.show', 'arrivee'));

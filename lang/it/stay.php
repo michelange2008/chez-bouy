@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'home' => 'Pagina iniziale',
     'download_guide' => 'Scarica la guida di benvenuto',
     'guide_unavailable' => 'La guida di benvenuto non è disponibile in questa lingua.',
     'arrivee' => 'Arrivare all’appartamento',

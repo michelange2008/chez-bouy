@@ -2,6 +2,7 @@
 
 return [
     'welcome' => 'Benvenuti',
+    'home_intro_title' => 'Un appartamento ai piedi delle piste',
     'navigation' => 'Navigazione principale',
     'stay' => 'Il mio soggiorno',
     'admin' => 'Amministrazione',
@@ -42,4 +43,7 @@ return [
 Valido per 10 minuti, utilizzabile una sola volta.
 Se non avete richiesto questo codice, ignorate questa e-mail.',
     'email_not_registered' => 'Questo indirizzo e-mail non è registrato. Contattate il proprietario per richiedere l’accesso all’area ospiti.',
+    'all_photos' => 'Tutte le foto (:count)',
+    'previous_photo' => 'Foto precedente',
+    'next_photo' => 'Foto successiva',
 ];

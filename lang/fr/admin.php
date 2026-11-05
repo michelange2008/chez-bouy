@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'stay' => 'Pages locataire',
+    'stay' => 'Pages du site',
     'navigation' => 'Menu d’administration',
     'users' => 'Utilisateurs',
     'photos' => 'Photos',

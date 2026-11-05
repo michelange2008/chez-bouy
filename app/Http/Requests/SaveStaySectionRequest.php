@@ -27,6 +27,11 @@ class SaveStaySectionRequest extends FormRequest
             $rules["translations.$locale.body"] = [$locale === 'fr' ? 'required' : "required_with:translations.$locale.title", 'nullable', 'string', 'max:50000'];
         }
 
+        if (($this->route('page') ?? $this->route('section')?->page) === 'home') {
+            $rules['photos'] = ['prohibited'];
+            $rules['action'] = ['prohibited'];
+        }
+
         return $rules;
     }
 }

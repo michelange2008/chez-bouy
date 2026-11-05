@@ -9,6 +9,7 @@ export default defineConfig({
             input: ['resources/css/app.css', 'resources/js/app.js'],
             refresh: true,
             fonts: [
+                bunny('Roboto', { weights: [300] }),
                 bunny('Instrument Sans', {
                     weights: [400, 500, 600],
                 }),

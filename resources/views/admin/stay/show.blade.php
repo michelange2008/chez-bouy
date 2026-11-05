@@ -5,7 +5,7 @@
     <h2>{{ __('stay.'.$page) }}</h2>
     <div class="flex flex-wrap gap-3">
         <a class="media-button" href="{{ route('admin.stay') }}">{{ __('sections.back') }}</a>
-        <a class="media-button" href="{{ route('stay.'.$page) }}">{{ __('sections.view') }}</a>
+        <a class="media-button" href="{{ route($page === 'home' ? 'home' : 'stay.'.$page) }}">{{ __('sections.view') }}</a>
         <a class="media-button" href="{{ route('admin.stay.create', $page) }}">{{ __('sections.add') }}</a>
     </div>
 </div>

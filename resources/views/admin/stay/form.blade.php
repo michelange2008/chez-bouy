@@ -50,6 +50,7 @@
                 <p class="media-help" id="markdown-help-{{ $locale }}">{{ __('sections.markdown_help') }}</p>
                 <p data-preview-status role="status" data-loading="{{ __('sections.preview_loading') }}" data-error="{{ __('sections.preview_error') }}" data-stale="{{ __('sections.preview_stale') }}" data-ready="{{ __('sections.preview_ready') }}"></p>
                 <div class="stay-markdown rounded border border-(--color-border) p-4" id="section-preview-{{ $locale }}" data-markdown-output lang="{{ $locale }}" hidden></div>
+                @if($section->page !== 'home')
                 <div class="mt-6">
                     <h3>{{ __('sections.photos') }}</h3>
                     <p class="media-help">{{ __('sections.photo_help') }}</p>
@@ -86,6 +87,7 @@
                         @endforelse
                     </div>
                 </div>
+                @endif
             </fieldset>
         @endforeach
         <p class="media-help">{{ __('sections.translation_help') }}</p>

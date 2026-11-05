@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Photo;
+use App\Models\StaySection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -20,7 +21,10 @@ class HomeController extends Controller
             ->orderBy('photo_location.position')->orderBy('photos.id')->get();
         $availablePhotoIds = $photos->filter(fn (Photo $photo): bool => Storage::disk('local')->exists($photo->filename))->modelKeys();
 
-        return view('home', compact('photos', 'availablePhotoIds'));
+        $sections = StaySection::query()->where('page', 'home')->where('published', true)
+            ->orderBy('position')->orderBy('id')->get();
+
+        return view('home', compact('photos', 'availablePhotoIds', 'sections'));
     }
 
     public function image(Photo $photo): StreamedResponse

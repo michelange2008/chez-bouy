@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'stay' => 'Pagine ospiti',
+    'stay' => 'Pagine del sito',
     'navigation' => 'Menu di amministrazione',
     'users' => 'Utenti',
     'photos' => 'Foto',

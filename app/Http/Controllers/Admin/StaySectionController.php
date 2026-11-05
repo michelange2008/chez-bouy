@@ -25,7 +25,7 @@ class StaySectionController extends Controller
 
     public function index(): View
     {
-        return view('admin.stay.index', ['pages' => StaySection::PAGES]);
+        return view('admin.stay.index', ['pages' => StaySection::EDITABLE_PAGES]);
     }
 
     public function show(string $page): View
@@ -76,7 +76,7 @@ class StaySectionController extends Controller
     {
         $data = $request->validated();
         DB::transaction(function () use ($section, $data): void {
-            PhotoLocation::query()->where('route_name', 'stay.'.$section->page)->lockForUpdate()->firstOrFail();
+            PhotoLocation::query()->where('route_name', $section->pageRoute())->lockForUpdate()->firstOrFail();
             if (! $section->exists) {
                 $section->position = (StaySection::query()->where('page', $section->page)->max('position') ?? 0) + 1;
             }
@@ -103,7 +103,7 @@ class StaySectionController extends Controller
     {
         $data = $request->validate(['direction' => ['required', 'in:up,down']]);
         DB::transaction(function () use ($section, $data): void {
-            PhotoLocation::query()->where('route_name', 'stay.'.$section->page)->lockForUpdate()->firstOrFail();
+            PhotoLocation::query()->where('route_name', $section->pageRoute())->lockForUpdate()->firstOrFail();
             $sections = StaySection::query()->where('page', $section->page)->orderBy('position')->orderBy('id')->lockForUpdate()->get();
             $index = $sections->search(fn (StaySection $item): bool => $item->id === $section->id);
             abort_if($index === false, 404);

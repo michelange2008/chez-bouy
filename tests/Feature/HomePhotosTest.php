@@ -47,6 +47,17 @@ class HomePhotosTest extends TestCase
         Storage::disk('local')->assertExists([$last->filename, $first->filename, $samePosition->filename]);
     }
 
+    public function test_toutes_les_photos_restent_accessibles_dans_la_galerie(): void
+    {
+        Storage::fake('local');
+        for ($position = 1; $position <= 7; $position++) {
+            $this->photo('home', true, $position, 'Vue '.$position);
+        }
+        $response = $this->get('/')->assertOk()->assertSee('Toutes les photos (7)')
+            ->assertSee('Vue 7')->assertSee('data-gallery-dialog', false);
+        $this->assertSame(7, substr_count($response->getContent(), 'data-gallery-photo '));
+    }
+
     public function test_la_legende_est_traduite_echappee_et_utilise_le_francais_en_secours(): void
     {
         Storage::fake('local');

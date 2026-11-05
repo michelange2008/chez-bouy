@@ -12,6 +12,13 @@ class StaySection extends Model
 
     public const PAGES = ['arrivee', 'installation', 'appartement', 'depart', 'chamonix'];
 
+    public const EDITABLE_PAGES = ['home', ...self::PAGES];
+
+    public function pageRoute(): string
+    {
+        return $this->page === 'home' ? 'home' : 'stay.'.$this->page;
+    }
+
     protected function casts(): array
     {
         return ['published' => 'boolean', 'translations' => 'array'];

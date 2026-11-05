@@ -2,6 +2,7 @@
 
 return [
     'welcome' => 'Bienvenue',
+    'home_intro_title' => 'Un appartement au pied des pistes',
     'navigation' => 'Navigation principale',
     'stay' => 'Mon séjour',
     'admin' => 'Administration',
@@ -42,4 +43,7 @@ return [
 Valable 10 minutes, utilisable une seule fois.
 Si vous n’avez rien demandé, ignorez cet e-mail.',
     'email_not_registered' => 'Cette adresse e-mail n’est pas enregistrée. Contactez le propriétaire pour obtenir un accès locataire.',
+    'all_photos' => 'Toutes les photos (:count)',
+    'previous_photo' => 'Photo précédente',
+    'next_photo' => 'Photo suivante',
 ];

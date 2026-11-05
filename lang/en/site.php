@@ -2,6 +2,7 @@
 
 return [
     'welcome' => 'Welcome',
+    'home_intro_title' => 'An apartment at the foot of the slopes',
     'navigation' => 'Main navigation',
     'stay' => 'My stay',
     'admin' => 'Administration',
@@ -42,4 +43,7 @@ return [
 Valid for 10 minutes, for one use only.
 If you did not request this code, ignore this email.',
     'email_not_registered' => 'This email address is not registered. Contact the owner to request guest access.',
+    'all_photos' => 'All photos (:count)',
+    'previous_photo' => 'Previous photo',
+    'next_photo' => 'Next photo',
 ];

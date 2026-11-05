@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'home' => 'Home',
     'download_guide' => 'Download the welcome guide',
     'guide_unavailable' => 'The welcome guide is not available in this language.',
     'arrivee' => 'Arriving at the apartment',

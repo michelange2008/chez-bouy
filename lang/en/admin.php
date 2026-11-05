@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'stay' => 'Guest pages',
+    'stay' => 'Site pages',
     'navigation' => 'Administration menu',
     'users' => 'Users',
     'photos' => 'Photos',
