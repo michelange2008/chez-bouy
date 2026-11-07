@@ -94,7 +94,33 @@ label {
     margin-top: 16px;
 }
 
-input {
+.contact-panel {
+    max-width: 660px;
+}
+
+.contact-photo {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.contact-panel label {
+    margin-bottom: 12px;
+}
+
+.contact-panel h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin-top: 0;
+}
+
+.contact-panel textarea {
+    display: block;
+    resize: vertical;
+}
+
+input, .contact-panel textarea {
     width: 100%;
     padding: 12px;
     border: 1px solid var(--color-input-border);
@@ -225,8 +251,8 @@ footer {
 
 .site-footer-links {
     display: flex;
-    flex-wrap: wrap;
-    gap: 12px 24px;
+    flex-direction: column;
+    gap: 12px;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -239,7 +265,21 @@ footer {
     text-underline-offset: 4px;
 }
 
-.site-footer-links a:hover {
+.site-footer-links .button {
+    min-height: 32px;
+    padding: 4px 10px;
+    background: #ededed;
+    color: #444;
+    font-size: 1rem;
+}
+
+.site-footer-links .button:hover,
+.site-footer-links .button:focus-visible {
+    background: #505050;
+    color: #fff;
+}
+
+.site-footer-links a:not(.button):hover {
     color: var(--color-link-hover);
     text-decoration-thickness: 2px;
 }

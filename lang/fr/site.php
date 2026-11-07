@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'contact_title' => 'Nous contacter',
+    'contact_message' => 'Votre message',
+    'contact_send' => 'Envoyer le message',
+    'contact_sent' => 'Votre message a bien été envoyé.',
+    'contact_failed' => 'L’envoi a échoué. Veuillez réessayer dans un instant.',
     'welcome' => 'Bienvenue',
     'home_intro_title' => 'Un appartement au pied des pistes',
     'navigation' => 'Navigation principale',
