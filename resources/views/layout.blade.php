@@ -4,13 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Bienvenue') — Chez Bouy</title>
-    <link rel="icon" type="image/svg+xml" href="{{ \Illuminate\Support\Facades\Storage::disk('public')->url("icon.svg") }}">
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body data-theme="@yield('theme', 'public')">
 <header>
     <a class="brand" href="{{ route('home') }}">
-        <img class="img-brand" src="{{ asset('storage/icon.svg') }}" alt="">
+        <img class="img-brand" src="icon.svg" alt="">
         <strong>Chez Bouy</strong></a>
     <nav aria-label="Navigation principale">
         @auth
