@@ -91,10 +91,9 @@
                 <p>{{ __('site.home_intro') }}</p>
             </section>
         @endforelse
-            <section>
-                <h2>{{ __('site.login_title') }}</h2>
-                <p>{{ __('site.login_intro') }}</p>
-                <a class="button" href="{{ route('login') }}">{{ __('site.view_stay') }}</a>
-            </section>
+        <section>
+            <p>{{ __('site.home_login_intro') }}</p>
+            <a class="button" href="{{ route('login') }}">{{ __('site.view_stay') }}</a>
+        </section>
     </div>
 @endsection
