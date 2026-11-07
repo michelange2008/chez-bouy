@@ -2,9 +2,11 @@
 
 return [
     'contact_title' => 'Contattaci',
+    'contact_email' => 'Il tuo indirizzo e-mail',
+    'back_home' => 'Torna alla pagina iniziale',
     'contact_message' => 'Il tuo messaggio',
     'contact_send' => 'Invia il messaggio',
-    'contact_sent' => 'Il tuo messaggio è stato inviato.',
+    'contact_sent' => 'Il tuo messaggio è stato inviato. Ti risponderemo al più presto.',
     'contact_failed' => 'Invio non riuscito. Riprova tra poco.',
     'welcome' => 'Benvenuti',
     'home_intro_title' => 'Un appartamento ai piedi delle piste',

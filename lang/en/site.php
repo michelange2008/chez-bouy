@@ -2,9 +2,11 @@
 
 return [
     'contact_title' => 'Contact us',
+    'contact_email' => 'Your email address',
+    'back_home' => 'Back to home',
     'contact_message' => 'Your message',
     'contact_send' => 'Send message',
-    'contact_sent' => 'Your message has been sent.',
+    'contact_sent' => 'Your message has been sent. We’ll reply as soon as possible.',
     'contact_failed' => 'Your message could not be sent. Please try again in a moment.',
     'welcome' => 'Welcome',
     'home_intro_title' => 'An apartment at the foot of the slopes',

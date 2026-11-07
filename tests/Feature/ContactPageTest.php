@@ -15,15 +15,20 @@ class ContactPageTest extends TestCase
     {
         $this->withoutVite()->withSession(['locale' => 'fr']);
         $this->get('/')->assertOk()->assertSee('Nous contacter')->assertSee('href="'.route('contact').'"', false);
-        $this->get('/contact')->assertOk()->assertSee('Votre message')->assertSee('action="'.route('contact.store').'"', false);
+        $this->get('/contact')->assertOk()->assertSee('Votre adresse e-mail')->assertSee('Votre message')->assertSee('action="'.route('contact.store').'"', false);
     }
 
     public function test_le_visiteur_peut_envoyer_un_message_au_proprietaire(): void
     {
         config(['mail.default' => 'array']);
         $data = ['email' => 'visiteur@example.org', 'message' => "Bonjour,\nLe logement est-il disponible ?"];
-        $this->withSession(['locale' => 'fr'])->post('/contact', $data)
-            ->assertRedirect(route('contact'))->assertSessionHas('status', 'Votre message a bien été envoyé.');
+        $this->withoutVite()->withSession(['locale' => 'fr'])->post('/contact', $data)
+            ->assertRedirect(route('contact.confirmation'));
+        $this->get(route('contact.confirmation'))->assertOk()
+            ->assertSee('aiguilles_de_chamonix.webp')
+            ->assertSee('<h1>Votre message a bien été envoyé, nous y répondrons au plus vite</h1>', false)
+            ->assertSee('href="'.route('home').'">Retour à l’accueil</a>', false)
+            ->assertDontSee('name="email"', false)->assertDontSee('name="message"', false);
 
         $mail = Mail::getSymfonyTransport()->messages()->sole()->getOriginalMessage();
         $this->assertSame('chezbouy@michelange.org', $mail->getTo()[0]->getAddress());

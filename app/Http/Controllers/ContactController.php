@@ -29,6 +29,6 @@ class ContactController extends Controller
             return to_route('contact')->withInput()->withErrors(['contact' => __('site.contact_failed')]);
         }
 
-        return to_route('contact')->with('status', __('site.contact_sent'));
+        return to_route('contact.confirmation');
     }
 }
