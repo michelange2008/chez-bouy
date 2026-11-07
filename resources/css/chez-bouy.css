@@ -325,6 +325,11 @@ footer {
 .home-gallery-thumbnails img { width: 82px; height: 60px; object-fit: cover; }
 .home-gallery-dialog .home-gallery-heading { margin: 0; }
 .home-gallery-dialog .photo-lightbox-image { max-height: 62dvh; }
+.home-apartment-facts { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(6px, 2vw, 14px); margin: 20px auto 0; padding: 0; list-style: none; }
+.home-apartment-facts li { width: 116px; display: flex; align-items: center; justify-content: center; gap: .2em; aspect-ratio: 2.05; border: 2px solid #415342; border-radius: 10px; background: white; color: #087328; font-size: clamp(14px, 4vw, 24px); line-height: 1; white-space: nowrap; }
+.home-apartment-facts svg { width: auto; height: 1.2em; }
+.home-apartment-facts .home-location-fact { padding: 4px; font-size: 15px; line-height: 1.1; text-align: center; white-space: normal; }
+.home-location-fact svg { flex: none; width: 30px; height: 30px; }
 .home-text-sections { display: grid; gap: 32px; margin-top: 40px; }
 .home-text-sections section { padding-top: 28px; border-top: 1px solid var(--color-border); overflow-wrap: anywhere; }
 .home-text-sections h2 { font-size: 1.7rem; margin-bottom: 16px; }

@@ -44,6 +44,40 @@
             </dialog>
         </section>
     @endif
+    <ul class="home-apartment-facts">
+        <li>
+            <svg aria-hidden="true" viewBox="0 0 12 40" fill="none" stroke="currentColor">
+                <rect x="1" y="1" width="10" height="38"/>
+                <path d="M11 5H7m4 4H9m2 4H7m4 4H9m2 4H7m4 4H9m2 4H7m4 4H9m2 4H7"/>
+            </svg>
+            <span>50 m²</span>
+        </li>
+        <li>{{ __('site.apartment_rooms') }}</li>
+        <li class="home-location-fact">
+            <svg aria-hidden="true" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="22" cy="5" r="2.8" fill="currentColor" stroke="none"/>
+                <path d="m19 10-6 7 5 4-6 6m7-17 2 5 6 2M18 9l-7 2-3 6" stroke-width="3.5"/>
+                <path d="m2 21 7-4m11 5 7-5M3 24l21 7q3 1 5-1" stroke-width="1.8"/>
+            </svg>
+            <span>{{ __('site.near_slopes') }}</span>
+        </li>
+        <li class="home-location-fact">
+            <svg aria-hidden="true" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1.8">
+                <path d="m2 7 9 3 9-3 10 3v19l-10-3-9 3-9-3Zm9 3v19m9-15v12"/>
+                <path d="M27 6c0 3-4 8-4 8s-4-5-4-8a4 4 0 0 1 8 0Z" fill="white"/>
+                <circle cx="23" cy="6" r="1" fill="currentColor"/>
+                <path d="M6 17q8-5 8 2t8-3" stroke-dasharray="2 2" stroke-linecap="round"/>
+            </svg>
+            <span>{{ __('site.near_town_centre') }}</span>
+        </li>
+        <li>
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+                <path d="M2 8a15 15 0 0 1 20 0M5 12a10.5 10.5 0 0 1 14 0M8.5 16a5.25 5.25 0 0 1 7 0"/>
+                <circle cx="12" cy="20" r="1.25"/>
+            </svg>
+            <span>WiFi</span>
+        </li>
+    </ul>
     <div class="home-text-sections">
         @forelse($sections as $section)
             @php($content = $section->translatedContent())
