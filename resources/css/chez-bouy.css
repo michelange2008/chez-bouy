@@ -74,8 +74,9 @@ figure {
     margin: 0;
 }
 
-figcaption {
-    padding: 10px 0;
+.gallery figcaption {
+    padding: 10px 0 5px;
+    font-style: italic;
 }
 
 .panel {
