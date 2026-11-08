@@ -11,9 +11,9 @@
             <section class="min-w-0">
                 @if($content['title'])<h2 class="mb-4 text-2xl bg-gray-200 p-2">{{ $content['title'] }}</h2>@endif
                 <div class="stay-markdown">{!! $markdown->render($content['body']) !!}</div>
-                <div class="gallery mt-5 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
+                <div class="gallery mt-5 flex flex-wrap gap-3 sm:gap-5">
                     @foreach($section->photos as $photo)
-                        <figure>
+                        <figure class="min-w-0 grow basis-[calc((100%-1.5rem)/3)] wrap-anywhere sm:basis-[calc((100%-2.5rem)/3)]">
                             @if(in_array($photo->id, $availablePhotoIds, true))
                                 <img src="{{ route('stay.photos.image', $photo) }}" alt="{{ $photo->translatedTitle() }}" width="800" height="600" loading="lazy">
                             @else
