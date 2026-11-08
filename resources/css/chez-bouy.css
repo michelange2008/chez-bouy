@@ -53,21 +53,18 @@ h3 {
     padding: 40px 0;
 }
 
-.gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(240px,1fr));
-    gap: 20px;
-}
-
 .gallery img, .placeholder {
     width: 100%;
-    aspect-ratio: 4/3;
-    object-fit: cover;
     border-radius: 12px;
     background: var(--color-surface-muted);
 }
 
+.gallery img {
+    height: auto;
+}
+
 .placeholder {
+    aspect-ratio: 4/3;
     display: grid;
     place-items: center;
     color: var(--color-text-muted);

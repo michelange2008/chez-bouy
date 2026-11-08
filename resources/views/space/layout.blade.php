@@ -11,7 +11,7 @@
             <section class="min-w-0">
                 @if($content['title'])<h2 class="mb-4 text-2xl bg-gray-200 p-2">{{ $content['title'] }}</h2>@endif
                 <div class="stay-markdown">{!! $markdown->render($content['body']) !!}</div>
-                <div class="gallery mt-5">
+                <div class="gallery mt-5 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
                     @foreach($section->photos as $photo)
                         <figure>
                             @if(in_array($photo->id, $availablePhotoIds, true))
