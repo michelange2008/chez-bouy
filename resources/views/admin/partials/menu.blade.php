@@ -10,6 +10,11 @@
     ];
 @endphp
 <nav class="{{ $isDashboard ? 'admin-tiles' : 'admin-menu' }}" aria-label="{{ __('admin.navigation') }}">
+    @unless($isDashboard)
+        <a class="admin-menu-back" href="{{ route('admin') }}">
+            <img class="size-6" src="{{ asset('icones/retour.svg') }}" alt="{{ __('site.admin') }}" width="24" height="24">
+        </a>
+    @endunless
     @foreach($icons as $route => $icon)
         <a href="{{ route($route) }}"
            @if(request()->routeIs($route, $route.'.*')) aria-current="page" @endif>

@@ -19,6 +19,12 @@
 
 .admin-menu a:hover { background: var(--color-surface-muted); }
 
+.admin-menu .admin-menu-back {
+    width: 44px;
+    padding: 0;
+    justify-content: center;
+}
+
 .admin-menu a[aria-current="page"] {
     border-color: var(--color-primary);
     background: var(--color-primary);
