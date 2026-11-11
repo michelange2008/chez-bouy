@@ -19,6 +19,9 @@
     </source>
     <php>
         <env name="APP_ENV" value="testing" force="true"/>
+        <!-- Un cache local peut désigner MySQL. Ce chemin distinct permet à RefreshDatabase
+             de recréer les tables dans la base SQLite en mémoire configurée ci-dessous. -->
+        <env name="APP_CONFIG_CACHE" value="bootstrap/cache/config-testing.php" force="true"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
         <env name="BROADCAST_CONNECTION" value="null"/>

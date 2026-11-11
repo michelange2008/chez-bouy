@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Str;
 
+/**
+ * Chaque navigateur reçoit son propre jeton après validation du code par e-mail.
+ * Son empreinte sert de clé dans le cache : à la déconnexion, supprimer cette
+ * entrée révoque ce navigateur, y compris si une copie du cookie existe encore.
+ */
 class AdminDevice
 {
     public const COOKIE = 'admin_device';
@@ -22,6 +27,10 @@ class AdminDevice
         Cookie::queue(cookie(self::COOKIE, $token, (int) ceil($now->diffInMinutes($expires)), secure: $request->isSecure() || config('session.secure'), httpOnly: true, sameSite: 'lax'));
     }
 
+    /**
+     * Vérifie les droits actuels du compte et reprend l’échéance fixée lors
+     * de la validation du code. Une visite ne prolonge donc pas les six mois.
+     */
     public static function restore(Request $request, string $token): ?User
     {
         $device = Cache::get(self::key($token));

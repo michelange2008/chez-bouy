@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Intervient avant le contrôle d’accès des routes pour qu’un appareil reconnu
+ * puisse ouvrir directement une page protégée. L’échéance conservée en session
+ * impose un nouveau code même si la session est encore ouverte après six mois.
+ */
 class RememberAdminDevice
 {
     public function handle(Request $request, Closure $next): Response

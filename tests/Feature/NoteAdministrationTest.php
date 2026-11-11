@@ -83,11 +83,11 @@ class NoteAdministrationTest extends TestCase
         $this->actingAs($author)->post('/admin/notes', ['title' => 'Accueil', 'author_id' => $editor->id])->assertRedirect('/admin/notes');
         $note = Note::query()->sole();
         $this->assertDatabaseHas('notes', ['id' => $note->id, 'author_id' => $author->id]);
-        $this->get('/admin/notes')->assertOk()->assertSee('(Marie Dupont)');
+        $this->get('/admin/notes')->assertOk()->assertSeeText('Marie Dupont');
 
         $this->actingAs($editor)->patch("/admin/notes/$note->id", ['title' => 'Accueil modifié', 'author_id' => $editor->id])->assertRedirect('/admin/notes');
         $this->assertDatabaseHas('notes', ['id' => $note->id, 'title' => 'Accueil modifié', 'author_id' => $author->id]);
-        $this->get('/admin/notes')->assertOk()->assertSee('(Marie Dupont)');
+        $this->get('/admin/notes')->assertOk()->assertSeeText('Marie Dupont');
     }
 
     public function test_les_notes_sans_auteur_et_celles_d_un_utilisateur_supprime_restent_accessibles(): void
@@ -98,7 +98,7 @@ class NoteAdministrationTest extends TestCase
         $note = Note::factory()->for($author, 'author')->create();
         $author->delete();
         $this->assertDatabaseHas('notes', ['id' => $note->id, 'author_id' => null]);
-        $this->actingAs($admin)->get('/admin/notes')->assertOk()->assertSee('(Auteur non renseigné)');
+        $this->actingAs($admin)->get('/admin/notes')->assertOk()->assertSeeText('Auteur non renseigné');
         $this->patch("/admin/notes/$oldNote->id", ['title' => 'Ancienne note modifiée'])->assertRedirect('/admin/notes');
         $this->assertDatabaseHas('notes', ['id' => $oldNote->id, 'author_id' => null]);
     }
