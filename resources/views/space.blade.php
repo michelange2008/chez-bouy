@@ -2,7 +2,7 @@
 @section('title', __('site.stay'))
 @section('content')
     @include('partials.language-switcher')
-    <h1>{{ __('site.welcome') }}, {{ auth()->user()->name }}.</h1>
+    <h1>{{ __('site.welcome') }},</h1>
     <p>{{ __('site.stay_intro') }}</p>
     <nav class="stay-menu" aria-label="{{ __('stay.summary') }}">
         @foreach(['arrivee', 'installation', 'appartement', 'depart', 'chamonix'] as $page)
