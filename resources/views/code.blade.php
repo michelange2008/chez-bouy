@@ -8,6 +8,12 @@
         @csrf
         <label for="code">Code à 6 chiffres</label>
         <input id="code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" minlength="6" maxlength="6" required>
+        @if(session('offer_admin_device'))
+            <label class="remember-device">
+                <input type="checkbox" name="remember_device" value="1">
+                {{ __('site.remember_admin_device') }}
+            </label>
+        @endif
         <button>Me connecter</button>
     </form>
     <p><a href="{{ route('login') }}">Demander un nouveau code</a></p>

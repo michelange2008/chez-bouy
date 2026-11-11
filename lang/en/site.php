@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'remember_admin_device' => 'Remember this device for 6 months',
     'contact_title' => 'Contact us',
     'contact_email' => 'Your email address',
     'back_home' => 'Back to home',

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AdminDevice;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,15 +18,16 @@ class CodeLoginController extends Controller
     {
         $data = $request->validate(['email' => ['required', 'email', 'max:254']]);
         $email = mb_strtolower(trim($data['email']));
-        if (! User::where('email', $email)->exists()) {
-            $request->session()->forget('login_email');
+        $user = User::where('email', $email)->first();
+        if (! $user) {
+            $request->session()->forget(['login_email', 'offer_admin_device']);
 
             throw ValidationException::withMessages([
                 'email' => __('site.email_not_registered'),
             ]);
         }
         $key = 'login-code:'.hash('sha256', $email);
-        $request->session()->put('login_email', $email);
+        $request->session()->put(['login_email' => $email, 'offer_admin_device' => $user->role === 'admin' && $user->is_active]);
 
         // Limite par adresse, en complément de la limite par IP des routes.
         RateLimiter::attempt($key.':send', 1, function () use ($key, $email) {
@@ -89,7 +91,11 @@ class CodeLoginController extends Controller
         // Incrément SQL atomique : deux connexions ne perdent pas une unité.
         $user->increment('login_count', 1, ['last_login_at' => now()]);
         $request->session()->regenerate();
-        $request->session()->forget('login_email');
+        $request->session()->forget(['login_email', 'offer_admin_device']);
+
+        if ($user->role === 'admin' && $request->boolean('remember_device')) {
+            AdminDevice::remember($request, $user);
+        }
 
         return redirect()->route($user->role === 'admin' ? 'admin' : 'dashboard');
     }
@@ -97,6 +103,7 @@ class CodeLoginController extends Controller
     public function logout(Request $request)
     {
         $locale = $request->session()->get('locale', config('app.locale', 'fr'));
+        AdminDevice::forget($request);
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

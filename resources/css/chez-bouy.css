@@ -92,6 +92,9 @@ label {
     margin-top: 16px;
 }
 
+.remember-device { display: flex; align-items: center; gap: 10px; }
+.remember-device input { width: 20px; height: 20px; flex-shrink: 0; }
+
 .contact-panel {
     max-width: 660px;
 }
