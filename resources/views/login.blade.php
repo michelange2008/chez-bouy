@@ -1,8 +1,8 @@
 @extends('layout')
 @section('title', 'Connexion')
 @section('content')
-<section class="panel">
-    <h2>{{__('site.login_title')}}
+<section class="panel login-panel">
+    <h2>{{ __('site.login_title') }}</h2>
     <p>{{ __('site.login_intro') }}</p>
     <form action="{{ route('code.send') }}" method="post">
         @csrf

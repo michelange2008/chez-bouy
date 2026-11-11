@@ -7,5 +7,6 @@ return [
     'photos' => 'Foto',
     'files' => 'File',
     'notes' => 'Note',
+    'calendar' => 'Calendario',
     'annuaire' => 'Rubrica',
 ];

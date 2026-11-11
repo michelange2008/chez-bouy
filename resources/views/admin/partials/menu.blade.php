@@ -1,12 +1,13 @@
 @php
     $isDashboard = request()->routeIs('admin');
     $icons = [
-        'admin.stay' => 'pages-locataires',
         'admin.users' => 'utilisateurs',
-        'admin.photos' => 'photos',
-        'admin.files' => 'fichiers',
+        'admin.calendar' => 'calendrier',
         'admin.notes' => 'notes',
         'admin.annuaire' => 'annuaire',
+        'admin.stay' => 'pages-locataires',
+        'admin.photos' => 'photos',
+        'admin.files' => 'fichiers',
     ];
 @endphp
 <nav class="{{ $isDashboard ? 'admin-tiles' : 'admin-menu' }}" aria-label="{{ __('admin.navigation') }}">

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AnnuaireController;
+use App\Http\Controllers\Admin\CalendarController;
 use App\Http\Controllers\Admin\FileController;
 use App\Http\Controllers\Admin\NoteController;
 use App\Http\Controllers\Admin\PhotoController;
@@ -46,6 +47,13 @@ Route::post('/deconnexion', [CodeLoginController::class, 'logout'])->name('logou
 Route::middleware(['auth', RequireRole::class.':admin'])
     ->prefix('admin')->group(function () {
         Route::view('/', 'admin')->name('admin');
+        Route::get('/calendrier', [CalendarController::class, 'index'])->name('admin.calendar');
+        Route::get('/calendrier/ajouter', [CalendarController::class, 'create'])->name('admin.calendar.create');
+        Route::post('/calendrier', [CalendarController::class, 'store'])->name('admin.calendar.store');
+        Route::get('/calendrier/{event}/modifier', [CalendarController::class, 'edit'])->whereNumber('event')->name('admin.calendar.edit');
+        Route::patch('/calendrier/{event}', [CalendarController::class, 'update'])->whereNumber('event')->name('admin.calendar.update');
+        Route::delete('/calendrier/{event}', [CalendarController::class, 'destroy'])->whereNumber('event')->name('admin.calendar.destroy');
+
         Route::post('/pages-locataire/apercu', [StaySectionController::class, 'preview'])->name('admin.stay.preview');
         Route::get('/pages-locataire', [StaySectionController::class, 'index'])->name('admin.stay');
         Route::get('/pages-locataire/{page}', [StaySectionController::class, 'show'])->whereIn('page', StaySection::EDITABLE_PAGES)->name('admin.stay.show');

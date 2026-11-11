@@ -104,6 +104,7 @@ label {
     border-radius: 8px;
 }
 
+.login-panel label,
 .contact-panel label {
     margin-bottom: 12px;
 }
