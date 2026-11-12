@@ -19,6 +19,8 @@
 
 .admin-menu a:hover { background: var(--color-surface-muted); }
 
+.admin-menu-icon { display: none; }
+
 .admin-menu .admin-menu-back {
     width: 44px;
     padding: 0;
@@ -145,6 +147,15 @@
 .calendar-actions button { margin: 0; }
 
 @media (max-width: 600px) {
+    .admin-menu a {
+        width: 44px;
+        padding: 0;
+        justify-content: center;
+    }
+    .admin-menu-icon { display: block; }
+    .admin-menu a[aria-current="page"] .admin-menu-icon { filter: brightness(0) invert(1); }
+    .admin-menu a span { @apply sr-only; }
+
     .calendar-month ul { grid-template-columns: minmax(0, 1fr); }
     .calendar-row { grid-template-columns: .5rem minmax(0, 1fr) auto; }
     .calendar-color { grid-column: 1; grid-row: 1 / 3; }

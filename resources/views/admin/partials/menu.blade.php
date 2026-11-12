@@ -21,8 +21,10 @@
            @if(request()->routeIs($route, $route.'.*')) aria-current="page" @endif>
             @if($isDashboard)
                 <img class="size-12 shrink-0" src="{{ asset('icones/'.$icon.'.svg') }}" alt="" width="48" height="48">
+            @else
+                <img class="admin-menu-icon size-6" src="{{ asset('icones/'.$icon.'.svg') }}" alt="" width="24" height="24">
             @endif
-            {{ __($route) }}
+            <span>{{ __($route) }}</span>
         </a>
     @endforeach
 </nav>
