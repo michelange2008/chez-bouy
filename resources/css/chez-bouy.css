@@ -205,6 +205,44 @@ footer {
     flex-shrink: 0;
 }
 
+@media (width < 40rem) {
+    .authenticated-header {
+        padding-inline-start: 12px;
+        padding-bottom: 8px;
+        gap: 4px;
+        flex-wrap: nowrap;
+    }
+
+    .authenticated-header + main:has(> .language-switcher) {
+        padding-top: 8px;
+    }
+
+    .authenticated-header nav {
+        gap: 8px;
+        flex-wrap: nowrap;
+    }
+
+    body[data-theme] header.authenticated-header nav :is(a, button) {
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        background: var(--color-surface);
+    }
+}
+
+@media (max-width: 340px) {
+    .authenticated-header .brand {
+        gap: 6px;
+        font-size: 1rem;
+    }
+
+    .authenticated-header .img-brand {
+        width: 32px;
+    }
+}
+
 .stay-menu {
     display: grid;
     gap: 12px;

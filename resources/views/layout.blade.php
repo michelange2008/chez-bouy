@@ -8,15 +8,29 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body data-theme="@yield('theme', 'public')">
-<header>
+<header @auth class="authenticated-header" @endauth>
     <a class="brand" href="{{ route('home') }}">
         <img class="img-brand" src="icon.svg" alt="">
         <strong>Chez Bouy</strong></a>
     <nav aria-label="Navigation principale">
         @auth
-            <a href="{{ route('dashboard') }}">Mon séjour</a>
-            @if(auth()->user()->role === 'admin')<a href="{{ route('admin') }}">Administration</a>@endif
-            <form action="{{ route('logout') }}" method="post">@csrf<button>Déconnexion</button></form>
+            <a href="{{ route('dashboard') }}">
+                <img class="size-7 sm:hidden" src="{{ asset('icones/sejour.svg') }}" alt="">
+                <span class="max-sm:sr-only">{{ __('site.stay') }}</span>
+            </a>
+            @if(auth()->user()->role === 'admin')
+                <a href="{{ route('admin') }}">
+                    <img class="size-7 sm:hidden" src="{{ asset('icones/admin.svg') }}" alt="">
+                    <span class="max-sm:sr-only">{{ __('site.admin') }}</span>
+                </a>
+            @endif
+            <form action="{{ route('logout') }}" method="post">
+                @csrf
+                <button type="submit">
+                    <img class="size-7 sm:hidden" src="{{ asset('icones/deconnexion.svg') }}" alt="">
+                    <span class="max-sm:sr-only">{{ __('site.logout') }}</span>
+                </button>
+            </form>
         @else
             <a href="{{ route('login') }}">Espace privé</a>
         @endauth
