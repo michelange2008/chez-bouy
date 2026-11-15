@@ -17,7 +17,7 @@ use App\Models\StaySection;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/photos/{photo}/image', [HomeController::class, 'image'])->name('home.photos.image');
+Route::get('/photos/{photo}/image/{size?}', [HomeController::class, 'image'])->whereIn('size', ['thumbnail', 'preview'])->name('home.photos.image');
 Route::view('/contact', 'contact', ['messageSent' => false])->name('contact');
 Route::view('/contact/confirmation', 'contact', ['messageSent' => true])->name('contact.confirmation');
 Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:5,1,contact')->name('contact.store');

@@ -6,6 +6,7 @@ use App\Models\Photo;
 use App\Models\PhotoLocation;
 use App\Models\PhotoTranslation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -47,6 +48,25 @@ class HomePhotosTest extends TestCase
         Storage::disk('local')->assertExists([$last->filename, $first->filename, $samePosition->filename]);
     }
 
+    public function test_les_apercus_des_photos_existantes_sont_redimensionnes_sans_modifier_la_grande_photo(): void
+    {
+        Storage::fake('local');
+        $photo = $this->photo('home', true, 1, 'Salon');
+        $original = UploadedFile::fake()->image('salon.jpg', 1200, 900)->get();
+        Storage::disk('local')->put($photo->filename, $original);
+
+        $page = $this->get('/')->assertOk();
+        foreach (['thumbnail' => 480, 'preview' => 960] as $size => $width) {
+            $url = route('home.photos.image', [$photo, $size]);
+            $page->assertSee($url);
+            $bytes = $this->get($url)->assertOk()->assertHeader('Content-Type', 'image/webp')->streamedContent();
+            $dimensions = getimagesizefromstring($bytes);
+            $this->assertSame($width, $dimensions[0]);
+            $this->assertSame((int) ($width * 0.75), $dimensions[1]);
+        }
+        $this->assertSame($original, $this->get(route('home.photos.image', $photo))->streamedContent());
+    }
+
     public function test_toutes_les_photos_restent_accessibles_dans_la_galerie(): void
     {
         Storage::fake('local');
@@ -83,6 +103,7 @@ class HomePhotosTest extends TestCase
         $this->assertSame('image Public', $response->streamedContent());
         foreach ([$draft, $private, $unassigned] as $photo) {
             $this->get(route('home.photos.image', $photo))->assertNotFound();
+            $this->get(route('home.photos.image', [$photo, 'preview']))->assertNotFound();
         }
         $public->published = false;
         $public->save();

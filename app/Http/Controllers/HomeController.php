@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Photo;
 use App\Models\StaySection;
+use App\PhotoImage;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -27,12 +28,14 @@ class HomeController extends Controller
         return view('home', compact('photos', 'availablePhotoIds', 'sections'));
     }
 
-    public function image(Photo $photo): StreamedResponse
+    public function image(Photo $photo, PhotoImage $images, ?string $size = null): StreamedResponse
     {
         abort_unless($photo->published && $photo->locations()->where('route_name', 'home')->exists(), 404);
         abort_unless(Storage::disk('local')->exists($photo->filename), 404);
 
-        return Storage::disk('local')->response($photo->filename, null, [
+        $filename = $size ? $images->galleryPreview($photo->filename, $size) : $photo->filename;
+
+        return Storage::disk('local')->response($filename, null, [
             'Cache-Control' => 'private, no-store',
             'X-Content-Type-Options' => 'nosniff',
         ]);

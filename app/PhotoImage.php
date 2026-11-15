@@ -4,6 +4,7 @@ namespace App;
 
 use GdImage;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -14,6 +15,33 @@ class PhotoImage
     public static function thumbnailPath(string $filename): string
     {
         return 'photos/thumbnails/'.basename($filename);
+    }
+
+    private static function previewPath(string $filename): string
+    {
+        return 'photos/previews/'.basename($filename).'.webp';
+    }
+
+    public function galleryPreview(string $filename, string $size): string
+    {
+        $disk = Storage::disk('local');
+        $small = $size === 'thumbnail';
+        $path = $small ? self::thumbnailPath($filename) : self::previewPath($filename);
+        if ($disk->exists($path)) {
+            return $path;
+        }
+
+        $source = function_exists('imagewebp') ? @imagecreatefromstring($disk->get($filename) ?? '') : false;
+        if (! $source) {
+            return $filename;
+        }
+
+        $bytes = $this->encode($source, $small ? config('photos.thumbnail_dimension') : 960);
+        $destination = $disk->path($path);
+        File::ensureDirectoryExists(dirname($destination));
+        File::replace($destination, $bytes, 0600);
+
+        return $path;
     }
 
     public function store(UploadedFile $file): string
@@ -79,6 +107,6 @@ class PhotoImage
 
     public function delete(string $filename): void
     {
-        Storage::disk('local')->delete([$filename, self::thumbnailPath($filename)]);
+        Storage::disk('local')->delete([$filename, self::thumbnailPath($filename), self::previewPath($filename)]);
     }
 }

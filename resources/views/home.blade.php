@@ -19,7 +19,14 @@
                     <figure>
                         @if (in_array($photo->id, $availablePhotoIds, true))
                             <a href="{{ route('home.photos.image', $photo) }}" data-gallery-photo data-caption="{{ $photo->translatedTitle() }}" aria-label="{{ __('photos.enlarge') }} : {{ $photo->translatedTitle() }}">
-                                <img src="{{ route('home.photos.image', $photo) }}" alt="{{ $photo->translatedTitle() }}" loading="{{ $loop->first ? 'eager' : 'lazy' }}" width="800" height="600">
+                                <picture class="block h-full">
+                                    @if($loop->first || $loop->count <= 3 || ($loop->count === 4 && $loop->last))
+                                        <source media="(min-width: 480px)" srcset="{{ route('home.photos.image', [$photo, 'preview']) }}">
+                                    @endif
+                                    <img src="{{ route('home.photos.image', [$photo, 'thumbnail']) }}"
+                                         srcset="{{ route('home.photos.image', [$photo, 'thumbnail']) }} 1x, {{ route('home.photos.image', [$photo, 'preview']) }} 2x"
+                                         alt="{{ $photo->translatedTitle() }}" loading="{{ $loop->first ? 'eager' : 'lazy' }}" width="800" height="600">
+                                </picture>
                             </a>
                         @else
                             <div class="placeholder">{{ __('site.photo_missing') }}</div>

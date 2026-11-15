@@ -32,7 +32,7 @@ for (const gallery of document.querySelectorAll('[data-home-gallery]')) {
         button.type = 'button';
         button.setAttribute('aria-label', link.dataset.caption);
         const thumbnail = document.createElement('img');
-        thumbnail.src = link.href;
+        thumbnail.src = link.querySelector('img').src;
         thumbnail.alt = '';
         thumbnail.loading = 'lazy';
         button.append(thumbnail);
