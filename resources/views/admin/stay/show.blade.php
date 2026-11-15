@@ -31,8 +31,14 @@
                     <button class="media-button !mt-0" name="direction" value="up" @disabled($loop->first)>{{ __('sections.up') }}</button>
                     <button class="media-button !mt-0" name="direction" value="down" @disabled($loop->last)>{{ __('sections.down') }}</button>
                 </form>
-                <details class="media-delete !mt-0">
-                    <summary class="media-button">{{ __('sections.delete') }}</summary>
+                <form method="post" action="{{ route('admin.stay.publication', $section) }}">
+                    @csrf @method('PATCH')
+                    <button class="media-button !mt-0" name="published" value="{{ $section->published ? '0' : '1' }}">
+                        {{ $section->published ? __('sections.unpublish_action') : __('sections.publish_action') }}
+                    </button>
+                </form>
+                <details class="media-delete !mt-0 ms-auto text-end">
+                    <summary class="media-button media-button-danger">{{ __('sections.delete') }}</summary>
                     <p>{{ __('sections.confirm') }}</p>
                     <form method="post" action="{{ route('admin.stay.destroy', $section) }}">
                         @csrf @method('DELETE')

@@ -99,6 +99,15 @@ class StaySectionController extends Controller
         return redirect()->route('admin.stay.show', $section->page)->with('status', __('sections.saved'));
     }
 
+    public function updatePublication(Request $request, StaySection $section): RedirectResponse
+    {
+        $data = $request->validate(['published' => ['required', 'boolean']]);
+        $section->published = $data['published'];
+        $section->save();
+
+        return redirect()->route('admin.stay.show', $section->page)->with('status', __('sections.saved'));
+    }
+
     public function move(Request $request, StaySection $section): RedirectResponse
     {
         $data = $request->validate(['direction' => ['required', 'in:up,down']]);

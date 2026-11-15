@@ -10,6 +10,8 @@ return [
     'edit' => 'Modifier',
     'up' => 'Monter',
     'down' => 'Descendre',
+    'publish_action' => 'Publier',
+    'unpublish_action' => 'Ne pas publier',
     'delete' => 'Supprimer',
     'confirm' => 'Supprimer cette section ? Les photos seront conservées dans la photothèque.',
     'empty' => 'Cette page ne contient aucune section.',

@@ -61,6 +61,7 @@ Route::middleware(['auth', RequireRole::class.':admin'])
         Route::post('/pages-locataire/{page}', [StaySectionController::class, 'store'])->whereIn('page', StaySection::EDITABLE_PAGES)->name('admin.stay.store');
         Route::get('/sections/{section}/modifier', [StaySectionController::class, 'edit'])->name('admin.stay.edit');
         Route::patch('/sections/{section}', [StaySectionController::class, 'update'])->name('admin.stay.update');
+        Route::patch('/sections/{section}/publication', [StaySectionController::class, 'updatePublication'])->name('admin.stay.publication');
         Route::patch('/sections/{section}/ordre', [StaySectionController::class, 'move'])->name('admin.stay.move');
         Route::delete('/sections/{section}', [StaySectionController::class, 'destroy'])->name('admin.stay.destroy');
 

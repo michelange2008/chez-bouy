@@ -28,6 +28,24 @@ class HomeSectionsTest extends TestCase
         $this->withSession(['locale' => 'en'])->get('/')->assertOk()->assertSee('First section')->assertSee('Seconde section');
     }
 
+    public function test_la_publication_depuis_la_carte_change_la_visibilite_de_la_section(): void
+    {
+        $section = StaySection::factory()->create(['page' => 'home', 'published' => false, 'translations' => ['fr' => ['body' => 'Vue sur le glacier']]]);
+        $action = route('admin.stay.publication', $section);
+        $listing = route('admin.stay.show', 'home');
+
+        $this->actingAs(User::factory()->create(['role' => 'locataire']))->patch($action, ['published' => '1'])->assertForbidden();
+        $this->actingAs(User::factory()->create(['role' => 'admin']));
+        $this->patch($action, ['published' => 'incorrect'])->assertSessionHasErrors('published');
+        $this->get($listing)->assertOk()->assertSee('Publier')->assertSee($action);
+        $this->patch($action, ['published' => '1'])->assertRedirect($listing);
+        $this->get('/')->assertSee('Vue sur le glacier');
+        $this->get($listing)->assertSee('Ne pas publier');
+        $this->patch($action, ['published' => '0'])->assertRedirect($listing);
+        $this->get('/')->assertDontSee('Vue sur le glacier');
+        $this->get($listing)->assertSee('Vue sur le glacier')->assertSee('Brouillon');
+    }
+
     public function test_l_administrateur_gere_les_sections_publiques_depuis_la_page_accueil(): void
     {
         $this->actingAs(User::factory()->create(['role' => 'admin']));
