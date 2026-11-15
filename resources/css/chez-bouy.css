@@ -428,4 +428,5 @@ footer {
     .home-gallery-heading { flex-wrap: wrap; }
 }
 
-.stay-markdown h1, .stay-markdown h2 { font-weight: 300; }
+.stay-markdown h1 { font-weight: 300; }
+.stay-markdown h2 { font-weight: 700; }
