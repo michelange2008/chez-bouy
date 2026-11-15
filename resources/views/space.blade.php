@@ -1,7 +1,7 @@
 @extends('layout')
 @section('title', __('site.stay'))
 @section('content')
-    @include('partials.language-switcher')
+    @include('partials.language-switcher', ['inStay' => true])
     <h1>{{ __('site.welcome') }},</h1>
     <p>{{ __('site.stay_intro') }}</p>
     <nav class="stay-menu" aria-label="{{ __('stay.summary') }}">

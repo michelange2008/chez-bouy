@@ -3,7 +3,7 @@
 @inject('markdown', 'App\StayMarkdown')
 
 @section('content')
-    @include('partials.language-switcher')
+    @include('partials.language-switcher', ['inStay' => true])
     <h1>@yield('title')</h1>
     <div class="my-8 grid gap-10">
         @foreach($sections as $section)

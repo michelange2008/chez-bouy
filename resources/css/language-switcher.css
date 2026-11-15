@@ -39,13 +39,13 @@
 }
 
 @media (width < 40rem) {
-    .language-switcher:has(~ .stay-menu) {
+    .stay-language-switcher {
         justify-content: flex-start;
         gap: 16px;
         padding-block: 8px;
     }
 
-    .language-switcher:has(~ .stay-menu) button {
+    .stay-language-switcher button {
         position: relative;
         min-width: 28px;
         min-height: 28px;
@@ -53,7 +53,7 @@
         font-size: 0.75rem;
     }
 
-    .language-switcher:has(~ .stay-menu) button::after {
+    .stay-language-switcher button::after {
         content: "";
         position: absolute;
         inset: -9px;
