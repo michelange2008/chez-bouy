@@ -43,7 +43,7 @@ return [
     'sign_in' => 'Log in',
     'resend' => 'Request a new code',
     'greeting' => 'Welcome, :name.',
-    'stay_intro' => 'Your guest area is ready for the welcome guide and practical information for your stay.',
+    'stay_intro' => 'Here you can find all the information about your stay and download the welcome guide.',
     'admin_only' => 'This page is for administrators only.',
     'admin_intro' => 'Guest, photo and stay management can be added here.',
     'home_login_intro' => 'If you’ve booked a stay, access your private area.',

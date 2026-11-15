@@ -56,7 +56,7 @@ class LocalizationTest extends TestCase
 
         $this->get('/espace')->assertOk()
             ->assertSee('lang="en"', false)
-            ->assertSee('Your guest area is ready for the welcome guide and practical information for your stay.');
+            ->assertSee('Here you can find all the information about your stay and download the welcome guide.');
     }
 
     public function test_l_administration_reste_en_francais_et_preserve_la_langue_du_sejour(): void

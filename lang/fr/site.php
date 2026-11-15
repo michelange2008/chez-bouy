@@ -43,7 +43,7 @@ return [
     'sign_in' => 'Me connecter',
     'resend' => 'Demander un nouveau code',
     'greeting' => 'Bienvenue, :name.',
-    'stay_intro' => 'Votre espace locataire est prêt à accueillir le livret d’accueil et les informations pratiques du séjour.',
+    'stay_intro' => 'Vous trouverez ici toutes les informations relatives à votre séjour et pourrez télécharger le livret d\'accueil',
     'admin_only' => 'Cette page est réservée aux administrateurs.',
     'admin_intro' => 'La gestion des locataires, des photos et des séjours pourra être ajoutée ici.',
     'home_login_intro' => 'Vous avez réservé un séjour, accédez à votre espace privé',

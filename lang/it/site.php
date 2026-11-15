@@ -43,7 +43,7 @@ return [
     'sign_in' => 'Accedi',
     'resend' => 'Richiedi un nuovo codice',
     'greeting' => 'Benvenuto/a, :name.',
-    'stay_intro' => 'La vostra area ospiti è pronta per la guida di benvenuto e le informazioni pratiche per il soggiorno.',
+    'stay_intro' => 'Qui troverete tutte le informazioni sul vostro soggiorno e potrete scaricare la guida di benvenuto.',
     'admin_only' => 'Questa pagina è riservata agli amministratori.',
     'admin_intro' => 'Qui sarà possibile aggiungere la gestione degli ospiti, delle foto e dei soggiorni.',
     'home_login_intro' => 'Se avete prenotato un soggiorno, accedete alla vostra area riservata.',
