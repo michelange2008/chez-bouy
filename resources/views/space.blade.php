@@ -6,7 +6,12 @@
     <p>{{ __('site.stay_intro') }}</p>
     <nav class="stay-menu" aria-label="{{ __('stay.summary') }}">
         @foreach(['arrivee', 'installation', 'appartement', 'depart', 'chamonix'] as $page)
-            <a href="{{ route('stay.'.$page) }}">{{ __('stay.'.$page) }}</a>
+            <a href="{{ route('stay.'.$page) }}">
+                <span>{{ __('stay.'.$page) }}</span>
+                <svg class="size-6 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M4 12h16m-7-7 7 7-7 7"/>
+                </svg>
+            </a>
         @endforeach
     </nav>
     <div class="stay-guide">
