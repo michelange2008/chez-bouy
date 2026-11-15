@@ -24,7 +24,7 @@ class LegalPageTest extends TestCase
         }
     }
 
-    public function test_le_lien_est_present_sur_les_pages_publiques_locataire_et_admin(): void
+    public function test_le_lien_est_present_sur_les_pages_publiques_et_locataire_uniquement(): void
     {
         $link = 'href="'.route('legal').'"';
         $this->get('/')->assertOk()->assertSee($link, false);
@@ -32,7 +32,8 @@ class LegalPageTest extends TestCase
         $this->actingAs(User::factory()->create(['role' => 'locataire']))
             ->get('/espace')->assertOk()->assertSee($link, false);
         $this->actingAs(User::factory()->create(['role' => 'admin']))
-            ->get('/admin')->assertOk()->assertSee($link, false);
+            ->get('/admin')->assertOk()->assertDontSee('<footer', false);
+        $this->get('/admin/utilisateurs')->assertOk()->assertDontSee('<footer', false);
     }
 
     public function test_les_informations_configurees_sont_echappees_et_les_champs_vides_signales(): void
