@@ -59,6 +59,26 @@ class LocalizationTest extends TestCase
             ->assertSee('Your guest area is ready for the welcome guide and practical information for your stay.');
     }
 
+    public function test_l_administration_reste_en_francais_et_preserve_la_langue_du_sejour(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $this->actingAs($admin)->post('/langue', ['locale' => 'en']);
+
+        foreach (['/admin', '/admin/utilisateurs'] as $page) {
+            $this->get($page)->assertOk()
+                ->assertSee('<html lang="fr">', false)
+                ->assertSee('Utilisateurs')
+                ->assertDontSee(route('locale.update'))
+                ->assertSessionHas('locale', 'en');
+        }
+
+        foreach (['/', '/espace'] as $page) {
+            $this->get($page)->assertOk()
+                ->assertSee('<html lang="en">', false)
+                ->assertSee(route('locale.update'));
+        }
+    }
+
     public function test_une_langue_non_supportee_est_refusee(): void
     {
         $this->withSession(['locale' => 'it'])

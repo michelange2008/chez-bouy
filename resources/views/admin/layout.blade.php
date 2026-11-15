@@ -3,7 +3,6 @@
 @section('theme', 'admin')
 
 @section('content')
-    @include('partials.language-switcher')
     <h1>{{ __('site.admin') }}</h1>
     @include('admin.partials.menu')
     <section class="admin-content">

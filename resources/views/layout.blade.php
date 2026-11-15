@@ -4,18 +4,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Bienvenue') — Chez Bouy</title>
-    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('icon.svg') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body data-theme="@yield('theme', 'public')">
 <header @auth class="authenticated-header" @endauth>
     <a class="brand" href="{{ route('home') }}">
-        <img class="img-brand" src="icon.svg" alt="">
+        <img class="img-brand" src="{{ asset('icon.svg') }}" alt="">
         <strong>Chez Bouy</strong></a>
     <nav aria-label="Navigation principale">
         @auth
             <a href="{{ route('dashboard') }}">
-                <img class="size-7 sm:hidden" src="{{ asset('icones/sejour.svg') }}" alt="">
+                <img class="size-7 sm:hidden" src="{{ asset('icones/home.svg') }}" alt="">
                 <span class="max-sm:sr-only">{{ __('site.stay') }}</span>
             </a>
             @if(auth()->user()->role === 'admin')
