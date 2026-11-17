@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\File;
 use App\Models\Photo;
 use App\Models\StaySection;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
@@ -18,8 +17,11 @@ class StayController extends Controller
         $page = substr($request->route()->getName(), strlen('stay.'));
         abort_unless(in_array($page, StaySection::PAGES, true), 404);
         $sections = StaySection::query()->where('page', $page)->where('published', true)
-            ->with(['photos' => fn (BelongsToMany $query): BelongsToMany => $query->where('published', true)->wherePivot('locale', app()->getLocale()), 'photos.translations'])
+            ->with('photos.translations')
             ->orderBy('position')->orderBy('id')->get();
+        foreach ($sections as $section) {
+            $section->setRelation('photos', $section->displayPhotosForLocale(app()->getLocale())->where('published', true));
+        }
         $availablePhotoIds = $sections->flatMap->photos->unique('id')
             ->filter(fn (Photo $photo): bool => Storage::disk('local')->exists($photo->filename))->pluck('id')->all();
 
@@ -28,7 +30,9 @@ class StayController extends Controller
 
     public function image(Photo $photo): StreamedResponse
     {
-        abort_unless($photo->published && $photo->sections()->wherePivot('locale', app()->getLocale())->where('published', true)->whereIn('page', StaySection::PAGES)->exists(), 404);
+        abort_unless($photo->published, 404);
+        $sections = $photo->sections()->where('published', true)->whereIn('page', StaySection::PAGES)->with('photos')->get();
+        abort_unless($sections->contains(fn (StaySection $section): bool => $section->displayPhotosForLocale(app()->getLocale())->contains('id', $photo->id)), 404);
         abort_unless(Storage::disk('local')->exists($photo->filename), 404);
 
         return Storage::disk('local')->response($photo->filename, null, [

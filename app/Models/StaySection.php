@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -32,6 +33,14 @@ class StaySection extends Model
     public function photosForLocale(string $locale): BelongsToMany
     {
         return $this->photos()->withPivotValue('locale', $locale);
+    }
+
+    /** @return Collection<int, Photo> */
+    public function displayPhotosForLocale(string $locale): Collection
+    {
+        $photos = $this->photos->where('pivot.locale', $locale);
+
+        return $photos->isNotEmpty() ? $photos : $this->photos->where('pivot.locale', 'fr');
     }
 
     /** @return array{title: ?string, body: ?string} */

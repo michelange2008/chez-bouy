@@ -17,7 +17,7 @@ return [
     'body' => 'Text',
     'translation_help' => 'French text is required and is used when a translation is missing. Line breaks are preserved.',
     'photos' => 'Associated photos',
-    'photo_help' => 'Photos and their order belong to this language tab. An empty selection displays no photos. Uncheck to remove an association; the file is kept.',
+    'photo_help' => 'When no photos are selected in another language, the French photos and their order are used automatically. Select photos in that language to use different images. Uncheck to remove an association; the file is kept.',
     'upload' => 'Save and add a new photo',
     'no_photos' => 'No photos available.',
     'publish' => 'Publish this section',

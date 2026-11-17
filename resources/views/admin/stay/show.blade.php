@@ -18,7 +18,7 @@
             <div class="flex flex-wrap gap-3">
                 @foreach(config('languages.supported') as $locale => $label)
                 <div><p>{{ $label }}</p><div class="flex flex-wrap gap-3">
-                @foreach($section->photos->where('pivot.locale', $locale) as $photo)
+                @foreach($section->displayPhotosForLocale($locale) as $photo)
                     <img class="h-20 w-28 rounded object-cover" src="{{ route('admin.photos.image', ['photo' => $photo, 'thumbnail' => 1]) }}" alt="{{ $photo->translatedTitle() }}" loading="lazy" width="112" height="80">
                 @endforeach
                 </div></div>

@@ -17,7 +17,7 @@ return [
     'body' => 'Testo',
     'translation_help' => 'Il testo francese è obbligatorio e viene usato quando manca una traduzione. Gli a capo vengono conservati.',
     'photos' => 'Foto associate',
-    'photo_help' => 'Le foto e il loro ordine sono specifici di questa lingua. Una selezione vuota non mostra foto. Deseleziona per rimuovere un’associazione; il file viene conservato.',
+    'photo_help' => 'Senza una selezione in un’altra lingua, vengono usate automaticamente le foto francesi nello stesso ordine. Seleziona le foto nella lingua desiderata per usare immagini diverse. Deseleziona per rimuovere un’associazione; il file viene conservato.',
     'upload' => 'Salva e aggiungi una nuova foto',
     'no_photos' => 'Nessuna foto disponibile.',
     'publish' => 'Pubblica questa sezione',

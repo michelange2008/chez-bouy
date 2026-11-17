@@ -45,13 +45,48 @@ class LocalizedStayPhotosTest extends TestCase
         $this->withSession(['locale' => 'en'])->get('/espace/arrivee')->assertOk()->assertSeeInOrder([route('stay.photos.image', $shared), route('stay.photos.image', $english)])->assertDontSee(route('stay.photos.image', $french));
         $this->get(route('stay.photos.image', $french))->assertNotFound();
         $this->get(route('stay.photos.image', $english))->assertOk();
-        $this->withSession(['locale' => 'it'])->get('/espace/arrivee')->assertOk()->assertDontSee('<figure>', false);
-        $this->get(route('stay.photos.image', $shared))->assertNotFound();
+        $this->withSession(['locale' => 'it'])->get('/espace/arrivee')->assertOk()->assertSeeInOrder([route('stay.photos.image', $french), route('stay.photos.image', $shared)]);
+        $this->get(route('stay.photos.image', $shared))->assertOk();
         $this->actingAs(User::factory()->create(['role' => 'admin']));
         $data['photos']['en'] = [];
         $this->patch(route('admin.stay.update', $section), $data)->assertRedirect();
         $this->assertSame([$french->id, $shared->id], $section->photosForLocale('fr')->get()->modelKeys());
         $this->assertSame([], $section->photosForLocale('en')->get()->modelKeys());
+    }
+
+    public function test_les_photos_francaises_sont_reprises_et_suivent_les_modifications(): void
+    {
+        Storage::fake('local');
+        $section = StaySection::factory()->create(['published' => true]);
+        $first = Photo::factory()->create(['published' => true]);
+        $second = Photo::factory()->create(['published' => true]);
+        $draft = Photo::factory()->create(['published' => false]);
+        foreach ([$first, $second, $draft] as $photo) {
+            Storage::disk('local')->put($photo->filename, 'image');
+        }
+        $admin = User::factory()->create(['role' => 'admin']);
+        $tenant = User::factory()->create(['role' => 'locataire']);
+        $data = ['published' => '1', 'translations' => $section->translations,
+            'photos' => ['fr' => [$second->id, $draft->id, $first->id]]];
+
+        $this->actingAs($admin)->patch(route('admin.stay.update', $section), $data)->assertRedirect();
+
+        foreach (['en', 'it'] as $locale) {
+            $this->actingAs($tenant)->withSession(['locale' => $locale])->get('/espace/arrivee')
+                ->assertOk()->assertSeeInOrder([route('stay.photos.image', $second), route('stay.photos.image', $first)])
+                ->assertDontSee(route('stay.photos.image', $draft));
+            $this->get(route('stay.photos.image', $first))->assertOk();
+            $this->get(route('stay.photos.image', $draft))->assertNotFound();
+        }
+
+        $data['photos']['fr'] = [$second->id];
+        $this->actingAs($admin)->patch(route('admin.stay.update', $section), $data)->assertRedirect();
+        $this->actingAs($tenant)->withSession(['locale' => 'en'])->get('/espace/arrivee')
+            ->assertOk()->assertSee(route('stay.photos.image', $second))->assertDontSee(route('stay.photos.image', $first));
+        $this->get(route('stay.photos.image', $first))->assertNotFound();
+        $section->published = false;
+        $section->save();
+        $this->get(route('stay.photos.image', $second))->assertNotFound();
     }
 
     public function test_la_migration_reprend_les_photos_existantes_dans_les_trois_langues(): void

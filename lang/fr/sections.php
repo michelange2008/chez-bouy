@@ -19,7 +19,7 @@ return [
     'body' => 'Texte',
     'translation_help' => 'Le texte français est obligatoire. Sans traduction, il sera affiché dans les autres langues. Les retours à la ligne sont conservés.',
     'photos' => 'Photos associées',
-    'photo_help' => 'Les photos et leur ordre sont propres à cet onglet de langue. Une sélection vide n’affiche aucune photo. Décochez pour retirer une association ; le fichier est conservé.',
+    'photo_help' => 'Sans sélection dans une autre langue, les photos françaises et leur ordre sont repris automatiquement. Pour utiliser des images différentes, sélectionnez-les dans la langue concernée. Décochez pour retirer une association ; le fichier est conservé.',
     'upload' => 'Enregistrer et ajouter une nouvelle photo',
     'no_photos' => 'Aucune photo disponible.',
     'publish' => 'Publier cette section',
