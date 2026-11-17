@@ -84,6 +84,9 @@
             </svg>
             <span>WiFi</span>
         </li>
+        <li>
+            <img src="{{ asset('icones/parking_couvert.svg') }}" alt="{{ __('site.covered_parking') }}" width="52" height="52" class="shrink-0">
+        </li>
     </ul>
     <div class="home-text-sections">
         @forelse($sections as $section)

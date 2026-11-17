@@ -24,6 +24,7 @@ return [
     'home_subtitle' => 'Sentitevi a casa.',
     'home_intro' => 'Scoprite gli ambienti in foto e preparate il vostro prossimo soggiorno.',
     'apartment_rooms' => '2 locali',
+    'covered_parking' => 'Parcheggio coperto',
     'near_slopes' => 'Vicino alle piste',
     'near_town_centre' => 'Vicino al centro',
     'photos_link' => 'Scopri le foto',

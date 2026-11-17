@@ -24,6 +24,7 @@ return [
     'home_subtitle' => 'Make yourself at home.',
     'home_intro' => 'Explore the photos and start planning your next stay.',
     'apartment_rooms' => '2 rooms',
+    'covered_parking' => 'Covered parking',
     'near_slopes' => 'Near the slopes',
     'near_town_centre' => 'Near town centre',
     'photos_link' => 'Explore the photos',

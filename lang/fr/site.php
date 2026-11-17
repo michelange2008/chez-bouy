@@ -24,6 +24,7 @@ return [
     'home_subtitle' => 'Vous êtes chez vous.',
     'home_intro' => 'Découvrez les lieux en images et préparez votre prochain séjour.',
     'apartment_rooms' => '2 pièces',
+    'covered_parking' => 'Parking couvert',
     'near_slopes' => 'Proche pistes',
     'near_town_centre' => 'Proche centre-ville',
     'photos_link' => 'Découvrir les photos',
