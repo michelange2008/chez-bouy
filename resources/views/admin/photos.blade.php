@@ -13,11 +13,15 @@
     @forelse($photos as $photo)
         <article class="media-card">
             <img src="{{ route('admin.photos.image', ['photo' => $photo, 'thumbnail' => 1]) }}" alt="{{ $photo->translatedTitle() }}" loading="lazy" width="480" height="320">
-            <div class="media-card-body">
-                <span class="media-badge">{{ $photo->published ? __('photos.published') : __('photos.draft') }}</span>
-                <h3>{{ $photo->translatedTitle() }}</h3>
-                @if($photo->original_filename)<small class="block break-words text-(--color-text-muted)">({{ $photo->original_filename }})</small>@endif
-                <ul>
+            <div class="media-card-body grid gap-1.5 p-3! text-xs">
+                <h3 class="m-0! text-sm font-semibold">{{ $photo->translatedTitle() }}</h3>
+                <div class="flex min-w-0 items-center gap-2">
+                    @if($photo->original_filename)
+                        <span class="min-w-0 truncate text-(--color-text-muted)" title="{{ $photo->original_filename }}">{{ $photo->original_filename }}</span>
+                    @endif
+                    <span class="media-badge mb-0! shrink-0 px-2! py-0.5! text-xs!">{{ $photo->published ? __('photos.published') : __('photos.draft') }}</span>
+                </div>
+                <ul class="mb-0! ps-4!">
                     @foreach($photo->locations->where('route_name', 'home') as $location)
                         <li>{{ $location->name }} · {{ __('photos.position') }} {{ $location->pivot->position }}</li>
                     @endforeach
@@ -28,11 +32,22 @@
                         <li>{{ __('photos.unassigned') }}</li>
                     @endif
                 </ul>
-                <a class="media-button" href="{{ route('admin.photos.edit', $photo) }}">{{ __('photos.edit') }}</a>
-                <details class="media-delete"><summary class="media-button media-button-danger">{{ __('photos.delete') }}</summary>
-                    <p>{{ __('photos.delete_photo_help') }}</p>
-                    <form method="post" action="{{ route('admin.photos.destroy', $photo) }}">@csrf @method('DELETE')<button class="media-button media-button-danger">{{ __('photos.confirm_delete') }}</button></form>
-                </details>
+                <div class="flex items-start gap-1.5">
+                    <a class="media-button size-8 min-h-0! shrink-0 p-0!" href="{{ route('admin.photos.edit', $photo) }}" title="{{ __('photos.edit') }}" aria-label="{{ __('photos.edit') }} — {{ $photo->translatedTitle() }}">
+                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 3 5 5-12 12H4v-5L16 3Z M13 6l5 5"/></svg>
+                    </a>
+                    <details class="media-delete mt-0! min-w-0">
+                        <summary class="media-button media-button-danger size-8 min-h-0! p-0!" title="{{ __('photos.delete') }}" aria-label="{{ __('photos.delete') }} — {{ $photo->translatedTitle() }}">
+                            <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18 M9 6V3h6v3 M5 6l1 15h12l1-15 M10 10v7 M14 10v7"/></svg>
+                        </summary>
+                        <p>{{ __('photos.delete_photo_help') }}</p>
+                        <form method="post" action="{{ route('admin.photos.destroy', $photo) }}">
+                            @csrf
+                            @method('DELETE')
+                            <button class="media-button media-button-danger text-xs!">{{ __('photos.confirm_delete') }}</button>
+                        </form>
+                    </details>
+                </div>
             </div>
         </article>
     @empty

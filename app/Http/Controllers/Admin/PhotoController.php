@@ -34,7 +34,7 @@ class PhotoController extends Controller
         }
 
         return view('admin.photos', [
-            'photos' => $query->paginate(12)->withQueryString(),
+            'photos' => $query->paginate(24)->withQueryString(),
             'locations' => PhotoLocation::query()->where('route_name', 'home')->orderBy('name')->get(),
             'locationId' => $locationId,
         ]);

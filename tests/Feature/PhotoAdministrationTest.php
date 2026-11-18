@@ -87,6 +87,18 @@ class PhotoAdministrationTest extends TestCase
             ->assertSeeInOrder(['photos/first.jpg', 'photos/last.jpg'])->assertDontSee('photos/other.jpg');
     }
 
+    public function test_la_liste_affiche_vingt_quatre_photos_par_page(): void
+    {
+        Photo::factory()->count(25)->create();
+        $this->actingAs(User::factory()->create(['role' => 'admin']));
+
+        $firstPage = $this->get('/admin/photos')->assertOk();
+        $secondPage = $this->get('/admin/photos?page=2')->assertOk();
+
+        $this->assertCount(24, $firstPage->viewData('photos')->items());
+        $this->assertCount(1, $secondPage->viewData('photos')->items());
+    }
+
     public function test_la_validation_refuse_les_fichiers_et_traductions_invalides(): void
     {
         Storage::fake('local');
