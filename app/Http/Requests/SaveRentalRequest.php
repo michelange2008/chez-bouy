@@ -23,35 +23,40 @@ class SaveRentalRequest extends FormRequest
 
     public function rules(): array
     {
-        $money = ['numeric', 'decimal:0,2', 'max:99999999.99'];
-        $rules = [
+        $stay = [
             'arrival' => ['required', 'date_format:Y-m-d'],
             'departure' => ['required', 'date_format:Y-m-d', 'after_or_equal:arrival'],
             'type' => ['required', Rule::in(Rental::TYPES)],
-            'amount' => ['exclude_unless:type,rental', 'required', ...$money, 'min:0.01'],
-            'deposit_date' => ['nullable', 'date_format:Y-m-d'],
-            'deposit_amount' => ['nullable', ...$money, 'min:0'],
-            'balance_date' => ['nullable', 'date_format:Y-m-d'],
-            'balance_amount' => ['nullable', ...$money, 'min:0'],
-            'remarks' => ['nullable', 'string', 'max:10000'],
-            ...array_fill_keys(Rental::CHECKLIST, ['sometimes', 'boolean']),
+            'amount' => ['exclude_unless:type,rental', 'required', 'numeric', 'decimal:0,2', 'min:0.01', 'max:99999999.99'],
         ];
 
         if ($this->route('rental')) {
             return [
-                ...$rules,
+                ...$stay,
                 ...array_fill_keys(['user_id', 'new_name', 'new_first_name', 'new_email'], ['prohibited']),
             ];
         }
 
         return [
-            ...$rules,
+            ...$stay,
             'user_id' => $this->input('user_id') === 'new'
                 ? ['required', Rule::in(['new'])]
                 : ['required', 'integer', 'exists:users,id'],
             'new_name' => ['exclude_unless:user_id,new', 'required', 'string', 'max:255'],
             'new_first_name' => ['exclude_unless:user_id,new', 'nullable', 'string', 'max:255'],
             'new_email' => ['exclude_unless:user_id,new', 'required', 'string', 'email', 'max:254', Rule::unique('users', 'email')],
+        ];
+    }
+
+    public static function paymentRules(): array
+    {
+        $money = ['numeric', 'decimal:0,2', 'max:99999999.99'];
+
+        return [
+            'deposit_date' => ['nullable', 'date_format:Y-m-d'],
+            'deposit_amount' => ['nullable', ...$money, 'min:0'],
+            'balance_date' => ['nullable', 'date_format:Y-m-d'],
+            'balance_amount' => ['nullable', ...$money, 'min:0'],
         ];
     }
 

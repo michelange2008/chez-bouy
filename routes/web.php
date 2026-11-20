@@ -14,6 +14,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\StayController;
 use App\Http\Middleware\RequireRole;
+use App\Models\Rental;
 use App\Models\StaySection;
 use Illuminate\Support\Facades\Route;
 
@@ -60,6 +61,12 @@ Route::middleware(['auth', RequireRole::class.':admin'])
         Route::post('/locations', [RentalController::class, 'store'])->name('admin.rentals.store');
         Route::get('/locations/{rental}/modifier', [RentalController::class, 'edit'])->name('admin.rentals.edit');
         Route::patch('/locations/{rental}', [RentalController::class, 'update'])->name('admin.rentals.update');
+        Route::patch('/locations/{rental}/remarque', [RentalController::class, 'updateRemarks'])->name('admin.rentals.remarks');
+        Route::patch('/locations/{rental}/versements/{payment}', [RentalController::class, 'updatePayment'])
+            ->whereIn('payment', ['deposit', 'balance'])->name('admin.rentals.payment');
+        Route::patch('/locations/{rental}/suivi/{field}', [RentalController::class, 'updateChecklist'])
+            ->whereIn('field', Rental::CHECKLIST)->name('admin.rentals.checklist');
+        Route::post('/locations/{rental}/email-acces', [RentalController::class, 'sendAccessEmail'])->name('admin.rentals.send-access-email');
         Route::delete('/locations/{rental}', [RentalController::class, 'destroy'])->name('admin.rentals.destroy');
 
         Route::post('/pages-locataire/apercu', [StaySectionController::class, 'preview'])->name('admin.stay.preview');

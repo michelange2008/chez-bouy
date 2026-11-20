@@ -1,9 +1,9 @@
 @php
     $isDashboard = request()->routeIs('admin');
     $icons = [
+        'admin.rentals' => 'gestion_location',
         'admin.users' => 'utilisateurs',
         'admin.calendar' => 'calendrier',
-        'admin.rentals' => 'sejour',
         'admin.notes' => 'notes',
         'admin.annuaire' => 'annuaire',
         'admin.stay' => 'pages-locataires',

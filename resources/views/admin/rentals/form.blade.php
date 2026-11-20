@@ -9,9 +9,7 @@
         @csrf
         @if($rental->exists) @method('PATCH') @endif
         <section class="media-panel">
-            @if($rental->exists)
-                <p><strong>{{ __('rentals.fields.user_id') }}</strong> · {{ $rental->guestName() }}</p>
-            @else
+            @unless($rental->exists)
                 <label for="rental-user">{{ __('rentals.fields.user_id') }} *</label>
                 <select id="rental-user" name="user_id" required>
                     <option value="">{{ __('rentals.choose_user') }}</option>
@@ -27,7 +25,7 @@
                         <input id="rental-{{ $field }}" name="{{ $field }}" type="{{ $type }}" maxlength="{{ $type === 'email' ? 254 : 255 }}" value="{{ old($field) }}" @if($field !== 'new_first_name') data-required-for-new @endif>
                     @endforeach
                 </fieldset>
-            @endif
+            @endunless
             <div class="grid gap-x-4 sm:grid-cols-2">
                 @foreach(['arrival', 'departure'] as $field)
                     <div>
@@ -44,42 +42,11 @@
                         @endforeach
                     </select>
                 </div>
-                <div data-rental-amount>
+                <div data-rental-amount @if(old('type', $rental->type) !== 'rental') hidden @endif>
                     <label for="rental-amount">{{ __('rentals.fields.amount') }} *</label>
                     <input id="rental-amount" name="amount" type="number" min="0.01" max="99999999.99" step="0.01" value="{{ old('amount', $rental->amount) }}">
                 </div>
             </div>
-        </section>
-        <section class="media-panel">
-            <h3>{{ __('rentals.payments') }}</h3>
-            <div class="grid gap-x-4 sm:grid-cols-2">
-                @foreach(['deposit', 'balance'] as $payment)
-                    <div>
-                        <label for="rental-{{ $payment }}_date">{{ __('rentals.fields.'.$payment.'_date') }}</label>
-                        <input id="rental-{{ $payment }}_date" name="{{ $payment }}_date" type="date" value="{{ old($payment.'_date', $rental->{$payment.'_date'}?->toDateString()) }}">
-                    </div>
-                    <div>
-                        <label for="rental-{{ $payment }}_amount">{{ __('rentals.fields.'.$payment.'_amount') }}</label>
-                        <input id="rental-{{ $payment }}_amount" name="{{ $payment }}_amount" type="number" min="0" max="99999999.99" step="0.01" value="{{ old($payment.'_amount', $rental->{$payment.'_amount'}) }}">
-                    </div>
-                @endforeach
-            </div>
-        </section>
-        <section class="media-panel">
-            <h3>{{ __('rentals.checklist') }}</h3>
-            <div class="grid gap-x-4 sm:grid-cols-2">
-                @foreach(\App\Models\Rental::CHECKLIST as $field)
-                    <div>
-                        <label for="rental-{{ $field }}">{{ __('rentals.fields.'.$field) }}</label>
-                        <select id="rental-{{ $field }}" name="{{ $field }}">
-                            <option value="0" @selected(! old($field, $rental->$field))>{{ __('users.no') }}</option>
-                            <option value="1" @selected((bool) old($field, $rental->$field))>{{ __('users.yes') }}</option>
-                        </select>
-                    </div>
-                @endforeach
-            </div>
-            <label for="rental-remarks">{{ __('rentals.fields.remarks') }}</label>
-            <textarea id="rental-remarks" name="remarks" rows="4" maxlength="10000">{{ old('remarks', $rental->remarks) }}</textarea>
         </section>
         <div class="users-form-actions">
             <a class="media-button" href="{{ route('admin.rentals') }}">{{ __('notes.cancel') }}</a>

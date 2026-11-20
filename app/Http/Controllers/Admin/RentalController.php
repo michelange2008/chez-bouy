@@ -7,27 +7,35 @@ use App\Http\Requests\SaveRentalRequest;
 use App\InfomaniakCalendar;
 use App\Models\Rental;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Mail\Message;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Throwable;
 
 class RentalController extends Controller
 {
     public function __construct(private InfomaniakCalendar $calendar) {}
 
-    public function index(): Response
+    public function index(Request $request): Response
     {
         $today = now(InfomaniakCalendar::TIMEZONE)->toDateString();
-        $rentals = Rental::with('user:id,name,first_name')
-            ->orderByRaw('departure < ?', [$today])
-            ->orderByRaw('CASE WHEN departure >= ? THEN arrival END ASC', [$today])
-            ->orderByDesc('arrival')->orderByDesc('id')->paginate(20);
+        $showPast = $request->boolean('past');
+        $rentals = Rental::with('user:id,name,first_name,email')
+            ->where('departure', $showPast ? '<' : '>=', $today)
+            ->orderBy('arrival', $showPast ? 'desc' : 'asc')
+            ->orderByDesc('id')
+            ->paginate(20)
+            ->withQueryString();
 
-        return response()->view('admin.rentals', compact('rentals', 'today'))->header('Cache-Control', 'private, no-store');
+        return response()->view('admin.rentals', compact('rentals', 'showPast'))->header('Cache-Control', 'private, no-store');
     }
 
     public function create(): Response
@@ -38,6 +46,33 @@ class RentalController extends Controller
     public function edit(Rental $rental): Response
     {
         return $this->form($rental);
+    }
+
+    public function sendAccessEmail(Rental $rental): RedirectResponse
+    {
+        $email = $rental->user?->email;
+
+        if (blank($email)) {
+            return back()->withErrors(['access_email' => __('rentals.access_email_missing')]);
+        }
+
+        try {
+            $sent = Mail::send('emails.rental-access', [], function (Message $message) use ($email): void {
+                $message->to($email)->subject('Chez Bouy - accéder à votre espace');
+            });
+        } catch (TransportExceptionInterface $exception) {
+            report($exception);
+
+            return back()->withErrors(['access_email' => __('rentals.access_email_failed')]);
+        }
+
+        if ($sent === null) {
+            return back()->withErrors(['access_email' => __('rentals.access_email_failed')]);
+        }
+
+        $rental->update(['mail_envoye' => true]);
+
+        return back()->with('status', __('rentals.access_email_sent'));
     }
 
     public function store(SaveRentalRequest $request): RedirectResponse
@@ -85,7 +120,7 @@ class RentalController extends Controller
         try {
             DB::transaction(function () use ($request, $rental): void {
                 $rental = Rental::lockForUpdate()->findOrFail($rental->id);
-                $data = $request->validated();
+                $data = $request->safe()->only(['arrival', 'departure', 'type', 'amount']);
                 $rental->fill([...$data, 'amount' => $data['amount'] ?? null]);
 
                 $needsSync = $rental->calendar_event_id === null || $rental->isDirty(['arrival', 'departure', 'type']);
@@ -104,6 +139,57 @@ class RentalController extends Controller
         }
 
         return $this->saved('updated');
+    }
+
+    public function updateRemarks(Request $request, Rental $rental): RedirectResponse
+    {
+        $data = $request->validateWithBag('rentalRemarks'.$rental->id, [
+            'remarks' => ['present', 'nullable', 'string', 'max:10000'],
+        ], [], __('rentals.fields'));
+
+        $rental->update($data);
+
+        return back()->withFragment('rental-remarks-'.$rental->id)->with('status', __('rentals.updated'));
+    }
+
+    public function updatePayment(Request $request, Rental $rental, string $payment): JsonResponse|RedirectResponse
+    {
+        $rules = Arr::only(SaveRentalRequest::paymentRules(), [$payment.'_date', $payment.'_amount']);
+        $data = $request->validate($rules, [], __('rentals.fields'));
+
+        $result = DB::transaction(function () use ($rental, $payment, $data): array {
+            $rental = Rental::lockForUpdate()->findOrFail($rental->id);
+            abort_unless($rental->type === 'rental', 404);
+
+            $rental->update($data);
+
+            return ['payment' => $rental->paymentSummary($payment), 'total' => $rental->paymentTotalStatus()];
+        });
+
+        if ($request->expectsJson()) {
+            return response()->json($result);
+        }
+
+        return back();
+    }
+
+    public function updateChecklist(Request $request, Rental $rental, string $field): JsonResponse|RedirectResponse
+    {
+        $request->validate(['value' => ['required', 'boolean']]);
+        $value = $request->boolean('value');
+
+        DB::transaction(function () use ($rental, $field, $value): void {
+            $rental = Rental::lockForUpdate()->findOrFail($rental->id);
+            abort_if($rental->type === 'family' || ($rental->type === 'exchange' && in_array($field, ['contract_sent', 'contract_signed'], true)), 404);
+
+            $rental->update([$field => $value]);
+        });
+
+        if ($request->expectsJson()) {
+            return response()->json(['value' => $value, 'label' => __($value ? 'users.yes' : 'users.no')]);
+        }
+
+        return back();
     }
 
     public function destroy(Rental $rental): RedirectResponse
