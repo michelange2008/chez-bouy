@@ -22,6 +22,11 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    public function fullName(): string
+    {
+        return trim($this->first_name.' '.$this->name);
+    }
+
     public function hasExpired(): bool
     {
         return $this->role === 'locataire'

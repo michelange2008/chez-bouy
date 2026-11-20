@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveCalendarEventRequest;
 use App\InfomaniakCalendar;
+use App\Models\Rental;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -40,7 +41,11 @@ class CalendarController extends Controller
             $months[$cursor->format('Y-m')] = ['date' => $cursor->locale(app()->getLocale()), 'events' => $events];
         }
 
-        return response()->view('admin.calendar', compact('months', 'previousPage', 'nextPage', 'configured'))->header('Cache-Control', 'private, no-store');
+        $eventIds = collect($months)->pluck('events')->flatten(1)->pluck('id')->filter()->unique();
+        $rentalIds = Rental::whereIn('calendar_event_id', $eventIds)->pluck('id', 'calendar_event_id');
+
+        return response()->view('admin.calendar', compact('months', 'previousPage', 'nextPage', 'configured', 'rentalIds'))
+            ->header('Cache-Control', 'private, no-store');
     }
 
     public function create(): Response
@@ -50,8 +55,13 @@ class CalendarController extends Controller
         return $this->form([]);
     }
 
-    public function edit(string $event): Response
+    public function edit(string $event): Response|RedirectResponse
     {
+        $rental = Rental::where('calendar_event_id', $event)->first();
+        if ($rental !== null) {
+            return redirect()->route('admin.rentals.edit', $rental);
+        }
+
         return $this->form($this->calendar->event($event));
     }
 
@@ -76,6 +86,10 @@ class CalendarController extends Controller
 
     public function update(SaveCalendarEventRequest $request, string $event): RedirectResponse
     {
+        if (Rental::where('calendar_event_id', $event)->exists()) {
+            return redirect()->route('admin.rentals')->withErrors(['calendar' => __('rentals.manage_linked')]);
+        }
+
         $this->calendar->save($request->validated(), $event);
 
         return $this->saved();
@@ -89,6 +103,10 @@ class CalendarController extends Controller
 
     public function destroy(string $event): RedirectResponse
     {
+        if (Rental::where('calendar_event_id', $event)->exists()) {
+            return redirect()->route('admin.rentals')->withErrors(['calendar' => __('rentals.manage_linked')]);
+        }
+
         $this->calendar->delete($event);
 
         return redirect()->route('admin.calendar')->with('status', __('calendar.deleted'));

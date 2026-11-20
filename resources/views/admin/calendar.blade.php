@@ -22,8 +22,9 @@
                             $fullDay = $event['fullday'] ?? false;
                             $dateFormat = $start->isSameMonth($end) ? 'D j' : 'D j M Y';
                             $color = $event['color'] ?? null;
+                            $rentalId = $rentalIds[$event['id']] ?? null;
                         @endphp
-                        <li class="calendar-row">
+                        <li class="calendar-row" id="calendar-event-{{ $event['id'] }}-{{ $month['date']->format('Y-m') }}">
                             <span class="calendar-color" aria-hidden="true"
                                 @if(is_string($color) && preg_match(\App\InfomaniakCalendar::COLOR_PATTERN, $color)) style="background-color: {{ $color }}" @endif></span>
                             <div class="calendar-dates">
@@ -34,9 +35,10 @@
                             </div>
                             <span class="calendar-title">{{ $event['title'] }}</span>
                             <div class="calendar-actions">
-                                <a class="users-icon" href="{{ route('admin.calendar.edit', $event['id']) }}" aria-label="{{ __('notes.modify') }} — {{ $event['title'] }}" title="{{ __('notes.modify') }}">
+                                <a class="users-icon" href="{{ $rentalId ? route('admin.rentals.edit', $rentalId) : route('admin.calendar.edit', $event['id']) }}" aria-label="{{ __('notes.modify') }} — {{ $event['title'] }}" title="{{ __('notes.modify') }}">
                                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m16 3 5 5-12 12H4v-5L16 3Z M13 6l5 5"/></svg>
                                 </a>
+                                @unless($rentalId)
                                 <details>
                                     <summary class="users-icon" aria-label="{{ __('notes.delete') }} — {{ $event['title'] }}" title="{{ __('notes.delete') }}">
                                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18 M9 6V3h6v3 M5 6l1 15h12l1-15 M10 10v7 M14 10v7"/></svg>
@@ -47,6 +49,7 @@
                                         <button class="media-button media-button-danger">{{ __('notes.confirm_delete') }}</button>
                                     </form>
                                 </details>
+                                @endunless
                             </div>
                         </li>
                     @empty

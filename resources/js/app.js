@@ -3,3 +3,4 @@ import './photo-upload.js';
 import './stay-sections.js';
 import './home-gallery.js';
 import './calendar-event.js';
+import './rental-form.js';

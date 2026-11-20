@@ -3,6 +3,7 @@
     $icons = [
         'admin.users' => 'utilisateurs',
         'admin.calendar' => 'calendrier',
+        'admin.rentals' => 'sejour',
         'admin.notes' => 'notes',
         'admin.annuaire' => 'annuaire',
         'admin.stay' => 'pages-locataires',

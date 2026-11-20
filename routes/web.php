@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\CalendarController;
 use App\Http\Controllers\Admin\FileController;
 use App\Http\Controllers\Admin\NoteController;
 use App\Http\Controllers\Admin\PhotoController;
+use App\Http\Controllers\Admin\RentalController;
 use App\Http\Controllers\Admin\StaySectionController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\CodeLoginController;
@@ -53,6 +54,13 @@ Route::middleware(['auth', RequireRole::class.':admin'])
         Route::get('/calendrier/{event}/modifier', [CalendarController::class, 'edit'])->whereNumber('event')->name('admin.calendar.edit');
         Route::patch('/calendrier/{event}', [CalendarController::class, 'update'])->whereNumber('event')->name('admin.calendar.update');
         Route::delete('/calendrier/{event}', [CalendarController::class, 'destroy'])->whereNumber('event')->name('admin.calendar.destroy');
+
+        Route::get('/locations', [RentalController::class, 'index'])->name('admin.rentals');
+        Route::get('/locations/ajouter', [RentalController::class, 'create'])->name('admin.rentals.create');
+        Route::post('/locations', [RentalController::class, 'store'])->name('admin.rentals.store');
+        Route::get('/locations/{rental}/modifier', [RentalController::class, 'edit'])->name('admin.rentals.edit');
+        Route::patch('/locations/{rental}', [RentalController::class, 'update'])->name('admin.rentals.update');
+        Route::delete('/locations/{rental}', [RentalController::class, 'destroy'])->name('admin.rentals.destroy');
 
         Route::post('/pages-locataire/apercu', [StaySectionController::class, 'preview'])->name('admin.stay.preview');
         Route::get('/pages-locataire', [StaySectionController::class, 'index'])->name('admin.stay');

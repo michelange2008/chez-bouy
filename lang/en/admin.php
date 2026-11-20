@@ -9,4 +9,5 @@ return [
     'notes' => 'Notes',
     'calendar' => 'Calendar',
     'annuaire' => 'Directory',
+    'rentals' => 'Rental management',
 ];

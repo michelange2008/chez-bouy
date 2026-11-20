@@ -56,7 +56,7 @@ class InfomaniakCalendar
     }
 
     /** @param array{title: string, start: string, end?: ?string, color?: ?string, fullday?: bool|int|string} $fields */
-    public function save(array $fields, ?string $id = null): void
+    public function save(array $fields, ?string $id = null): ?int
     {
         $existing = $id === null ? [] : $this->event($id);
         $fullDay = (bool) ($fields['fullday'] ?? false);
@@ -100,16 +100,24 @@ class InfomaniakCalendar
             $payload['color'] = $fields['color'];
         }
 
-        $this->request($id === null ? 'POST' : 'PUT', $id === null ? '' : '/'.$id, ['json' => $payload]);
+        $data = $this->request($id === null ? 'POST' : 'PUT', $id === null ? '' : '/'.$id, ['json' => $payload]);
+        $eventId = filter_var($data['id'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+
+        return $eventId === false ? null : $eventId;
     }
 
-    public function delete(string $id): void
+    public function delete(string $id, bool $allowMissing = false): void
     {
-        $this->event($id);
-        $this->request('DELETE', '/'.$id, ['query' => ['calendar_id' => config('services.infomaniak.calendar_id')]]);
+        $event = $this->request('GET', '/'.$id, allowMissing: $allowMissing);
+        if ($allowMissing && $event === null) {
+            return;
+        }
+
+        abort_unless($this->belongsToCalendar($event), 404);
+        $this->request('DELETE', '/'.$id, ['query' => ['calendar_id' => config('services.infomaniak.calendar_id')]], $allowMissing);
     }
 
-    private function request(string $method, string $path, array $options = []): array
+    private function request(string $method, string $path, array $options = [], bool $allowMissing = false): ?array
     {
         abort_unless($this->configured(), 503, __('calendar.setup'));
 
@@ -121,6 +129,10 @@ class InfomaniakCalendar
             abort(503, __('calendar.unavailable'));
         }
 
+        if ($allowMissing && $response->notFound()) {
+            return null;
+        }
+
         abort_if($response->notFound(), 404);
         abort_unless($response->successful() && $response->json('result') !== 'error', 502, __('calendar.unavailable'));
         $data = $response->json('data');
@@ -130,6 +142,6 @@ class InfomaniakCalendar
             return $data;
         }
 
-        return [];
+        return is_array($data) ? $data : [];
     }
 }
