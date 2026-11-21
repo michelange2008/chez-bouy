@@ -6,6 +6,14 @@
 }
 .users-toolbar { justify-content: space-between; margin-bottom: 20px; }
 .users-toolbar h2 { margin: 0; }
+.users-list-actions .users-list-switch {
+    --color-button-background: #fff;
+    --color-button-text: var(--color-primary);
+    --color-button-border: var(--color-primary);
+    min-width: 44px;
+    min-height: 44px;
+    padding: 2px;
+}
 .users-table-scroll { max-width: 100%; overflow-x: auto; }
 .users-table { width: 100%; border-collapse: collapse; table-layout: fixed; background: var(--color-surface); }
 .users-table th, .users-table td { padding: 12px 16px; border-bottom: 1px solid var(--color-border); text-align: left; }
@@ -41,6 +49,7 @@
 
 /* Conserver les en-têtes pour les lecteurs d'écran et présenter une fiche par compte. */
 @media (max-width: 900px) {
+    .users-list-switch { margin-inline-start: auto; }
     .users-table { display: block; background: transparent; }
     .users-table thead {
         position: absolute;
@@ -102,6 +111,7 @@
 @media (max-width: 480px) {
     .users-toolbar { align-items: stretch; flex-direction: column; }
     .users-toolbar button { width: 100%; }
+    .users-list-actions button.media-button { width: auto; padding-inline: 8px; font-size: .85rem; }
     .users-pagination { justify-content: center; }
     .users-pagination span { order: -1; flex-basis: 100%; text-align: center; }
     .users-dialog { padding: 20px; }

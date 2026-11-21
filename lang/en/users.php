@@ -3,6 +3,8 @@
 return [
     'locale' => 'Email language',
     'locale_invalid' => 'Choose one of the available languages.',
+    'active_users' => 'Active users',
+    'inactive_users' => 'Inactive users',
     'add' => 'Add user',
     'edit' => 'Edit user',
     'delete' => 'Delete user',

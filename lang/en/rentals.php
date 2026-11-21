@@ -24,6 +24,7 @@ return [
     'create' => 'Create a new rental',
     'edit' => 'Edit stay',
     'back' => 'Back to rentals',
+    'overlapping_stay' => 'These dates overlap with a stay already booked from :arrival to :departure.',
     'choose_user' => 'Select a user',
     'choose_type' => 'Select a type',
     'payments' => 'Payments',

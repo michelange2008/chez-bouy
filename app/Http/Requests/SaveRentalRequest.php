@@ -6,6 +6,7 @@ use App\Models\Rental;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator;
 
 class SaveRentalRequest extends FormRequest
 {
@@ -45,6 +46,35 @@ class SaveRentalRequest extends FormRequest
             'new_name' => ['exclude_unless:user_id,new', 'required', 'string', 'max:255'],
             'new_first_name' => ['exclude_unless:user_id,new', 'nullable', 'string', 'max:255'],
             'new_email' => ['exclude_unless:user_id,new', 'required', 'string', 'email', 'max:254', Rule::unique('users', 'email')],
+        ];
+    }
+
+    /** @return array<int, \Closure(Validator): void> */
+    public function after(): array
+    {
+        if ($this->route('rental')) {
+            return [];
+        }
+
+        return [
+            function (Validator $validator): void {
+                if ($validator->errors()->hasAny(['arrival', 'departure'])) {
+                    return;
+                }
+
+                $overlappingStay = Rental::whereDate('arrival', '<', $this->input('departure'))
+                    ->whereDate('departure', '>', $this->input('arrival'))
+                    ->orderBy('arrival')
+                    ->orderBy('id')
+                    ->first(['arrival', 'departure']);
+
+                if ($overlappingStay !== null) {
+                    $validator->errors()->add('arrival', __('rentals.overlapping_stay', [
+                        'arrival' => $overlappingStay->arrival->format('d/m/Y'),
+                        'departure' => $overlappingStay->departure->format('d/m/Y'),
+                    ]));
+                }
+            },
         ];
     }
 

@@ -1,17 +1,32 @@
 @extends('admin.layout')
 
-@section('title', __('admin.users'))
+@php($pageTitle = $showInactive ? __('users.inactive_users') : __('admin.users'))
+
+@section('title', $pageTitle)
 
 @section('admin-content')
 <div class="users-toolbar">
-    <h2>{{ __('admin.users') }}</h2>
-    <button type="button" data-open-user-dialog="create-user" disabled>{{ __('users.add') }}</button>
+    <h2>{{ $pageTitle }}</h2>
+    <div class="users-actions users-list-actions">
+        <button type="button" class="media-button" data-open-user-dialog="create-user" disabled>{{ __('users.add') }}</button>
+        @if($showInactive)
+            <a class="media-button users-list-switch" href="{{ route('admin.users') }}"
+               aria-label="{{ __('users.active_users') }}" title="{{ __('users.active_users') }}">
+                <img src="{{ asset('icones/utilisateurs.svg') }}" alt="" width="38" height="38">
+            </a>
+        @else
+            <a class="media-button users-list-switch" href="{{ route('admin.users', ['inactive' => 1]) }}"
+               aria-label="{{ __('users.inactive_users') }}" title="{{ __('users.inactive_users') }}">
+                <img src="{{ asset('icones/utilisateurs_non_actives.svg') }}" alt="" width="38" height="38">
+            </a>
+        @endif
+    </div>
 </div>
 <noscript><p>{{ __('users.js_required') }}</p></noscript>
 
-<div class="users-table-scroll" tabindex="0" role="region" aria-label="{{ __('admin.users') }}">
+<div class="users-table-scroll" tabindex="0" role="region" aria-label="{{ $pageTitle }}">
     <table class="users-table" role="table">
-        <caption class="users-sr-only">{{ __('admin.users') }}</caption>
+        <caption class="users-sr-only">{{ $pageTitle }}</caption>
         <thead role="rowgroup">
             <tr role="row">
                 @foreach(['name', 'first_name', 'email', 'role', 'active', 'actions'] as $label)

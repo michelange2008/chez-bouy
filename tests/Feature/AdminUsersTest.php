@@ -194,6 +194,32 @@ class AdminUsersTest extends TestCase
         $this->assertModelExists($user);
     }
 
+    public function test_les_utilisateurs_non_actives_ont_une_liste_paginee_distincte(): void
+    {
+        $admin = $this->admin();
+        $inactiveUser = User::factory()->create(['is_active' => false, 'name' => 'AAA']);
+        User::factory()->count(19)->create(['is_active' => false, 'name' => 'MMM']);
+        $lastInactiveUser = User::factory()->create(['is_active' => false, 'name' => 'ZZZ']);
+        $inactiveUrl = route('admin.users', ['inactive' => 1]);
+        $nextPageUrl = route('admin.users', ['inactive' => 1, 'page' => 2]);
+
+        $this->get(route('admin.users'))->assertOk()
+            ->assertSee($admin->email)
+            ->assertDontSee($inactiveUser->email)
+            ->assertSee($inactiveUrl);
+
+        $this->get($inactiveUrl)->assertOk()
+            ->assertSee($inactiveUser->email)
+            ->assertDontSee($admin->email)
+            ->assertDontSee($lastInactiveUser->email)
+            ->assertSee($nextPageUrl);
+
+        $this->get($nextPageUrl)->assertOk()
+            ->assertSee($lastInactiveUser->email)
+            ->assertDontSee($admin->email)
+            ->assertDontSee($inactiveUser->email);
+    }
+
     public function test_les_noms_sont_echappes_et_les_utilisateurs_sont_pagines(): void
     {
         $this->admin();

@@ -10,14 +10,22 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request): View
     {
-        return view('admin.users', [
-            'users' => User::query()->orderBy('name')->orderBy('first_name')->orderBy('id')->paginate(20),
-        ]);
+        $showInactive = $request->boolean('inactive');
+        $users = User::query()
+            ->where('is_active', ! $showInactive)
+            ->orderBy('name')
+            ->orderBy('first_name')
+            ->orderBy('id')
+            ->paginate(20)
+            ->withQueryString();
+
+        return view('admin.users', compact('users', 'showInactive'));
     }
 
     public function save(Request $request)

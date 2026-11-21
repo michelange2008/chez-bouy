@@ -278,6 +278,46 @@ class RentalAdministrationTest extends TestCase
         $this->assertModelExists($guest);
     }
 
+    public function test_creating_a_stay_warns_when_dates_overlap_and_keeps_the_entered_dates(): void
+    {
+        $this->actingAs(User::factory()->create(['role' => 'admin']));
+        $existingStay = Rental::factory()->create(self::DATES);
+        $createUrl = route('admin.rentals.create');
+
+        $this->followingRedirects()->from($createUrl)->post(route('admin.rentals.store'), [
+            'arrival' => '2027-02-18', 'departure' => '2027-02-21', 'type' => 'family', 'user_id' => $existingStay->user_id,
+        ])->assertOk()
+            ->assertSeeText(__('rentals.overlapping_stay', ['arrival' => '12/02/2027', 'departure' => '19/02/2027']))
+            ->assertSee('value="2027-02-18"', false)
+            ->assertSee('value="2027-02-21"', false);
+        $this->assertDatabaseCount('rentals', 1);
+        Http::assertNothingSent();
+    }
+
+    public function test_creating_a_stay_allows_arrival_on_the_previous_stay_departure_date(): void
+    {
+        $this->actingAs(User::factory()->create(['role' => 'admin']));
+        $existingStay = Rental::factory()->create(self::DATES);
+        Http::fake([self::API => Http::response(['data' => ['id' => 123]], 201)]);
+
+        $this->post(route('admin.rentals.store'), [
+            'arrival' => self::DATES['departure'], 'departure' => '2027-02-21', 'type' => 'family', 'user_id' => $existingStay->user_id,
+        ])->assertValid()->assertRedirect(route('admin.rentals'));
+
+        $this->assertDatabaseCount('rentals', 2);
+    }
+
+    public function test_create_form_only_lists_active_users(): void
+    {
+        $this->actingAs(User::factory()->create(['role' => 'admin']));
+        $activeGuest = User::factory()->create(['is_active' => true]);
+        $inactiveGuest = User::factory()->create(['is_active' => false]);
+
+        $this->get(route('admin.rentals.create'))->assertOk()
+            ->assertSeeText($activeGuest->email)
+            ->assertDontSeeText($inactiveGuest->email);
+    }
+
     public function test_admin_can_add_a_user_inline_for_a_free_family_stay(): void
     {
         $this->actingAs(User::factory()->create(['role' => 'admin']));

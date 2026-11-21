@@ -24,6 +24,7 @@ return [
     'create' => 'Créer une nouvelle location',
     'edit' => 'Modifier le séjour',
     'back' => 'Retour aux locations',
+    'overlapping_stay' => 'Ces dates chevauchent un séjour déjà prévu du :arrival au :departure.',
     'choose_user' => 'Sélectionner un utilisateur',
     'choose_type' => 'Sélectionner un type',
     'payments' => 'Versements',

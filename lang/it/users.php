@@ -3,6 +3,8 @@
 return [
     'locale' => 'Lingua delle e-mail',
     'locale_invalid' => 'Scegliete una delle lingue disponibili.',
+    'active_users' => 'Utenti attivi',
+    'inactive_users' => 'Utenti non attivi',
     'add' => 'Aggiungi utente',
     'edit' => 'Modifica utente',
     'delete' => 'Elimina utente',

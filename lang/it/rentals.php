@@ -24,6 +24,7 @@ return [
     'create' => 'Crea un nuovo affitto',
     'edit' => 'Modifica il soggiorno',
     'back' => 'Torna agli affitti',
+    'overlapping_stay' => 'Queste date si sovrappongono a un soggiorno già previsto dal :arrival al :departure.',
     'choose_user' => 'Seleziona un utente',
     'choose_type' => 'Seleziona un tipo',
     'payments' => 'Pagamenti',

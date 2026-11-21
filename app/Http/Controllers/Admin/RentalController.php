@@ -211,7 +211,10 @@ class RentalController extends Controller
 
     private function form(Rental $rental): Response
     {
-        $users = $rental->exists ? collect() : User::orderBy('name')->orderBy('first_name')->orderBy('id')
+        $users = $rental->exists ? collect() : User::where('is_active', true)
+            ->orderBy('name')
+            ->orderBy('first_name')
+            ->orderBy('id')
             ->get(['id', 'name', 'first_name', 'email']);
 
         return response()->view('admin.rentals.form', compact('rental', 'users'))->header('Cache-Control', 'private, no-store');
