@@ -21,14 +21,19 @@
         </thead>
         <tbody role="rowgroup">
             @forelse($users as $user)
-                <tr role="row">
-                    <td role="cell"><span class="users-mobile-label" aria-hidden="true">{{ __('users.name') }}</span><span class="users-value">{{ $user->name }}</span></td>
-                    <td role="cell"><span class="users-mobile-label" aria-hidden="true">{{ __('users.first_name') }}</span><span class="users-value">{{ $user->first_name ?? '—' }}</span></td>
-                    <td role="cell"><span class="users-mobile-label" aria-hidden="true">{{ __('users.email') }}</span><span class="users-value">{{ $user->email }}</span></td>
-                    <td role="cell"><span class="users-mobile-label" aria-hidden="true">{{ __('users.role') }}</span><span class="users-value">{{ $user->role === 'admin' ? __('users.admin') : __('users.tenant') }}</span></td>
-                    <td role="cell"><span class="users-mobile-label" aria-hidden="true">{{ __('users.active') }}</span><span class="users-value">{{ $user->is_active ? __('users.yes') : __('users.no') }}</span></td>
-                    <td role="cell">
-                        <span class="users-mobile-label" aria-hidden="true">{{ __('users.actions') }}</span>
+                <tr role="row" @class([
+                    'users-account',
+                    'users-account-inactive' => ! $user->is_active,
+                    'users-account-admin' => $user->is_active && $user->role === 'admin',
+                ])>
+                    <td role="cell" class="users-name">
+                        {{ $user->name }}@if(filled($user->first_name)) <span class="users-mobile-first-name" aria-hidden="true">{{ $user->first_name }}</span>@endif
+                    </td>
+                    <td role="cell" class="users-desktop-cell">{{ $user->first_name ?? '—' }}</td>
+                    <td role="cell" class="users-email">{{ $user->email }}</td>
+                    <td role="cell" class="users-desktop-cell">{{ $user->role === 'admin' ? __('users.admin') : __('users.tenant') }}</td>
+                    <td role="cell" class="users-desktop-cell">{{ $user->is_active ? __('users.yes') : __('users.no') }}</td>
+                    <td role="cell" class="users-action-cell">
                         <div class="users-actions">
                             <a class="users-icon" href="{{ route('admin.users.edit', $user) }}"
                                aria-label="{{ __('users.edit') }} — {{ $user->email }}" title="{{ __('users.edit') }}">

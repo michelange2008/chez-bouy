@@ -13,8 +13,7 @@
 .users-table th, .users-table td { overflow-wrap: anywhere; }
 .users-table th:nth-child(3) { width: 28%; }
 .users-table th:last-child { width: 136px; }
-.users-mobile-label { display: none; }
-.users-value { min-width: 0; }
+.users-mobile-first-name { display: none; }
 .users-actions { flex-wrap: wrap; gap: 8px; }
 .users-actions .users-icon {
     display: inline-flex; justify-content: center; align-items: center;
@@ -53,24 +52,50 @@
         clip-path: inset(50%);
         white-space: nowrap;
     }
-    .users-table tbody { display: grid; gap: 16px; }
+    .users-table tbody { display: grid; gap: 8px; }
     .users-table tbody tr {
-        display: block;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
         min-width: 0;
         border: 1px solid var(--color-border);
         border-radius: 12px;
         background: var(--color-surface);
+        overflow: hidden;
     }
-    .users-table td {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-        align-items: center;
-        gap: 12px;
-        padding: 10px 14px;
+    .users-account { --users-banner-color: #08752a; }
+    .users-account-admin { --users-banner-color: var(--color-danger); }
+    .users-account-inactive { --users-banner-color: #626262; }
+    .users-table td { padding: 4px 10px; border-bottom: 0; }
+    .users-table .users-desktop-cell {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
     }
-    .users-table td:last-child { border-bottom: 0; }
-    .users-mobile-label { display: block; font-weight: 600; }
-    .users-table .users-empty { display: block; }
+    .users-mobile-first-name { display: inline; }
+    .users-name, .users-action-cell {
+        grid-row: 1;
+        align-content: center;
+        background: var(--users-banner-color);
+        color: white;
+    }
+    .users-name { grid-column: 1; font-weight: 600; }
+    .users-action-cell { grid-column: 2; }
+    .users-email, .users-table .users-empty { grid-column: 1 / -1; }
+    .users-email { font-size: .875rem; }
+    .users-actions { flex-wrap: nowrap; gap: 4px; }
+    .users-actions .users-icon {
+        flex-basis: 36px;
+        width: 36px;
+        height: 36px;
+        padding: 6px;
+        color: inherit;
+        border-color: currentColor;
+    }
+    .users-actions .users-icon:hover { background: rgb(255 255 255 / 15%); }
     .users-pagination { gap: 12px 20px; }
 }
 

@@ -52,7 +52,7 @@
                                 <span class="text-sm">{{ __('rentals.past') }}</span>
                             @endif
                         </div>
-                        <div class="ms-auto flex items-start gap-1.5 max-sm:flex-col max-sm:items-end">
+                        <div class="ms-auto flex items-start gap-1.5">
                             <a class="media-button size-8 min-h-0! shrink-0 p-0!" href="{{ route('admin.rentals.edit', $rental) }}" title="{{ __('notes.modify') }}" aria-label="{{ __('notes.modify') }} — {{ $rental->guestName() }}">
                                 <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 3 5 5-12 12H4v-5L16 3Z M13 6l5 5"/></svg>
                             </a>
