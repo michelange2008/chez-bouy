@@ -71,9 +71,9 @@
         background: var(--color-surface);
         overflow: hidden;
     }
-    .users-account { --users-banner-color: #08752a; }
-    .users-account-admin { --users-banner-color: var(--color-danger); }
-    .users-account-inactive { --users-banner-color: #626262; }
+    .users-account { --users-banner-color: #d6eadb; }
+    .users-account-admin { --users-banner-color: #f4d9d9; }
+    .users-account-inactive { --users-banner-color: #ededed; }
     .users-table td { padding: 4px 10px; border-bottom: 0; }
     .users-table .users-desktop-cell {
         position: absolute;
@@ -89,7 +89,7 @@
         grid-row: 1;
         align-content: center;
         background: var(--users-banner-color);
-        color: white;
+        color: #29312c;
     }
     .users-name { grid-column: 1; font-weight: 600; }
     .users-action-cell { grid-column: 2; }
@@ -104,7 +104,7 @@
         color: inherit;
         border-color: currentColor;
     }
-    .users-actions .users-icon:hover { background: rgb(255 255 255 / 15%); }
+    .users-actions .users-icon:hover { background: rgb(0 0 0 / 8%); }
     .users-pagination { gap: 12px 20px; }
 }
 
