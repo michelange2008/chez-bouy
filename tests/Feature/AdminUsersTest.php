@@ -19,7 +19,7 @@ class AdminUsersTest extends TestCase
 
         $this->assertTrue(
             $this->app->runningUnitTests(),
-            'Environnement détecté : ' . $this->app->environment()
+            'Environnement détecté : '.$this->app->environment()
         );
 
         $this->withoutVite();
@@ -29,6 +29,7 @@ class AdminUsersTest extends TestCase
     {
         $admin = User::factory()->create(['role' => 'admin', 'is_active' => true]);
         $this->actingAs($admin);
+
         return $admin;
     }
 
@@ -57,6 +58,7 @@ class AdminUsersTest extends TestCase
         $this->assertNull($user->first_name);
         $this->assertTrue($user->is_active);
         $this->assertSame('locataire', $user->role);
+        $this->assertSame('fr', $user->locale);
         $this->assertSame(0, $user->login_count);
         $this->assertNotEmpty($user->password);
         $this->assertFalse(Hash::needsRehash($user->password));
@@ -100,21 +102,22 @@ class AdminUsersTest extends TestCase
             'first_name' => str_repeat('a', 256),
             'role' => 'superadmin',
             'is_active' => 'peut-etre',
-        ])->assertSessionHasErrors(['email', 'name', 'first_name', 'role', 'is_active'], null, 'createUser');
+            'locale' => 'de',
+        ])->assertSessionHasErrors(['email', 'name', 'first_name', 'role', 'is_active', 'locale'], null, 'createUser');
         $this->assertDatabaseCount('users', 1);
     }
 
-    public function test_modification_des_quatre_champs_et_preservation_du_reste(): void
+    public function test_modification_du_profil_et_preservation_du_reste(): void
     {
         $this->admin();
         $user = User::factory()->create(['role' => 'locataire', 'is_active' => true, 'login_count' => 5]);
         $email = $user->email;
         $password = $user->password;
-        $key = 'login-code:' . hash('sha256', $email);
+        $key = 'login-code:'.hash('sha256', $email);
         Cache::put($key, Hash::make('123456'), 600);
 
         $this->patch(route('admin.users.update', $user), [
-            ...$this->profile(['role' => 'admin', 'is_active' => '0']),
+            ...$this->profile(['role' => 'admin', 'is_active' => '0', 'locale' => 'it']),
             'login_count' => 100,
             'password' => 'ne-pas-enregistrer',
         ])->assertRedirect(route('admin.users'));
@@ -124,6 +127,7 @@ class AdminUsersTest extends TestCase
         $this->assertSame('Alice', $user->first_name);
         $this->assertSame('admin', $user->role);
         $this->assertFalse($user->is_active);
+        $this->assertSame('it', $user->locale);
         $this->assertSame($email, $user->email);
         $this->assertSame($password, $user->password);
         $this->assertSame(5, $user->login_count);
@@ -145,7 +149,7 @@ class AdminUsersTest extends TestCase
     {
         $this->admin();
         $user = User::factory()->create();
-        $key = 'login-code:' . hash('sha256', $user->email);
+        $key = 'login-code:'.hash('sha256', $user->email);
         Cache::put($key, Hash::make('123456'), 600);
         $this->delete(route('admin.users.destroy', $user))->assertRedirect(route('admin.users'));
         $this->assertModelMissing($user);
@@ -198,9 +202,9 @@ class AdminUsersTest extends TestCase
         $response = $this->get(route('admin.users'))->assertOk();
         $response->assertSee('&lt;script&gt;alert(1)&lt;/script&gt;', false);
         $response->assertDontSee('<script>alert(1)</script>', false);
-        $response->assertViewHas('users', fn($users) => $users->total() === 24 && $users->count() === 20);
+        $response->assertViewHas('users', fn ($users) => $users->total() === 24 && $users->count() === 20);
         $this->get(route('admin.users', ['page' => 2]))->assertOk()
-            ->assertViewHas('users', fn($users) => $users->count() === 4);
+            ->assertViewHas('users', fn ($users) => $users->count() === 4);
     }
 
     public function test_la_page_edit_affiche_email_sans_champ_modifiable(): void

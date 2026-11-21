@@ -11,6 +11,13 @@
     @endforeach
 </select>
 
+<label for="{{ $formId }}-locale">{{ __('users.locale') }}</label>
+<select id="{{ $formId }}-locale" name="locale" required>
+    @foreach(config('languages.supported') as $locale => $label)
+        <option value="{{ $locale }}" @selected(old('locale', $editing ? $user->locale : 'fr') === $locale)>{{ $label }}</option>
+    @endforeach
+</select>
+
 <input type="hidden" name="is_active" value="0">
 <label class="users-checkbox" for="{{ $formId }}-active">
     <input id="{{ $formId }}-active" type="checkbox" name="is_active" value="1" @checked((bool) old('is_active', $editing ? $user->is_active : true))>

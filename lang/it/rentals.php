@@ -1,6 +1,18 @@
 <?php
 
 return [
+    'access_email' => [
+        'subject' => 'Chez Bouy - accedete alla vostra area riservata',
+        'greeting' => 'Buongiorno,',
+        'welcome' => 'Soggiornerete nel nostro appartamento a Chamonix. Ci auguriamo che il vostro soggiorno sia il più piacevole possibile.',
+        'website' => 'Trovate tutte le informazioni necessarie a questo indirizzo',
+        'select' => 'Selezionate',
+        'private_area' => 'area riservata',
+        'sign_in' => 'e inserite il vostro indirizzo e-mail. Riceverete un codice a quell’indirizzo per accedere alla vostra area.',
+        'booklet' => 'Troverete le informazioni per il vostro arrivo e soggiorno nell’appartamento. Potrete anche scaricare il libretto di benvenuto in formato PDF.',
+        'contact' => 'Se avete problemi, non esitate a contattarci.',
+        'farewell' => 'A presto',
+    ],
     'payment_total_matched' => 'Il totale corrisponde al prezzo del soggiorno',
     'payment_total_mismatch' => 'Il totale non corrisponde al prezzo del soggiorno',
     'checklist_update_failed' => 'Modifica non salvata. Riprova.',

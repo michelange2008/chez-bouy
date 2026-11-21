@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'locale' => 'Langue des e-mails',
+    'locale_invalid' => 'Choisissez une langue proposée.',
     'add' => 'Ajouter un utilisateur',
     'edit' => 'Modifier l’utilisateur',
     'delete' => 'Supprimer l’utilisateur',

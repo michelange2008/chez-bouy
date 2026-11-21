@@ -121,9 +121,9 @@ class LocalizationTest extends TestCase
             ]);
     }
 
-    public function test_le_mail_de_connexion_est_traduit(): void
+    public function test_le_mail_de_connexion_utilise_la_langue_du_profil(): void
     {
-        $user = User::factory()->create(['role' => 'locataire']);
+        $user = User::factory()->create(['role' => 'locataire', 'locale' => 'en']);
         Mail::shouldReceive('raw')->once()->withArgs(function ($body, $callback) use ($user) {
             $this->assertStringContainsString('Your Chez Bouy code:', $body);
             $message = new Message(new Email);
@@ -134,7 +134,7 @@ class LocalizationTest extends TestCase
             return true;
         });
 
-        $this->withSession(['locale' => 'en'])
+        $this->withSession(['locale' => 'fr'])
             ->post('/connexion', ['email' => $user->email])
             ->assertRedirect(route('code.form'));
     }

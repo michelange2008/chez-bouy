@@ -1,6 +1,18 @@
 <?php
 
 return [
+    'access_email' => [
+        'subject' => 'Chez Bouy - access your private area',
+        'greeting' => 'Hello,',
+        'welcome' => 'You will be staying in our apartment in Chamonix. We hope you have a wonderful stay.',
+        'website' => 'You can find all the information you need at this address',
+        'select' => 'Select',
+        'private_area' => 'private area',
+        'sign_in' => 'then enter your email address. We will send a code to that address so you can sign in.',
+        'booklet' => 'You will find information about your arrival and your stay in the apartment. You can also download the welcome booklet as a PDF.',
+        'contact' => 'Please contact us if you have any problems.',
+        'farewell' => 'See you soon',
+    ],
     'payment_total_matched' => 'The total matches the rental price',
     'payment_total_mismatch' => 'The total differs from the rental price',
     'checklist_update_failed' => 'Change could not be saved. Try again.',

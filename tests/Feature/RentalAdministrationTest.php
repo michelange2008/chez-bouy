@@ -186,6 +186,22 @@ class RentalAdministrationTest extends TestCase
         Event::assertNotDispatched(MessageSent::class);
     }
 
+    public function test_access_email_uses_the_guest_profile_language(): void
+    {
+        $this->actingAs(User::factory()->create(['role' => 'admin']));
+        $guest = User::factory()->create(['locale' => 'it']);
+        $rental = Rental::factory()->for($guest, 'user')->create();
+        config(['mail.default' => 'array']);
+        Event::fake([MessageSent::class]);
+
+        $this->from(route('admin.rentals'))->post(route('admin.rentals.send-access-email', $rental))
+            ->assertRedirect(route('admin.rentals'))->assertSessionHas('status', 'Courriel d’accès envoyé.');
+
+        Event::assertDispatched(MessageSent::class, fn (MessageSent $event): bool => $event->message->getSubject() === 'Chez Bouy - accedete alla vostra area riservata'
+            && str_contains($event->message->getHtmlBody(), '<html lang="it">')
+            && str_contains($event->message->getHtmlBody(), '<strong>area riservata</strong>'));
+    }
+
     public function test_admin_manages_a_paid_stay_and_its_linked_calendar_event(): void
     {
         $this->actingAs(User::factory()->create(['role' => 'admin']));

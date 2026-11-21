@@ -84,6 +84,7 @@ class UserController extends Controller
         $user->first_name = $data['first_name'] ?? null;
         $user->role = $data['role'];
         $user->is_active = (bool) $data['is_active'];
+        $user->locale = $data['locale'] ?? $user->locale;
     }
 
     private function profileRules(): array
@@ -93,6 +94,7 @@ class UserController extends Controller
             'first_name' => ['nullable', 'string', 'max:255'],
             'role' => ['required', Rule::in(['locataire', 'admin'])],
             'is_active' => ['required', 'boolean'],
+            'locale' => ['sometimes', 'required', 'string', Rule::in(array_keys(config('languages.supported')))],
         ];
     }
 
@@ -115,6 +117,9 @@ class UserController extends Controller
             'role.in' => __('users.role_invalid'),
             'is_active.required' => __('users.active_invalid'),
             'is_active.boolean' => __('users.active_invalid'),
+            'locale.required' => __('users.locale_invalid'),
+            'locale.string' => __('users.locale_invalid'),
+            'locale.in' => __('users.locale_invalid'),
         ];
     }
 }

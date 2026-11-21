@@ -41,8 +41,8 @@ class CodeLoginController extends Controller
                 Cache::put($key, Hash::make($code), now()->addMinutes(10));
             });
             Mail::raw(
-                __('site.mail_body', ['code' => $code]),
-                fn ($message) => $message->to($email)->subject(__('site.mail_subject'))
+                __('site.mail_body', ['code' => $code], $user->locale),
+                fn ($message) => $message->to($email)->subject(__('site.mail_subject', [], $user->locale))
             );
         }, 60);
 

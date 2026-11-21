@@ -1,6 +1,18 @@
 <?php
 
 return [
+    'access_email' => [
+        'subject' => 'Chez Bouy - accéder à votre espace',
+        'greeting' => 'Bonjour,',
+        'welcome' => 'Vous allez séjourner dans notre appartement à Chamonix. Nous souhaitons que votre séjour soit le plus agréable possible.',
+        'website' => 'Vous trouverez toutes les informations nécessaires à cette adresse',
+        'select' => 'Cliquez sur',
+        'private_area' => 'espace privé',
+        'sign_in' => 'puis renseignez votre adresse e-mail. Un code vous sera envoyé à cette adresse pour accéder à votre espace.',
+        'booklet' => 'Vous y trouverez les informations pour votre arrivée et votre séjour dans l’appartement. Vous pourrez aussi télécharger le livret d’accueil au format PDF.',
+        'contact' => 'Si vous rencontrez un problème, n’hésitez pas à nous contacter.',
+        'farewell' => 'À bientôt',
+    ],
     'payment_total_matched' => 'Le total correspond au montant de la location',
     'payment_total_mismatch' => 'Le total diffère du montant de la location',
     'checklist_update_failed' => 'Modification non enregistrée. Réessayez.',

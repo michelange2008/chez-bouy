@@ -50,15 +50,15 @@ class RentalController extends Controller
 
     public function sendAccessEmail(Rental $rental): RedirectResponse
     {
-        $email = $rental->user?->email;
+        $guest = $rental->user;
 
-        if (blank($email)) {
+        if ($guest === null || blank($guest->email)) {
             return back()->withErrors(['access_email' => __('rentals.access_email_missing')]);
         }
 
         try {
-            $sent = Mail::send('emails.rental-access', [], function (Message $message) use ($email): void {
-                $message->to($email)->subject('Chez Bouy - accéder à votre espace');
+            $sent = Mail::send('emails.rental-access', ['locale' => $guest->locale], function (Message $message) use ($guest): void {
+                $message->to($guest->email)->subject(__('rentals.access_email.subject', [], $guest->locale));
             });
         } catch (TransportExceptionInterface $exception) {
             report($exception);
