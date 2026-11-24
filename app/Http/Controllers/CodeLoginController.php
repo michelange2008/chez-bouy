@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\AdminDevice;
 use App\Models\User;
+use App\RememberedDevice;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -14,25 +15,25 @@ use Illuminate\Validation\ValidationException;
 
 class CodeLoginController extends Controller
 {
-    public function send(Request $request)
+    public function send(Request $request): RedirectResponse
     {
         $data = $request->validate(['email' => ['required', 'email', 'max:254']]);
         $email = mb_strtolower(trim($data['email']));
         $user = User::where('email', $email)->first();
         if (! $user) {
-            $request->session()->forget(['login_email', 'offer_admin_device']);
+            $request->session()->forget(['login_email', 'remember_device_role']);
 
             throw ValidationException::withMessages([
                 'email' => __('site.email_not_registered'),
             ]);
         }
         $key = 'login-code:'.hash('sha256', $email);
-        $request->session()->put(['login_email' => $email, 'offer_admin_device' => $user->role === 'admin' && $user->is_active]);
+        $request->session()->put(['login_email' => $email, 'remember_device_role' => $user->canSignIn() ? $user->role : null]);
 
         // Limite par adresse, en complément de la limite par IP des routes.
         RateLimiter::attempt($key.':send', 1, function () use ($key, $email) {
             $user = User::where('email', $email)->first();
-            if (! $user || ! $user->is_active || $user->hasExpired() || ! in_array($user->role, ['locataire', 'admin'], true)) {
+            if (! $user?->canSignIn()) {
                 return;
             }
 
@@ -52,7 +53,7 @@ class CodeLoginController extends Controller
         );
     }
 
-    public function verify(Request $request)
+    public function verify(Request $request): RedirectResponse
     {
         $data = $request->validate(['code' => ['required', 'regex:/^[0-9]{6}$/']]);
         $email = $request->session()->get('login_email');
@@ -73,7 +74,7 @@ class CodeLoginController extends Controller
             }
             Cache::forget($key);
             $user = User::where('email', $email)->first();
-            if (! $user || ! $user->is_active || $user->hasExpired() || ! in_array($user->role, ['locataire', 'admin'], true)) {
+            if (! $user?->canSignIn()) {
                 return null;
             }
             RateLimiter::clear($key.':verify');
@@ -91,19 +92,19 @@ class CodeLoginController extends Controller
         // Incrément SQL atomique : deux connexions ne perdent pas une unité.
         $user->increment('login_count', 1, ['last_login_at' => now()]);
         $request->session()->regenerate();
-        $request->session()->forget(['login_email', 'offer_admin_device']);
+        $request->session()->forget(['login_email', 'remember_device_role']);
 
-        if ($user->role === 'admin' && $request->boolean('remember_device')) {
-            AdminDevice::remember($request, $user);
+        if ($request->boolean('remember_device')) {
+            RememberedDevice::remember($request, $user);
         }
 
         return redirect()->route($user->role === 'admin' ? 'admin' : 'dashboard');
     }
 
-    public function logout(Request $request)
+    public function logout(Request $request): RedirectResponse
     {
         $locale = $request->session()->get('locale', config('app.locale', 'fr'));
-        AdminDevice::forget($request);
+        RememberedDevice::forget($request);
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

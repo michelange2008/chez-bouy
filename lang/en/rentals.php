@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'codes_to_send' => 'Access codes to send',
+    'code_reminder_email' => [
+        'subject' => 'Chez Bouy – access code reminder',
+        'body' => "The access codes for :guest, arriving on :arrival, still need to be sent.\n\n:url",
+    ],
     'access_email' => [
         'subject' => 'Chez Bouy - access your private area',
         'greeting' => 'Hello,',

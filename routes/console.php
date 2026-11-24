@@ -9,3 +9,5 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command('users:purge-expired')->dailyAt('03:00')->timezone('Europe/Paris')->withoutOverlapping();
+
+Schedule::command('rentals:remind-codes')->dailyAt('09:00')->timezone('Europe/Paris')->withoutOverlapping();

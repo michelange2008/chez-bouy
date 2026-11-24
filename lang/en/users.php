@@ -38,6 +38,7 @@ return [
     'email_unique' => 'This email address is already in use.',
     'email_immutable' => 'The email address cannot be changed.',
     'role_invalid' => 'Choose Guest or Administrator.',
+    'cannot_deactivate_with_stays' => 'This user has an ongoing or upcoming stay. You can deactivate their account after their last stay ends.',
     'active_invalid' => 'Active status must be yes or no.',
     'pagination' => 'User pagination',
     'previous' => 'Previous',

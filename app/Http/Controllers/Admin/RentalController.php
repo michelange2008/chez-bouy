@@ -26,16 +26,18 @@ class RentalController extends Controller
 
     public function index(Request $request): Response
     {
-        $today = now(InfomaniakCalendar::TIMEZONE)->toDateString();
+        $today = today(InfomaniakCalendar::TIMEZONE);
+        $firstReminderArrival = $today->toDateString();
+        $lastReminderArrival = $today->addDays(Rental::CODE_REMINDER_DAYS)->toDateString();
         $showPast = $request->boolean('past');
         $rentals = Rental::with('user:id,name,first_name,email')
-            ->where('departure', $showPast ? '<' : '>=', $today)
+            ->where('departure', $showPast ? '<' : '>=', $firstReminderArrival)
             ->orderBy('arrival', $showPast ? 'desc' : 'asc')
             ->orderByDesc('id')
             ->paginate(20)
             ->withQueryString();
 
-        return response()->view('admin.rentals', compact('rentals', 'showPast'))->header('Cache-Control', 'private, no-store');
+        return response()->view('admin.rentals', compact('rentals', 'showPast', 'firstReminderArrival', 'lastReminderArrival'))->header('Cache-Control', 'private, no-store');
     }
 
     public function create(): Response

@@ -21,6 +21,10 @@ class Rental extends Model
 
     public const TYPES = ['rental', 'exchange', 'family'];
 
+    public const TYPES_WITH_CODES = ['rental', 'exchange'];
+
+    public const CODE_REMINDER_DAYS = 7;
+
     public const TYPE_COLORS = [
         'rental' => '#d40000',
         'exchange' => '#aa00d4',

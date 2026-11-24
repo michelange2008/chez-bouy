@@ -137,6 +137,9 @@
                                         <span role="alert" hidden>{{ __('rentals.checklist_update_failed') }}</span>
                                     </form>
                                 </dd>
+                                @if($field === 'codes_sent' && ! $showPast && $rental->arrival->toDateString() >= $firstReminderArrival && $rental->arrival->toDateString() <= $lastReminderArrival)
+                                    <span class="col-span-2 text-xs font-semibold text-amber-900" data-code-reminder @if($rental->codes_sent) hidden @endif>{{ __('rentals.codes_to_send') }}</span>
+                                @endif
                             </div>
                         @endforeach
                     </dl>

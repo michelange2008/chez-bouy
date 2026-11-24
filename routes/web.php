@@ -12,6 +12,7 @@ use App\Http\Controllers\CodeLoginController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocaleController;
+use App\Http\Controllers\RentalCodeReminderCronController;
 use App\Http\Controllers\StayController;
 use App\Http\Middleware\RequireRole;
 use App\Models\Rental;
@@ -25,6 +26,11 @@ Route::view('/contact/confirmation', 'contact', ['messageSent' => true])->name('
 Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:5,1,contact')->name('contact.store');
 Route::view('/informations-legales', 'legal')->name('legal');
 Route::post('/langue', [LocaleController::class, 'update'])->name('locale.update');
+
+Route::get('/webcron/rappels-codes', RentalCodeReminderCronController::class)
+    ->withoutMiddleware('web')
+    ->middleware('throttle:10,1')
+    ->name('webcron.rental-code-reminders');
 
 Route::middleware('guest')->group(function () {
     Route::view('/connexion', 'login')->name('login');

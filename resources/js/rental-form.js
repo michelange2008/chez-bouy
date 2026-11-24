@@ -85,6 +85,11 @@ for (const form of document.querySelectorAll('[data-rental-checklist], [data-ren
                 if (form.dataset.rentalChecklist === 'does_cleaning') {
                     form.closest('[data-rental-card]').querySelector('[data-rental-concierge]').hidden = result.value;
                 }
+
+                const codeReminder = form.parentElement.nextElementSibling;
+                if (codeReminder?.matches('[data-code-reminder]')) {
+                    codeReminder.hidden = result.value;
+                }
             } else {
                 const details = form.closest('details');
                 const payment = result.payment;

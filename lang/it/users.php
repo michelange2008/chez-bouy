@@ -38,6 +38,7 @@ return [
     'email_unique' => 'Questo indirizzo e-mail è già utilizzato.',
     'email_immutable' => 'L’indirizzo e-mail non può essere modificato.',
     'role_invalid' => 'Scegliete Ospite o Amministratore.',
+    'cannot_deactivate_with_stays' => 'Questo utente ha un soggiorno in corso o futuro. Potrai disattivare il suo account dopo la fine del suo ultimo soggiorno.',
     'active_invalid' => 'Lo stato attivo deve essere sì o no.',
     'pagination' => 'Paginazione utenti',
     'previous' => 'Precedente',

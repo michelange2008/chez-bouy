@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Middleware\RememberAdminDevice;
+use App\Http\Middleware\RestoreRememberedDevice;
 use App\Http\Middleware\SetLocale;
 use Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests;
 use Illuminate\Foundation\Application;
@@ -15,8 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->web(append: [SetLocale::class, RememberAdminDevice::class]);
-        $middleware->prependToPriorityList(AuthenticatesRequests::class, RememberAdminDevice::class);
+        $middleware->web(append: [SetLocale::class, RestoreRememberedDevice::class]);
+        $middleware->prependToPriorityList(AuthenticatesRequests::class, RestoreRememberedDevice::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

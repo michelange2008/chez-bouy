@@ -2,6 +2,7 @@
 
 return [
     'remember_admin_device' => 'Ricorda questo dispositivo per 6 mesi',
+    'remember_tenant_device' => 'Ricorda questo dispositivo per 3 mesi',
     'contact_title' => 'Contattaci',
     'contact_email' => 'Il tuo indirizzo e-mail',
     'back_home' => 'Torna alla pagina iniziale',

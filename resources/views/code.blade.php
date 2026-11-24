@@ -8,10 +8,10 @@
         @csrf
         <label for="code">Code à 6 chiffres</label>
         <input id="code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" minlength="6" maxlength="6" required>
-        @if(session('offer_admin_device'))
+        @if($rememberDeviceRole = session('remember_device_role'))
             <label class="remember-device">
                 <input type="checkbox" name="remember_device" value="1">
-                {{ __('site.remember_admin_device') }}
+                {{ __($rememberDeviceRole === 'admin' ? 'site.remember_admin_device' : 'site.remember_tenant_device') }}
             </label>
         @endif
         <button>Me connecter</button>

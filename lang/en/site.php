@@ -2,6 +2,7 @@
 
 return [
     'remember_admin_device' => 'Remember this device for 6 months',
+    'remember_tenant_device' => 'Remember this device for 3 months',
     'contact_title' => 'Contact us',
     'contact_email' => 'Your email address',
     'back_home' => 'Back to home',

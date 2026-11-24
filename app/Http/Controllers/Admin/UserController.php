@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\DeleteUser;
 use App\Http\Controllers\Controller;
+use App\InfomaniakCalendar;
+use App\Models\Rental;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -63,6 +65,12 @@ class UserController extends Controller
 
         if ($user->is($request->user()) && ($data['role'] !== 'admin' || ! (bool) $data['is_active'])) {
             throw ValidationException::withMessages(['role' => __('users.keep_own_access')]);
+        }
+
+        if ($user->is_active && ! (bool) $data['is_active'] && Rental::where('user_id', $user->id)
+            ->whereDate('departure', '>=', now(InfomaniakCalendar::TIMEZONE)->toDateString())
+            ->exists()) {
+            throw ValidationException::withMessages(['is_active' => __('users.cannot_deactivate_with_stays')]);
         }
 
         // Liste explicite : ni email, ni password, ni statistiques ne sont modifiés.

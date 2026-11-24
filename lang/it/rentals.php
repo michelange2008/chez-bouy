@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'codes_to_send' => 'Codici da inviare',
+    'code_reminder_email' => [
+        'subject' => 'Chez Bouy – promemoria per l’invio dei codici',
+        'body' => "I codici di accesso per il soggiorno di :guest, con arrivo il :arrival, sono ancora da inviare.\n\n:url",
+    ],
     'access_email' => [
         'subject' => 'Chez Bouy - accedete alla vostra area riservata',
         'greeting' => 'Buongiorno,',

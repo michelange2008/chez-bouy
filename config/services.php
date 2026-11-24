@@ -25,6 +25,7 @@ return [
     'infomaniak' => [
         'calendar_id' => env('INFOMANIAK_CALENDAR_ID'),
         'token' => env('INFOMANIAK_CALENDAR_TOKEN'),
+        'webcron_password' => env('INFOMANIAK_WEBCRON_PASSWORD'),
     ],
 
     'ses' => [

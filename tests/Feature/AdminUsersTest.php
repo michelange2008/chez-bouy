@@ -2,8 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Models\Rental;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -132,6 +134,42 @@ class AdminUsersTest extends TestCase
         $this->assertSame($password, $user->password);
         $this->assertSame(5, $user->login_count);
         $this->assertNull(Cache::get($key));
+    }
+
+    public function test_la_desactivation_est_refusee_pour_un_sejour_en_cours_ou_a_venir(): void
+    {
+        $this->travelTo(Carbon::parse('2027-02-19 00:30', 'Europe/Paris'));
+        $this->admin();
+
+        foreach ([
+            ['arrival' => '2027-02-12', 'departure' => '2027-02-19'],
+            ['arrival' => '2027-02-20', 'departure' => '2027-02-27'],
+        ] as $dates) {
+            $user = User::factory()->create(['name' => 'Conserver']);
+            Rental::factory()->create([...$dates, 'user_id' => $user->id]);
+
+            $this->patch(route('admin.users.update', $user), $this->profile(['is_active' => '0']))
+                ->assertInvalid(['is_active' => __('users.cannot_deactivate_with_stays')]);
+
+            $user->refresh();
+            $this->assertTrue($user->is_active);
+            $this->assertSame('Conserver', $user->name);
+        }
+    }
+
+    public function test_la_desactivation_est_autorisee_apres_la_fin_du_dernier_sejour(): void
+    {
+        $this->travelTo(Carbon::parse('2027-02-19 00:30', 'Europe/Paris'));
+        $this->admin();
+        $user = User::factory()->create();
+        Rental::factory()->create([
+            'user_id' => $user->id, 'arrival' => '2027-02-12', 'departure' => '2027-02-18',
+        ]);
+
+        $this->patch(route('admin.users.update', $user), $this->profile(['is_active' => '0']))
+            ->assertValid()->assertRedirect(route('admin.users'));
+
+        $this->assertFalse($user->fresh()->is_active);
     }
 
     public function test_une_tentative_de_changement_email_est_refusee(): void

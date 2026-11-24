@@ -28,6 +28,11 @@ class User extends Authenticatable
         return trim($this->first_name.' '.$this->name);
     }
 
+    public function canSignIn(): bool
+    {
+        return $this->is_active && ! $this->hasExpired() && in_array($this->role, ['locataire', 'admin'], true);
+    }
+
     public function hasExpired(): bool
     {
         return $this->role === 'locataire'
