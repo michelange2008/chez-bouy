@@ -4,3 +4,4 @@ import './stay-sections.js';
 import './home-gallery.js';
 import './calendar-event.js';
 import './rental-form.js';
+import './availability.js';

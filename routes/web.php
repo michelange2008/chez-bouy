@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\PhotoController;
 use App\Http\Controllers\Admin\RentalController;
 use App\Http\Controllers\Admin\StaySectionController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\AvailabilityController;
 use App\Http\Controllers\CodeLoginController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
@@ -20,6 +21,7 @@ use App\Models\StaySection;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/disponibilites', AvailabilityController::class)->name('availability');
 Route::get('/photos/{photo}/image/{size?}', [HomeController::class, 'image'])->whereIn('size', ['thumbnail', 'preview'])->name('home.photos.image');
 Route::view('/contact', 'contact', ['messageSent' => false])->name('contact');
 Route::view('/contact/confirmation', 'contact', ['messageSent' => true])->name('contact.confirmation');

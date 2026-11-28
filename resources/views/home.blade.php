@@ -5,6 +5,7 @@
     <section class="home-heading">
         <p>{{ __('site.home_eyebrow') }}</p>
         <h1>{{ __('site.home_title') }} {{ __('site.home_subtitle') }}</h1>
+        <a class="button mt-4" href="{{ route('availability') }}">{{ __('availability.check') }}</a>
     </section>
     @if($photos->isNotEmpty())
         <section id="photos" class="home-gallery" aria-labelledby="photos-title" data-home-gallery>
